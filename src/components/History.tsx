@@ -216,7 +216,13 @@ function Dots({ length, index, setIndex, accentClass }: { length: number; index:
         <button
           key={`dot-${i}`}
           onClick={() => setIndex(i)}
-          className={cx('h-2 rounded-full transition-all', i === index ? cx(accentClass, 'w-10') : 'bg-white/30 w-2 hover:bg-white/50')}
+          className={cx(
+            'rounded-full transition-all',
+            // targets maiores no mobile, mantendo visual no desktop
+            i === index
+              ? cx(accentClass, 'h-3 w-8 md:h-2 md:w-10')
+              : 'bg-white/40 h-3 w-3 md:h-2 md:w-2 hover:bg-white/60'
+          )}
           aria-label={`Ir para o slide ${i + 1}`}
         />
       ))}
@@ -279,7 +285,12 @@ function Controls({ onPrev, onNext, theme }: { onPrev: () => void; onNext: () =>
 function SlidesTrack({ slides, theme, trackRef }: { slides: HistorySlideData[]; theme: Required<HistoryTheme>; trackRef: React.RefObject<HTMLDivElement> }) {
   return (
     <div className="overflow-hidden">
-      <div ref={trackRef} className="flex w-full" aria-live="polite">
+      <div
+        ref={trackRef}
+        className="flex w-full"
+        aria-live="polite"
+        style={{ willChange: 'transform' }}
+      >
         {slides.map((s) => (
           <SlideCard key={s.id} title={s.title} content={s.content} theme={theme} />
         ))}
@@ -320,7 +331,8 @@ const History: React.FC<HistoryProps> = ({
   ariaLabel = 'Linha do tempo da história da CPE Anápolis',
 }) => {
   const th = { ...defaultTheme, ...theme }
-  const { index, prev, next, goTo, trackRef, containerRef, onPointerDown, onPointerMove, onPointerUp } = useCarousel(slides.length, initialIndex, onSlideChange)
+  const { index, prev, next, goTo, trackRef, containerRef, onPointerDown, onPointerMove, onPointerUp } =
+    useCarousel(slides.length, initialIndex, onSlideChange)
 
   return (
     <section id={id} className={cx('py-20', th.sectionBg, className)}>
@@ -334,7 +346,12 @@ const History: React.FC<HistoryProps> = ({
           tabIndex={0}
           role="region"
           aria-label={ariaLabel}
-          className={cx('rounded-lg border p-0 focus:outline-none', th.panelBg, th.panelBorder, th.focusRing)}
+          className={cx(
+            'rounded-lg border p-0 focus:outline-none',
+            th.panelBg, th.panelBorder, th.focusRing,
+            // melhorias de experiência no mobile (sem alterar desktop)
+            'touch-pan-y select-none overscroll-x-contain cursor-grab active:cursor-grabbing md:cursor-auto'
+          )}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
