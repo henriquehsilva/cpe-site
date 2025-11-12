@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import { Mail, Phone } from 'lucide-react';
+import React, { useState } from "react";
+import { Mail, Phone } from "lucide-react";
 
 const Contacts: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
 
   const contactInfo = {
     emailGeral: "31cipm.3crpm@gmail.com",
     telefone1: "62 99624-9821",
     telefone2: "62 99910-6969",
-    endereco: "Av. A, Quadra 08, Lote 01 - Cidade Jardim, Anápolis, Goiás"
+    endereco:
+      "CPE Anápolis - 31ª CIPM/CPE, Av. Brasil Norte, Qd. 08 Lt. 01, Cidade Jardim, Anápolis - GO",
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-    setFormData({ name: '', email: '', message: '' });
+    alert("Mensagem enviada com sucesso! Entraremos em contato em breve.");
+    setFormData({ name: "", email: "", message: "" });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <section id="contatos" className="py-20 bg-cpe-dark">
+    <section id="contatos" className="py-20 bg-cpe-dark relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Título */}
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             <span className="text-cpe-gold">Contatos</span>
@@ -39,12 +39,15 @@ const Contacts: React.FC = () => {
           <div className="w-24 h-1 bg-cpe-red mx-auto"></div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
+        {/* Grid principal */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Informações de Contato */}
           <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-white mb-8">Entre em Contato</h3>
+            <h3 className="text-2xl font-bold text-white mb-8">
+              Entre em Contato
+            </h3>
             <div className="space-y-6">
-              {/* Email Geral */}
+              {/* Email */}
               <div className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">
                 <Mail className="text-cpe-gold w-6 h-6" />
                 <div>
@@ -53,20 +56,19 @@ const Contacts: React.FC = () => {
                 </div>
               </div>
 
-              {/* Telefone 1 */}
+              {/* Telefones */}
               <div className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">
                 <Phone className="text-cpe-gold w-6 h-6" />
                 <div>
-                  <p className="text-white font-medium">Disk Denúncia</p>
+                  <p className="text-white font-medium">Telefone Denúncia</p>
                   <p className="text-gray-300">{contactInfo.telefone1}</p>
                 </div>
               </div>
 
-              {/* Telefone 2 */}
               <div className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">
                 <Phone className="text-cpe-gold w-6 h-6" />
                 <div>
-                  <p className="text-white font-medium">Contato</p>
+                  <p className="text-white font-medium">Telefone Contato</p>
                   <p className="text-gray-300">{contactInfo.telefone2}</p>
                 </div>
               </div>
@@ -79,17 +81,21 @@ const Contacts: React.FC = () => {
             </div>
           </div>
 
-          {/* Google Map */}
-          <div className="rounded-lg overflow-hidden shadow-lg border border-cpe-gray/30">
+          {/* Google Maps - CPE Anápolis */}
+          <div className="relative mt-[50px] rounded-lg overflow-hidden border-4 border-[#d97706] shadow-lg h-[450px]">
+            {/* Mapa estilizado (preto e branco) */}
             <iframe
-              title="Localização - 31ª CIPM"
+              title="Mapa da CPE Anápolis"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.823508907879!2d-48.9489158!3d-16.3157339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea46c91488b5d%3A0xe76f9fd20147d425!2sCPE%20ANAPOLIS%2031%C2%BA%20CIPM%2FCPE%20Companhia%20de%20Policiamento%20Especializado!5e0!3m2!1spt-BR!2sbr!4v1731411600000"
               width="100%"
               height="100%"
-              style={{ minHeight: '400px', border: 0, filter: 'grayscale(100%) contrast(1.1)' }}
+              style={{ border: 0, filter: "grayscale(100%) contrast(1.1)" }}
               loading="lazy"
-              allowFullScreen
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.013901701817!2d-48.950624!3d-16.333792!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea427dbf12345%3A0xabcdef1234567890!2sAv.%20A%2C%20Quadra%2008%2C%20Lote%2001%20-%20Cidade%20Jardim%2C%20An%C3%A1polis%20-%20GO!5e0!3m2!1spt-BR!2sbr!4v1700000000000"
+              referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
+
+            {/* Marcador laranja pulsante */}
+            <div className="absolute w-5 h-5 bg-[#d97706] rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg animate-pulse"></div>
           </div>
         </div>
       </div>
