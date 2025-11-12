@@ -47,6 +47,14 @@ const Header: React.FC = () => {
               
             </button>
             <button
+              onClick={() => scrollToSection('historia')}
+              className="text-white hover:text-cpe-gold transition-colors duration-200 font-medium"
+              aria-label="Ir para seção Nossa História"
+            >
+              Nossa História
+            </button>
+
+            <button
               onClick={() => scrollToSection('comando')}
               className="text-white hover:text-cpe-gold transition-colors duration-200 font-medium"
               aria-label="Ir para seção Comando"
