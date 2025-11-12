@@ -60,7 +60,7 @@ const Contacts: React.FC = () => {
               <div className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">
                 <Phone className="text-cpe-gold w-6 h-6" />
                 <div>
-                  <p className="text-white font-medium">Telefone Denúncia</p>
+                  <p className="text-white font-medium">Disk Denúncia</p>
                   <p className="text-gray-300">{contactInfo.telefone1}</p>
                 </div>
               </div>
@@ -68,7 +68,7 @@ const Contacts: React.FC = () => {
               <div className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">
                 <Phone className="text-cpe-gold w-6 h-6" />
                 <div>
-                  <p className="text-white font-medium">Telefone Contato</p>
+                  <p className="text-white font-medium">Contato</p>
                   <p className="text-gray-300">{contactInfo.telefone2}</p>
                 </div>
               </div>
