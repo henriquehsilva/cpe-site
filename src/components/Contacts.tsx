@@ -51,7 +51,7 @@ const Contacts: React.FC = () => {
               <div className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">
                 <Mail className="text-cpe-gold w-6 h-6" />
                 <div>
-                  <p className="text-white font-medium">E-mail Geral</p>
+                  <p className="text-white font-medium">E-mail</p>
                   <p className="text-gray-300">{contactInfo.emailGeral}</p>
                 </div>
               </div>
@@ -89,7 +89,7 @@ const Contacts: React.FC = () => {
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.823508907879!2d-48.9489158!3d-16.3157339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935ea46c91488b5d%3A0xe76f9fd20147d425!2sCPE%20ANAPOLIS%2031%C2%BA%20CIPM%2FCPE%20Companhia%20de%20Policiamento%20Especializado!5e0!3m2!1spt-BR!2sbr!4v1731411600000"
               width="100%"
               height="100%"
-              style={{ border: 0, filter: "grayscale(100%) contrast(1.1)" }}
+              style={{ border: 0}}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
