@@ -13,7 +13,7 @@ const Contacts: React.FC = () => {
     telefone1: "62 99624-9821",
     telefone2: "62 99910-6969",
     endereco:
-      "CPE Anápolis - 31ª CIPM/CPE, Av. Brasil Norte, Qd. 08 Lt. 01, Cidade Jardim, Anápolis - GO",
+      "CPE Anápolis - 31ª CIPM/CPE, Av. A, Qd. 08 Lt. 01, Cidade Jardim, Anápolis - GO",
   };
 
   const handleSubmit = (e: React.FormEvent) => {
