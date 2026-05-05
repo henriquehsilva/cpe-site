@@ -10,7 +10,8 @@ const Command: React.FC = () => {
   };
 
   const subcomandante = {
-    nome: "Capitão PM Thiago Pereira do Nascimento",
+    avatar: "sub.png",
+    nome: "Capitão PM Rafael Gonsalves Bueno",
     patente: ""
   };
 
@@ -41,7 +42,7 @@ const Command: React.FC = () => {
           <div className="bg-cpe-gray/20 rounded-xl p-8 border border-cpe-gray/30 hover:border-cpe-gold/50 transition-all duration-300 group">
             <div className="text-center">
               <div className="w-32 h-32 mx-auto mb-6 bg-cpe-gray/30 rounded-full flex items-center justify-center group-hover:bg-cpe-gold/20 transition-colors duration-300">
-                <User size={48} className="text-cpe-gold" />
+                <img src={subcomandante.avatar} alt="Avatar do Comandante" className="w-24 h-24 rounded-full object-cover" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Subcomandante</h3>
               <p className="text-cpe-gold text-xl font-semibold mb-4">{subcomandante.patente}</p>
