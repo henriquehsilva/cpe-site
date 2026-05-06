@@ -6,6 +6,7 @@ import {
   Award, Gift, BookOpen, LogOut, Shield, Palette,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
+import AniversariantesModule from './admin/AniversariantesModule';
 import { THEMES } from '../data/themes';
 
 interface AdminDashboardProps {
@@ -145,6 +146,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
       <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {activeModule === 'efetivo' ? (
           <EfetivoModule onBack={() => setActiveModule(null)} />
+        ) : activeModule === 'aniversariantes' ? (
+          <AniversariantesModule onBack={() => setActiveModule(null)} />
         ) : (
           <>
             <div className="mb-10">
