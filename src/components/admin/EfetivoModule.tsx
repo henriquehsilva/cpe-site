@@ -199,14 +199,14 @@ export default function EfetivoModule({ onBack }: { onBack: () => void }) {
     const rows = data.map(m =>
       `<tr><td>${m.ord}</td><td>${m.posto}</td><td>${m.rg}</td><td>${m.nome}</td><td>${m.cpf}</td><td>${m.telefone}</td></tr>`
     ).join('');
-    const html = `<!DOCTYPE html><html><head><title>Efetivo 31ª CIPM-CPE</title>
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Efetivo 31ª CIPM-CPE</title>
       <style>body{font-family:Arial;font-size:12px}table{width:100%;border-collapse:collapse}
       th,td{border:1px solid #ccc;padding:5px 8px}th{background:#333;color:#fff}
       h3{margin-bottom:12px}</style></head><body>
       <h3>Efetivo Geral — 31ª CIPM-CPE</h3>
       <table><thead><tr><th>Ord</th><th>Posto/Grad.</th><th>RG</th><th>Nome</th><th>CPF</th><th>Telefone</th></tr></thead>
       <tbody>${rows}</tbody></table></body></html>`;
-    const blob = new Blob([html], { type: 'text/html' });
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const w = window.open(url, '_blank');
     if (w) w.addEventListener('load', () => { w.print(); URL.revokeObjectURL(url); });
