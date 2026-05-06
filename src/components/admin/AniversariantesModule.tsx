@@ -25,6 +25,20 @@ function parseDateOrd(aniversario: string): number {
   return (MONTH_ORDER[match[2].toLowerCase()] ?? 0) * 100 + parseInt(match[1]);
 }
 
+const MONTHS_LIST = [
+  { abbr: 'jan', label: 'Janeiro' }, { abbr: 'fev', label: 'Fevereiro' },
+  { abbr: 'mar', label: 'Março' },   { abbr: 'abr', label: 'Abril' },
+  { abbr: 'mai', label: 'Maio' },    { abbr: 'jun', label: 'Junho' },
+  { abbr: 'jul', label: 'Julho' },   { abbr: 'ago', label: 'Agosto' },
+  { abbr: 'set', label: 'Setembro' },{ abbr: 'out', label: 'Outubro' },
+  { abbr: 'nov', label: 'Novembro' },{ abbr: 'dez', label: 'Dezembro' },
+];
+
+function parseAnivParts(value: string): { day: string; month: string } {
+  const match = value.match(/(\d+)[/-](\w{3})/);
+  return match ? { day: match[1], month: match[2].toLowerCase() } : { day: '1', month: 'jan' };
+}
+
 // ── Masks ──────────────────────────────────────────────
 function maskCPF(v: string) {
   const d = v.replace(/\D/g, '').slice(0, 11);
@@ -74,7 +88,7 @@ function reorderAfterMove(item: Aniversariante, oldOrd: number, list: Aniversari
 }
 
 const emptyForm = (): Omit<Aniversariante, 'id'> => ({
-  ord: 0, posto: 'SD PM', rg: '', nome: '', cpf: '', aniversario: '', obs: '',
+  ord: 0, posto: 'SD PM', rg: '', nome: '', cpf: '', aniversario: '1-jan.', obs: '',
 });
 
 interface Errors { cpf?: string; nome?: string; aniversario?: string; }
@@ -317,6 +331,7 @@ export default function AniversariantesModule({ onBack }: { onBack: () => void }
               <th className="px-4 py-3.5 text-left cursor-pointer hover:opacity-100 opacity-80 select-none" onClick={() => toggleSort('nome')}>
                 Nome <SortIcon col="nome" />
               </th>
+              <th className="px-4 py-3.5 text-left hidden xl:table-cell">CPF</th>
               <th className="px-4 py-3.5 text-left cursor-pointer hover:opacity-100 opacity-80 select-none w-32" onClick={() => toggleSort('aniversario')}>
                 Aniversário <SortIcon col="aniversario" />
               </th>
@@ -338,6 +353,7 @@ export default function AniversariantesModule({ onBack }: { onBack: () => void }
                 <td className="px-4 py-3.5 text-base font-medium" style={{ color: 'var(--adm-muted)' }}>{m.posto}</td>
                 <td className="px-4 py-3.5 text-base tabular-nums" style={{ color: 'var(--adm-muted)' }}>{m.rg}</td>
                 <td className="px-4 py-3.5 text-base font-semibold" style={{ color: 'var(--adm-text)' }}>{m.nome}</td>
+                <td className="px-4 py-3.5 text-base tabular-nums hidden xl:table-cell" style={{ color: 'var(--adm-muted)' }}>{m.cpf}</td>
                 <td className="px-4 py-3.5 text-base font-medium" style={{ color: 'var(--adm-accent)' }}>{m.aniversario}</td>
                 <td className="px-4 py-3.5 text-base hidden lg:table-cell" style={{ color: 'var(--adm-muted)' }}>{m.obs}</td>
                 <td className="px-4 py-3.5">
@@ -357,7 +373,7 @@ export default function AniversariantesModule({ onBack }: { onBack: () => void }
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-20 text-center text-lg" style={{ color: 'var(--adm-subtle)' }}>
+                <td colSpan={8} className="px-4 py-20 text-center text-lg" style={{ color: 'var(--adm-subtle)' }}>
                   Nenhum resultado encontrado.
                 </td>
               </tr>
@@ -438,15 +454,32 @@ export default function AniversariantesModule({ onBack }: { onBack: () => void }
               {/* Aniversário */}
               <div>
                 <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Aniversário</label>
-                <input
-                  type="text"
-                  value={form.aniversario}
-                  onChange={e => changeField('aniversario', e.target.value)}
-                  readOnly={isRO}
-                  placeholder="ex: 15-jan."
-                  className={inputCls(errors.aniversario)}
-                  style={isRO ? roStyle : { ...fieldStyle, ...(errors.aniversario ? { borderColor: '#ef4444' } : {}) }}
-                />
+                {isRO ? (
+                  <input readOnly value={form.aniversario} className={inputCls()} style={roStyle} />
+                ) : (
+                  <div className="flex gap-2">
+                    <select
+                      value={parseAnivParts(form.aniversario).day}
+                      onChange={e => changeField('aniversario', `${e.target.value}-${parseAnivParts(form.aniversario).month}.`)}
+                      className="adm-input w-20 rounded-lg px-3 py-2.5 text-base border"
+                      style={fieldStyle}
+                    >
+                      {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                        <option key={d} value={String(d)}>{d}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={parseAnivParts(form.aniversario).month}
+                      onChange={e => changeField('aniversario', `${parseAnivParts(form.aniversario).day}-${e.target.value}.`)}
+                      className="adm-input flex-1 rounded-lg px-3 py-2.5 text-base border"
+                      style={fieldStyle}
+                    >
+                      {MONTHS_LIST.map(m => (
+                        <option key={m.abbr} value={m.abbr}>{m.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 {errors.aniversario && (
                   <p className="text-sm mt-1 text-red-400 flex items-center gap-1">
                     <AlertCircle size={13} /> {errors.aniversario}
