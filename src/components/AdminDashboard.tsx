@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import AniversariantesModule from './admin/AniversariantesModule';
+import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import { THEMES } from '../data/themes';
 
 interface AdminDashboardProps {
@@ -148,6 +149,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <EfetivoModule onBack={() => setActiveModule(null)} />
         ) : activeModule === 'aniversariantes' ? (
           <AniversariantesModule onBack={() => setActiveModule(null)} />
+        ) : activeModule === 'plano-chamada' ? (
+          <PlanoChamadaModule onBack={() => setActiveModule(null)} />
         ) : (
           <>
             <div className="mb-10">
