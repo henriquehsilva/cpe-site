@@ -4,6 +4,7 @@ import {
   Download, FileJson, FileText, Printer, ArrowLeft, Save, AlertCircle,
 } from 'lucide-react';
 import { efetivoDB, Militar, POSTOS_GRADUACOES } from '../../data/efetivo';
+import { ModulePermission } from '../../types/rbac';
 
 type SortKey = keyof Pick<Militar, 'ord' | 'posto' | 'rg' | 'nome'>;
 type SortDir = 'asc' | 'desc';
@@ -82,7 +83,10 @@ const emptyForm = (): Omit<Militar, 'id'> => ({
 
 interface Errors { cpf?: string; telefone?: string; nome?: string; }
 
-export default function EfetivoModule({ onBack }: { onBack: () => void }) {
+export default function EfetivoModule({ onBack, permissions }: { onBack: () => void; permissions?: ModulePermission }) {
+  const canCreate = !permissions || permissions.create;
+  const canEdit   = !permissions || permissions.edit;
+  const canDelete = !permissions || permissions.delete;
   const [data, setData] = useState<Militar[]>(efetivoDB);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('ord');
@@ -280,12 +284,14 @@ export default function EfetivoModule({ onBack }: { onBack: () => void }) {
           )}
         </div>
 
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-base font-semibold px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus size={16} /> Novo Registro
-        </button>
+        {canCreate && (
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-base font-semibold px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus size={16} /> Novo Registro
+          </button>
+        )}
       </div>
 
       {/* ── Search ───────────────────────────────────── */}
@@ -347,12 +353,16 @@ export default function EfetivoModule({ onBack }: { onBack: () => void }) {
                     <button onClick={() => openView(m)} title="Visualizar" className="p-2 rounded-lg transition-colors hover:bg-blue-400/10 text-blue-400 opacity-70 hover:opacity-100">
                       <Eye size={17} />
                     </button>
-                    <button onClick={() => openEdit(m)} title="Editar" className="p-2 rounded-lg transition-colors hover:bg-amber-400/10 text-amber-400 opacity-70 hover:opacity-100">
-                      <Pencil size={17} />
-                    </button>
-                    <button onClick={() => setDeleteTarget(m)} title="Remover" className="p-2 rounded-lg transition-colors hover:bg-cpe-red/10 text-cpe-red opacity-70 hover:opacity-100">
-                      <Trash2 size={17} />
-                    </button>
+                    {canEdit && (
+                      <button onClick={() => openEdit(m)} title="Editar" className="p-2 rounded-lg transition-colors hover:bg-amber-400/10 text-amber-400 opacity-70 hover:opacity-100">
+                        <Pencil size={17} />
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button onClick={() => setDeleteTarget(m)} title="Remover" className="p-2 rounded-lg transition-colors hover:bg-cpe-red/10 text-cpe-red opacity-70 hover:opacity-100">
+                        <Trash2 size={17} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { auth } from './firebase';
+import { RBACProvider, useRBAC } from './contexts/RBACContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import History from './components/History';
@@ -10,23 +11,19 @@ import Footer from './components/Footer';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 
-function App() {
+function AppContent() {
+  const { adminUser, authReady } = useRBAC();
   const [showLogin, setShowLogin] = useState(false);
-  const [adminUser, setAdminUser] = useState<User | null>(null);
   const [showDashboard, setShowDashboard] = useState(false);
-  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setAdminUser(user);
-      setAuthReady(true);
-      if (user) {
-        setShowLogin(false);
-        setShowDashboard(true);
-      }
-    });
-    return unsubscribe;
-  }, []);
+    if (adminUser) {
+      setShowLogin(false);
+      setShowDashboard(true);
+    } else {
+      setShowDashboard(false);
+    }
+  }, [adminUser]);
 
   const handleAdminClick = () => {
     if (adminUser) {
@@ -34,6 +31,11 @@ function App() {
     } else {
       setShowLogin(true);
     }
+  };
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+    setShowDashboard(false);
   };
 
   if (!authReady) return null;
@@ -60,9 +62,17 @@ function App() {
       )}
 
       {showDashboard && adminUser && (
-        <AdminDashboard onClose={() => setShowDashboard(false)} />
+        <AdminDashboard onClose={handleSignOut} />
       )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <RBACProvider>
+      <AppContent />
+    </RBACProvider>
   );
 }
 
