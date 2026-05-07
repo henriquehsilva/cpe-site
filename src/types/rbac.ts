@@ -13,7 +13,8 @@ export type ModuleKey =
   | 'agendaAudiencias'
   | 'medalhas'
   | 'dispencaRecompensa'
-  | 'lesp';
+  | 'lesp'
+  | 'fotos';
 
 export type UserPermissions = Record<ModuleKey, ModulePermission>;
 
@@ -21,6 +22,7 @@ export interface AdminUserProfile {
   id: string;
   email: string;
   displayName: string;
+  avatarUrl: string;
   status: 'active' | 'inactive';
   createdAt: Date;
   updatedAt: Date;
@@ -36,6 +38,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
   medalhas: 'Medalhas',
   dispencaRecompensa: 'Dispença Recompensa',
   lesp: 'LESP',
+  fotos: 'Painel de Fotos',
 };
 
 export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
@@ -47,6 +50,7 @@ export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
   'medalhas': 'medalhas',
   'dispenca-recompensa': 'dispencaRecompensa',
   'lesp': 'lesp',
+  'fotos': 'fotos',
 };
 
 export const DEFAULT_MODULE_PERMISSION: ModulePermission = {
@@ -65,6 +69,7 @@ export const DEFAULT_PERMISSIONS: UserPermissions = {
   medalhas: { ...DEFAULT_MODULE_PERMISSION },
   dispencaRecompensa: { ...DEFAULT_MODULE_PERMISSION },
   lesp: { ...DEFAULT_MODULE_PERMISSION },
+  fotos: { ...DEFAULT_MODULE_PERMISSION },
 };
 
 export const SUPER_ADMIN_EMAIL = 'sad31chagas@gmail.com';

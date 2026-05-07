@@ -11,9 +11,10 @@ const InstagramIcon = ({ size = 16 }: { size?: number }) => (
 
 interface HeaderProps {
   onAdminClick: () => void;
+  onGalleryClick: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onAdminClick }) => {
+const Header: React.FC<HeaderProps> = ({ onAdminClick, onGalleryClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -71,6 +72,13 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick }) => {
             >
               Contatos
             </button>
+            <button
+              onClick={onGalleryClick}
+              className="text-white hover:text-cpe-gold transition-colors duration-200 font-medium"
+              aria-label="Abrir galeria de fotos"
+            >
+              Fotos
+            </button>
             <a
               href="https://www.instagram.com/cpe_anapolis_oficial"
               target="_blank"
@@ -122,6 +130,12 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick }) => {
                 className="block w-full text-left text-white hover:text-cpe-gold transition-colors duration-200 font-medium py-2"
               >
                 Contatos
+              </button>
+              <button
+                onClick={() => { onGalleryClick(); setIsMenuOpen(false); }}
+                className="block w-full text-left text-white hover:text-cpe-gold transition-colors duration-200 font-medium py-2"
+              >
+                Fotos
               </button>
               <a
                 href="https://www.instagram.com/cpe_anapolis_oficial"

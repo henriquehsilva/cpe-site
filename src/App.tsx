@@ -10,11 +10,13 @@ import Contacts from './components/Contacts';
 import Footer from './components/Footer';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
+import Gallery from './components/Gallery';
 
 function AppContent() {
   const { adminUser, authReady } = useRBAC();
   const [showLogin, setShowLogin] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
 
   useEffect(() => {
     if (adminUser) {
@@ -42,7 +44,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-cpe-dark text-white font-sans">
-      <Header onAdminClick={handleAdminClick} />
+      <Header onAdminClick={handleAdminClick} onGalleryClick={() => setShowGallery(true)} />
       <main>
         <Hero />
         <History />
@@ -63,6 +65,10 @@ function AppContent() {
 
       {showDashboard && adminUser && (
         <AdminDashboard onClose={handleSignOut} />
+      )}
+
+      {showGallery && (
+        <Gallery onClose={() => setShowGallery(false)} />
       )}
     </div>
   );
