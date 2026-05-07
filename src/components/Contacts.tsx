@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Mail, Phone } from "lucide-react";
 
+const InstagramIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+);
+
 const Contacts: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -72,6 +80,20 @@ const Contacts: React.FC = () => {
                   <p className="text-gray-300">{contactInfo.telefone2}</p>
                 </div>
               </div>
+
+              {/* Instagram */}
+              <a
+                href="https://www.instagram.com/cpe_anapolis_oficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-4 p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30 hover:border-pink-500/50 hover:bg-pink-500/5 transition-colors duration-200 group"
+              >
+                <InstagramIcon className="text-cpe-gold group-hover:text-pink-400 transition-colors duration-200 w-6 h-6 flex-shrink-0" />
+                <div>
+                  <p className="text-white font-medium">Instagram</p>
+                  <p className="text-gray-300">@cpe_anapolis_oficial</p>
+                </div>
+              </a>
 
               {/* Endereço */}
               <div className="p-4 bg-cpe-gray/20 rounded-lg border border-cpe-gray/30">

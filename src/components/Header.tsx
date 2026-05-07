@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShieldCheck } from 'lucide-react';
 
+const InstagramIcon = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+);
+
 interface HeaderProps {
   onAdminClick: () => void;
 }
@@ -63,6 +71,15 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick }) => {
             >
               Contatos
             </button>
+            <a
+              href="https://www.instagram.com/cpe_anapolis_oficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-pink-400 transition-colors duration-200"
+              aria-label="Instagram CPE Anápolis"
+            >
+              <InstagramIcon size={20} />
+            </a>
             <button
               onClick={onAdminClick}
               className="flex items-center gap-2 bg-cpe-red/10 hover:bg-cpe-red/20 border border-cpe-red/40 hover:border-cpe-red/70 text-cpe-red font-semibold px-4 py-2 rounded-lg transition-all duration-200"
@@ -106,6 +123,15 @@ const Header: React.FC<HeaderProps> = ({ onAdminClick }) => {
               >
                 Contatos
               </button>
+              <a
+                href="https://www.instagram.com/cpe_anapolis_oficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 w-full text-white hover:text-pink-400 transition-colors duration-200 font-medium py-2"
+              >
+                <InstagramIcon size={18} />
+                Instagram
+              </a>
               <button
                 onClick={() => { onAdminClick(); setIsMenuOpen(false); }}
                 className="flex items-center gap-2 w-full text-left text-cpe-red hover:text-red-300 transition-colors duration-200 font-semibold py-2"
