@@ -7,6 +7,7 @@ import {
   Settings, Camera, ArrowLeft,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
+import MapaEfetivoModule from './admin/MapaEfetivoModule';
 import AniversariantesModule from './admin/AniversariantesModule';
 import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import SettingsModule from './admin/SettingsModule';
@@ -30,6 +31,7 @@ const ALL_MODULES = [
   { id: 'dispenca-recompensa',label: 'Dispença Recompensa', icon: Gift },
   { id: 'lesp',               label: 'LESP',                icon: BookOpen },
   { id: 'fotos',              label: 'Painel de Fotos',     icon: Camera },
+  { id: 'mapa-efetivo',       label: 'Mapa do Efetivo',     icon: CalendarDays },
 ];
 
 const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
@@ -249,6 +251,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <PlanoChamadaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('plano-chamada')} />
         ) : activeModule === 'fotos' ? (
           <FotosModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('fotos')} />
+        ) : activeModule === 'mapa-efetivo' ? (
+          <MapaEfetivoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('mapa-efetivo')} />
         ) : (
           <>
             <div className="mb-8 sm:mb-10">
