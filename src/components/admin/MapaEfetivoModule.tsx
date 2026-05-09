@@ -526,7 +526,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
         <table className="w-full text-xs" style={{ minWidth: 900 }}>
           <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
             <tr className="font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
-              <th className="px-3 py-2.5 text-left w-32">Rótulo</th>
+              <th className="px-3 py-2.5 text-left w-32">Viatura</th>
               <th className="px-3 py-2.5 text-left">Pelotão A</th>
               <th className="px-3 py-2.5 text-left">Pelotão B</th>
               <th className="px-3 py-2.5 text-left">Pelotão C</th>
