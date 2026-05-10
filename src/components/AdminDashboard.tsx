@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
+import AgendaAudienciasModule from './admin/AgendaAudienciasModule';
 import AniversariantesModule from './admin/AniversariantesModule';
 import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import SettingsModule from './admin/SettingsModule';
@@ -253,6 +254,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <FotosModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('fotos')} />
         ) : activeModule === 'mapa-efetivo' ? (
           <MapaEfetivoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('mapa-efetivo')} />
+        ) : activeModule === 'agenda-audiencias' ? (
+          <AgendaAudienciasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('agenda-audiencias')} />
         ) : (
           <>
             <div className="mb-8 sm:mb-10">
