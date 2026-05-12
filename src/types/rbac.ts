@@ -37,7 +37,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
   planoChamada: 'Plano de Chamada',
   agendaAudiencias: 'Agenda Audiências',
   medalhas: 'Medalhas',
-  dispencaRecompensa: 'Dispença Recompensa',
+  dispencaRecompensa: 'Dispensa Recompensa',
   lesp: 'LESP',
   fotos: 'Painel de Fotos',
   mapaEfetivo: 'Mapa do Efetivo',

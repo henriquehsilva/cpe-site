@@ -30,7 +30,7 @@ const ALL_MODULES = [
   { id: 'plano-chamada',      label: 'Plano de Chamada',    icon: PhoneCall },
   { id: 'agenda-audiencias',  label: 'Agenda Audiências',   icon: Scale },
   { id: 'medalhas',           label: 'Medalhas',            icon: Award },
-  { id: 'dispenca-recompensa',label: 'Dispença Recompensa', icon: Gift },
+  { id: 'dispenca-recompensa',label: 'Dispensa Recompensa', icon: Gift },
   { id: 'lesp',               label: 'LESP',                icon: BookOpen },
   { id: 'fotos',              label: 'Painel de Fotos',     icon: Camera },
   { id: 'mapa-efetivo',       label: 'Mapa do Efetivo',     icon: CalendarDays },

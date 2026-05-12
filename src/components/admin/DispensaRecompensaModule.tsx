@@ -89,7 +89,7 @@ function exportPrint(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
     </tr>`).join('');
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-    <title>Dispença Recompensa</title>
+    <title>Dispensa Recompensa</title>
     <style>
       body{font-family:Arial;font-size:9px;margin:12px}
       h2{font-size:11px;margin:16px 0 6px}
@@ -98,7 +98,7 @@ function exportPrint(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
       th,td{border:1px solid #bbb;padding:2px 5px}
       th{background:#2d2d2d;color:#fff;text-transform:uppercase;font-size:8px}
     </style></head><body>
-    <h2>DISPENÇA RECOMPENSA — CPE</h2>
+    <h2>DISPENSA RECOMPENSA — CPE</h2>
     <h3>CMDO GERAL</h3>
     <table>
       <thead><tr>
@@ -309,7 +309,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
         </button>
         <span style={{ color: 'var(--adm-border)' }} className="hidden sm:block">|</span>
         <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>
-          Dispença Recompensa
+          Dispensa Recompensa
         </h3>
 
         {/* export */}

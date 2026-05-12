@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Eye, Pencil, Trash2, X, Save, Search,
   Download, FileSpreadsheet, Printer, ChevronUp, ChevronDown, AlertCircle,
+  CalendarPlus,
 } from 'lucide-react';
 import {
   agendaAudienciasDB, Audiencia, Modalidade, MODALIDADES,
@@ -93,6 +94,33 @@ function exportPrint(rows: Audiencia[], title: string) {
 
 function emptyForm(mes: number, ano: number): Omit<Audiencia, 'id'> {
   return { mes, ano, data: '', horario: '', local: '', postoGrad: '', modalidade: 'VIDEOCONFERÊNCIA', sei: '' };
+}
+
+// ── Google Calendar link ──────────────────────────────────────────────────
+
+function buildGCalUrl(a: Audiencia): string {
+  const [day, month] = a.data.split('/').map(Number);
+  const hm   = a.horario.match(/(\d+)h(\d+)/);
+  const hour = hm ? parseInt(hm[1], 10) : 9;
+  const min  = hm ? parseInt(hm[2], 10) : 0;
+  const pad  = (n: number) => String(n).padStart(2, '0');
+  const base = `${a.ano}${pad(month)}${pad(day)}`;
+  const start = `${base}T${pad(hour)}${pad(min)}00`;
+  const end   = `${base}T${pad(hour + 1)}${pad(min)}00`;
+  const details = [
+    `Modalidade: ${a.modalidade}`,
+    a.sei ? `SEI: ${a.sei}` : '',
+  ].filter(Boolean).join('\n');
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text:   `Audiência — ${a.postoGrad}`,
+    dates:  `${start}/${end}`,
+    details,
+    location: a.local,
+    sf: 'true',
+    output: 'xml',
+  });
+  return `https://www.google.com/calendar/render?${params}`;
 }
 
 // ── sort helpers ──────────────────────────────────────────────────────────
@@ -396,6 +424,11 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
                       className="p-1.5 rounded-lg hover:bg-blue-400/10 text-blue-400 opacity-70 hover:opacity-100 transition-colors">
                       <Eye size={15} />
                     </button>
+                    <a href={buildGCalUrl(a)} target="_blank" rel="noreferrer"
+                      title="Adicionar ao Google Agenda"
+                      className="p-1.5 rounded-lg hover:bg-emerald-400/10 text-emerald-400 opacity-70 hover:opacity-100 transition-colors">
+                      <CalendarPlus size={15} />
+                    </a>
                     {canEdit && (
                       <button onClick={() => openEdit(a)} title="Editar"
                         className="p-1.5 rounded-lg hover:bg-amber-400/10 text-amber-400 opacity-70 hover:opacity-100 transition-colors">
@@ -534,19 +567,29 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
               </div>
             </div>
 
-            {!isRO && (
-              <div className="flex justify-end gap-3 px-6 pb-5">
-                <button onClick={closeModal}
-                  className="px-5 py-2.5 text-base rounded-lg border transition-colors"
-                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>
-                  Cancelar
-                </button>
-                <button onClick={handleSave}
-                  className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
-                  <Save size={16} /> Salvar
-                </button>
-              </div>
-            )}
+            <div className="flex items-center justify-between gap-3 px-6 pb-5">
+              <a href={buildGCalUrl({ ...form, id: modal?.item?.id ?? '' })}
+                target="_blank" rel="noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg border transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--adm-muted)')}>
+                <CalendarPlus size={15} /> Google Agenda
+              </a>
+              {!isRO && (
+                <div className="flex gap-3">
+                  <button onClick={closeModal}
+                    className="px-5 py-2.5 text-base rounded-lg border transition-colors"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>
+                    Cancelar
+                  </button>
+                  <button onClick={handleSave}
+                    className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                    <Save size={16} /> Salvar
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
