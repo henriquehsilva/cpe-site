@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, Crosshair,
+  Settings, Camera, ArrowLeft, Crosshair, Car,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
@@ -16,6 +16,7 @@ import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import SettingsModule from './admin/SettingsModule';
 import FotosModule from './admin/FotosModule';
 import ArmamentoModule from './admin/ArmamentoModule';
+import ViaturasModule from './admin/ViaturasModule';
 import ProfileModal from './admin/ProfileModal';
 import { THEMES } from '../data/themes';
 import { useRBAC } from '../contexts/RBACContext';
@@ -37,6 +38,7 @@ const ALL_MODULES = [
   { id: 'fotos',              label: 'Painel de Fotos',     icon: Camera },
   { id: 'mapa-efetivo',       label: 'Mapa do Efetivo',     icon: CalendarDays },
   { id: 'armamento',          label: 'Armamento',           icon: Crosshair },
+  { id: 'viaturas',           label: 'Viaturas',            icon: Car },
 ];
 
 const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
@@ -260,6 +262,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <MapaEfetivoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('mapa-efetivo')} />
         ) : activeModule === 'armamento' ? (
           <ArmamentoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('armamento')} />
+        ) : activeModule === 'viaturas' ? (
+          <ViaturasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('viaturas')} />
         ) : activeModule === 'agenda-audiencias' ? (
           <AgendaAudienciasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('agenda-audiencias')} />
         ) : activeModule === 'plano-ferias' ? (
