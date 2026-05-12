@@ -15,7 +15,8 @@ export type ModuleKey =
   | 'dispencaRecompensa'
   | 'lesp'
   | 'fotos'
-  | 'mapaEfetivo';
+  | 'mapaEfetivo'
+  | 'armamento';
 
 export type UserPermissions = Record<ModuleKey, ModulePermission>;
 
@@ -41,6 +42,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
   lesp: 'LESP',
   fotos: 'Painel de Fotos',
   mapaEfetivo: 'Mapa do Efetivo',
+  armamento: 'Armamento',
 };
 
 export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
@@ -54,6 +56,7 @@ export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
   'lesp': 'lesp',
   'fotos': 'fotos',
   'mapa-efetivo': 'mapaEfetivo',
+  'armamento': 'armamento',
 };
 
 export const DEFAULT_MODULE_PERMISSION: ModulePermission = {
@@ -74,6 +77,7 @@ export const DEFAULT_PERMISSIONS: UserPermissions = {
   lesp: { ...DEFAULT_MODULE_PERMISSION },
   fotos: { ...DEFAULT_MODULE_PERMISSION },
   mapaEfetivo: { ...DEFAULT_MODULE_PERMISSION },
+  armamento: { ...DEFAULT_MODULE_PERMISSION },
 };
 
 export const SUPER_ADMIN_EMAIL = 'sad31chagas@gmail.com';

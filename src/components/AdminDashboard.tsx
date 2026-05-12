@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft,
+  Settings, Camera, ArrowLeft, Crosshair,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
@@ -15,6 +15,7 @@ import AniversariantesModule from './admin/AniversariantesModule';
 import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import SettingsModule from './admin/SettingsModule';
 import FotosModule from './admin/FotosModule';
+import ArmamentoModule from './admin/ArmamentoModule';
 import ProfileModal from './admin/ProfileModal';
 import { THEMES } from '../data/themes';
 import { useRBAC } from '../contexts/RBACContext';
@@ -35,6 +36,7 @@ const ALL_MODULES = [
   { id: 'lesp',               label: 'LESP',                icon: BookOpen },
   { id: 'fotos',              label: 'Painel de Fotos',     icon: Camera },
   { id: 'mapa-efetivo',       label: 'Mapa do Efetivo',     icon: CalendarDays },
+  { id: 'armamento',          label: 'Armamento',           icon: Crosshair },
 ];
 
 const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
@@ -256,6 +258,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <FotosModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('fotos')} />
         ) : activeModule === 'mapa-efetivo' ? (
           <MapaEfetivoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('mapa-efetivo')} />
+        ) : activeModule === 'armamento' ? (
+          <ArmamentoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('armamento')} />
         ) : activeModule === 'agenda-audiencias' ? (
           <AgendaAudienciasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('agenda-audiencias')} />
         ) : activeModule === 'plano-ferias' ? (
