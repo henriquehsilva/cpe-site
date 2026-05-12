@@ -10,6 +10,7 @@ import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
 import AgendaAudienciasModule from './admin/AgendaAudienciasModule';
 import DispensaRecompensaModule from './admin/DispensaRecompensaModule';
+import PlanoFeriasModule from './admin/PlanoFeriasModule';
 import AniversariantesModule from './admin/AniversariantesModule';
 import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import SettingsModule from './admin/SettingsModule';
@@ -257,6 +258,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <MapaEfetivoModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('mapa-efetivo')} />
         ) : activeModule === 'agenda-audiencias' ? (
           <AgendaAudienciasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('agenda-audiencias')} />
+        ) : activeModule === 'plano-ferias' ? (
+          <PlanoFeriasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('plano-ferias')} />
         ) : activeModule === 'dispenca-recompensa' ? (
           <DispensaRecompensaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('dispenca-recompensa')} />
         ) : (
