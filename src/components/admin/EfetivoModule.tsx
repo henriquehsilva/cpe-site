@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { efetivoDB, Militar, POSTOS_GRADUACOES } from '../../data/efetivo';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 type SortKey = keyof Pick<Militar, 'ord' | 'posto' | 'rg' | 'nome'>;
 type SortDir = 'asc' | 'desc';
@@ -87,7 +88,7 @@ export default function EfetivoModule({ onBack, permissions }: { onBack: () => v
   const canCreate = !permissions || permissions.create;
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
-  const [data, setData] = useState<Militar[]>(efetivoDB);
+  const [data, setData] = usePersistentState<Militar[]>('cpe-site:efetivo:v1', efetivoDB);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('ord');
   const [sortDir, setSortDir] = useState<SortDir>('asc');

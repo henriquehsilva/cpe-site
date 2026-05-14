@@ -10,6 +10,7 @@ import {
   emptyLinhas, emptyContagens,
 } from '../../data/mapaEfetivo';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 // ── helpers ──────────────────────────────────────────────────────────────
 
@@ -167,7 +168,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
-  const [data, setData]             = useState<MapaEfetivo[]>(mapaEfetivoDB);
+  const [data, setData]             = usePersistentState<MapaEfetivo[]>('cpe-site:mapa-efetivo:v1', mapaEfetivoDB);
   const [view, setView]             = useState<View>('list');
   const [selected, setSelected]     = useState<MapaEfetivo | null>(null);
   const [editMode, setEditMode]     = useState(false);

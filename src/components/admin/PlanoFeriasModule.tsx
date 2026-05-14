@@ -9,6 +9,7 @@ import {
   FeriasPessoa, FeriasPendente, FeriasAbrilMaio,
 } from '../../data/planoFerias';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 // ── constants ─────────────────────────────────────────────────────────────────
 
@@ -161,9 +162,9 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
-  const [mensalData,   setMensalData]   = useState<FeriasPessoa[]>(feriasMensalDB);
-  const [pendenteData, setPendenteData] = useState<FeriasPendente[]>(feriasPendenteDB);
-  const [abrMaiData,   setAbrMaiData]   = useState<FeriasAbrilMaio[]>(feriasAbrilMaioDB);
+  const [mensalData,   setMensalData]   = usePersistentState<FeriasPessoa[]>('cpe-site:plano-ferias:mensal:v1', feriasMensalDB);
+  const [pendenteData, setPendenteData] = usePersistentState<FeriasPendente[]>('cpe-site:plano-ferias:pendentes:v1', feriasPendenteDB);
+  const [abrMaiData,   setAbrMaiData]   = usePersistentState<FeriasAbrilMaio[]>('cpe-site:plano-ferias:abr-mai:v1', feriasAbrilMaioDB);
 
   const [activeTab, setActiveTab]     = useState(4); // Maio by default
   const [search, setSearch]           = useState('');

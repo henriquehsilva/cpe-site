@@ -8,6 +8,7 @@ import {
   dispensaCmdoDB, dispensaAnualDB, DispensaCmdo, DispensaAnual,
 } from '../../data/dispensaRecompensa';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -150,8 +151,8 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
-  const [cmdoData, setCmdoData]   = useState<DispensaCmdo[]>(dispensaCmdoDB);
-  const [anualData, setAnualData] = useState<DispensaAnual[]>(dispensaAnualDB);
+  const [cmdoData, setCmdoData]   = usePersistentState<DispensaCmdo[]>('cpe-site:dispensa-recompensa:cmdo:v1', dispensaCmdoDB);
+  const [anualData, setAnualData] = usePersistentState<DispensaAnual[]>('cpe-site:dispensa-recompensa:anual:v1', dispensaAnualDB);
   const [tab, setTab]             = useState<Tab>('cmdo');
   const [search, setSearch]       = useState('');
   const [soComDispensa, setSoComDispensa] = useState(false);

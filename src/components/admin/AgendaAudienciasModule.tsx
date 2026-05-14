@@ -10,6 +10,7 @@ import {
   MESES_AUDIENCIA, audienciaOrd,
 } from '../../data/agendaAudiencias';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 // ── helpers ──────────────────────────────────────────────────────────────
 
@@ -152,7 +153,7 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
-  const [data, setData]           = useState<Audiencia[]>(agendaAudienciasDB);
+  const [data, setData]           = usePersistentState<Audiencia[]>('cpe-site:agenda-audiencias:v1', agendaAudienciasDB);
   const [search, setSearch]       = useState('');
   const [activeMes, setActiveMes] = useState<string>('all'); // "all" or "YYYY-M"
   const [sortKey, setSortKey]     = useState<SortKey>('data');

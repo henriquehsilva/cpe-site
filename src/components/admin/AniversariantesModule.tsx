@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { aniversariantesDB, Aniversariante, POSTOS_GRADUACOES_ANIV } from '../../data/aniversariantes';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 type SortKey = keyof Pick<Aniversariante, 'ord' | 'posto' | 'rg' | 'nome' | 'aniversario'>;
 type SortDir = 'asc' | 'desc';
@@ -98,7 +99,7 @@ export default function AniversariantesModule({ onBack, permissions }: { onBack:
   const canCreate = !permissions || permissions.create;
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
-  const [data, setData] = useState<Aniversariante[]>(aniversariantesDB);
+  const [data, setData] = usePersistentState<Aniversariante[]>('cpe-site:aniversariantes:v1', aniversariantesDB);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('ord');
   const [sortDir, setSortDir] = useState<SortDir>('asc');

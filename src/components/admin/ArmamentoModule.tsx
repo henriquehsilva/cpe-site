@@ -8,6 +8,7 @@ import {
   armamentoDB, ArmamentoCategoria, ArmamentoItem, ARMAMENTO_CATEGORIAS,
 } from '../../data/armamento';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 type SortKey = keyof Pick<ArmamentoItem, 'categoria' | 'tombamento' | 'estado' | 'quantidade' | 'especificacao' | 'localizacao'>;
 type SortDir = 'asc' | 'desc';
@@ -48,7 +49,7 @@ export default function ArmamentoModule({ onBack, permissions }: Props) {
   const canEdit = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
-  const [data, setData] = useState<ArmamentoItem[]>(armamentoDB);
+  const [data, setData] = usePersistentState<ArmamentoItem[]>('cpe-site:armamento:v1', armamentoDB);
   const [search, setSearch] = useState('');
   const [categoria, setCategoria] = useState<CategoriaFilter>('Todas');
   const [sortKey, setSortKey] = useState<SortKey>('categoria');

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { chamadaDB, Chamada, POSTOS_GRADUACOES_CHAMADA } from '../../data/planoChamada';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 type SortKey = keyof Pick<Chamada, 'ord' | 'posto' | 'rg' | 'nome' | 'dataInclusao'>;
 type SortDir = 'asc' | 'desc';
@@ -102,7 +103,7 @@ export default function PlanoChamadaModule({ onBack, permissions }: { onBack: ()
   const canCreate = !permissions || permissions.create;
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
-  const [data, setData] = useState<Chamada[]>(chamadaDB);
+  const [data, setData] = usePersistentState<Chamada[]>('cpe-site:plano-chamada:v1', chamadaDB);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('ord');
   const [sortDir, setSortDir] = useState<SortDir>('asc');

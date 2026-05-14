@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { viaturasDB, ViaturaItem } from '../../data/viaturas';
 import { ModulePermission } from '../../types/rbac';
+import { usePersistentState } from '../../hooks/usePersistentState';
 
 type SortKey = keyof Pick<ViaturaItem, 'ordem' | 'tombamento' | 'estado' | 'quantidade' | 'especificacao' | 'localizacao'>;
 type SortDir = 'asc' | 'desc';
@@ -45,7 +46,7 @@ export default function ViaturasModule({ onBack, permissions }: Props) {
   const canEdit = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
-  const [data, setData] = useState<ViaturaItem[]>(viaturasDB);
+  const [data, setData] = usePersistentState<ViaturaItem[]>('cpe-site:viaturas:v1', viaturasDB);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('ordem');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
