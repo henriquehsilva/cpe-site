@@ -47,6 +47,85 @@ function emptyAbrMai(secao: FeriasAbrilMaio['secao']): FeriasAbrilMaio {
   return { id: '', secao, num: 1, graduacao: '', rg: '', nome: '', funcao: '', dias: '', inicio: '', fim: '', dispCmdo: '', pronto: '', observacao: '' };
 }
 
+function clampPosition(value: number, max: number) {
+  const normalized = Number.isFinite(value) && value > 0 ? Math.floor(value) : max;
+  return Math.min(normalized, max);
+}
+
+function sortByPosition<T>(rows: T[], getPosition: (row: T) => number) {
+  return rows
+    .map((row, index) => ({ row, index }))
+    .sort((a, b) => getPosition(a.row) - getPosition(b.row) || a.index - b.index)
+    .map(({ row }) => row);
+}
+
+function normalizeMensal(rows: FeriasPessoa[]) {
+  return MONTH_LABELS.flatMap((_, index) => {
+    const mes = index + 1;
+    return sortByPosition(rows.filter(row => row.mes === mes), row => row.ord)
+      .map((row, rowIndex) => ({ ...row, ord: rowIndex + 1 }));
+  });
+}
+
+function normalizePendentes(rows: FeriasPendente[]) {
+  return sortByPosition(rows, row => row.ord)
+    .map((row, index) => ({ ...row, ord: index + 1 }));
+}
+
+function normalizeAbrMai(rows: FeriasAbrilMaio[]) {
+  const secoes: FeriasAbrilMaio['secao'][] = ['retornam-abril', 'entram-maio', 'lesp'];
+  return secoes.flatMap(secao =>
+    sortByPosition(rows.filter(row => row.secao === secao), row => row.num)
+      .map((row, index) => ({ ...row, num: index + 1 })),
+  );
+}
+
+function upsertPessoa(rows: FeriasPessoa[], item: FeriasPessoa) {
+  const mesRows = sortByPosition(
+    rows.filter(row => row.mes === item.mes && row.id !== item.id),
+    row => row.ord,
+  );
+  const position = clampPosition(item.ord, mesRows.length + 1) - 1;
+  const nextMesRows = [
+    ...mesRows.slice(0, position),
+    { ...item, ord: position + 1 },
+    ...mesRows.slice(position),
+  ];
+
+  return normalizeMensal([
+    ...rows.filter(row => row.mes !== item.mes && row.id !== item.id),
+    ...nextMesRows,
+  ]);
+}
+
+function upsertPendente(rows: FeriasPendente[], item: FeriasPendente) {
+  const ordered = sortByPosition(rows.filter(row => row.id !== item.id), row => row.ord);
+  const position = clampPosition(item.ord, ordered.length + 1) - 1;
+  return normalizePendentes([
+    ...ordered.slice(0, position),
+    { ...item, ord: position + 1 },
+    ...ordered.slice(position),
+  ]);
+}
+
+function upsertAbrMai(rows: FeriasAbrilMaio[], item: FeriasAbrilMaio) {
+  const sectionRows = sortByPosition(
+    rows.filter(row => row.secao === item.secao && row.id !== item.id),
+    row => row.num,
+  );
+  const position = clampPosition(item.num, sectionRows.length + 1) - 1;
+  const nextSectionRows = [
+    ...sectionRows.slice(0, position),
+    { ...item, num: position + 1 },
+    ...sectionRows.slice(position),
+  ];
+
+  return normalizeAbrMai([
+    ...rows.filter(row => row.secao !== item.secao && row.id !== item.id),
+    ...nextSectionRows,
+  ]);
+}
+
 // ── XLSX export ───────────────────────────────────────────────────────────────
 
 function exportXLSX(
@@ -58,7 +137,7 @@ function exportXLSX(
 
   // Monthly sheets
   for (let m = 1; m <= 12; m++) {
-    const rows = mensal.filter(r => r.mes === m);
+    const rows = normalizeMensal(mensal).filter(r => r.mes === m);
     const ws = XLSX.utils.aoa_to_sheet([
       ...HDR,
       [MONTH_FULL[m - 1].toUpperCase()],
@@ -80,7 +159,7 @@ function exportXLSX(
     [],
     ['Ord', 'Posto/Grad.', 'RG', 'Nome', 'Inclusão',
      'Dias', 'Exercício', 'Dias', 'Exercício', 'Dias', 'Exercício', 'Dias', 'Exercício', 'Dias', 'Exercício'],
-    ...pendentes.map(r => [
+    ...normalizePendentes(pendentes).map(r => [
       r.ord, r.posto, r.rg, r.nome, r.inclusao,
       ...r.exercicios.flatMap(e => [e.dias, e.exercicio]),
     ]),
@@ -97,7 +176,7 @@ function exportXLSX(
     ['RETORNAM DE FÉRIAS DE ABRIL / ENTRAM DE FÉRIAS EM MAIO / LESP 2026'],
     [],
     ['Seção', 'Nº', 'Graduação', 'RG', 'Nome', 'Função', 'Dias', 'Início', 'Fim', 'Disp. Cmdo Geral', 'Pronto', 'Observação'],
-    ...abrMai.map(r => [r.secao, r.num, r.graduacao, r.rg, r.nome, r.funcao, r.dias, r.inicio, r.fim, r.dispCmdo, r.pronto, r.observacao]),
+    ...normalizeAbrMai(abrMai).map(r => [r.secao, r.num, r.graduacao, r.rg, r.nome, r.funcao, r.dias, r.inicio, r.fim, r.dispCmdo, r.pronto, r.observacao]),
   ]);
   wsAm['!cols'] = [
     { wch: 14 }, { wch: 4 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
@@ -113,17 +192,17 @@ function exportXLSX(
 function exportPrint(mensal: FeriasPessoa[], pendentes: FeriasPendente[], abrMai: FeriasAbrilMaio[]) {
   const monthBlocks = MONTH_FULL.map((label, i) => {
     const mes = i + 1;
-    const rows = mensal.filter(r => r.mes === mes);
+    const rows = normalizeMensal(mensal).filter(r => r.mes === mes);
     if (!rows.length) return '';
     const trs = rows.map(r => `<tr><td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.funcao}</td><td>${r.dias}</td><td>${r.saida}</td><td>${r.retorno}</td><td>${r.observacao}</td></tr>`).join('');
     return `<h3>${label.toUpperCase()}</h3><table><thead><tr><th>Ord</th><th>Posto/Grad</th><th>RG</th><th>Nome</th><th>Função</th><th>Dias</th><th>Saída</th><th>Retorno</th><th>Obs</th></tr></thead><tbody>${trs}</tbody></table>`;
   }).join('');
 
-  const pendTrs = pendentes.map(r =>
+  const pendTrs = normalizePendentes(pendentes).map(r =>
     `<tr><td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.inclusao}</td>${r.exercicios.map(e => `<td>${e.dias}</td><td>${e.exercicio}</td>`).join('')}</tr>`
   ).join('');
 
-  const amTrs = abrMai.map(r =>
+  const amTrs = normalizeAbrMai(abrMai).map(r =>
     `<tr><td>${r.secao}</td><td>${r.num}</td><td>${r.graduacao}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.funcao}</td><td>${r.dias}</td><td>${r.inicio}</td><td>${r.fim}</td><td>${r.dispCmdo}</td><td>${r.pronto}</td><td>${r.observacao}</td></tr>`
   ).join('');
 
@@ -187,18 +266,20 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
 
   const monthRows = useMemo(() => {
     const mes = activeTab + 1;
-    return mensalData
+    return normalizeMensal(mensalData)
       .filter(r => r.mes === mes)
       .filter(r => !q || r.nome.toLowerCase().includes(q) || r.posto.toLowerCase().includes(q) || r.rg.includes(q));
   }, [mensalData, activeTab, q]);
 
   const pendenteRows = useMemo(() =>
-    pendenteData.filter(r => !q || r.nome.toLowerCase().includes(q) || r.posto.toLowerCase().includes(q) || r.rg.includes(q)),
+    normalizePendentes(pendenteData)
+      .filter(r => !q || r.nome.toLowerCase().includes(q) || r.posto.toLowerCase().includes(q) || r.rg.includes(q)),
     [pendenteData, q],
   );
 
   const abrMaiRows = useMemo(() =>
-    abrMaiData.filter(r => !q || r.nome.toLowerCase().includes(q) || r.graduacao.toLowerCase().includes(q) || r.rg.includes(q)),
+    normalizeAbrMai(abrMaiData)
+      .filter(r => !q || r.nome.toLowerCase().includes(q) || r.graduacao.toLowerCase().includes(q) || r.rg.includes(q)),
     [abrMaiData, q],
   );
 
@@ -218,16 +299,20 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   }
 
   function savePessoa() {
+    const item = {
+      ...pessoaForm,
+      id: pessoaModal?.mode === 'create' ? nextId() : pessoaForm.id,
+    };
     if (pessoaModal?.mode === 'create') {
-      setMensalData(d => [...d, { ...pessoaForm, id: nextId() }]);
+      setMensalData(d => upsertPessoa(d, item));
     } else {
-      setMensalData(d => d.map(r => r.id === pessoaForm.id ? pessoaForm : r));
+      setMensalData(d => upsertPessoa(d, item));
     }
     setPessoaModal(null);
   }
 
   function deletePessoa(id: string) {
-    setMensalData(d => d.filter(r => r.id !== id));
+    setMensalData(d => normalizeMensal(d.filter(r => r.id !== id)));
     setDeleteConfirm(null);
   }
 
@@ -247,16 +332,20 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   }
 
   function savePendente() {
+    const item = {
+      ...pendenteForm,
+      id: pendenteModal?.mode === 'create' ? nextId() : pendenteForm.id,
+    };
     if (pendenteModal?.mode === 'create') {
-      setPendenteData(d => [...d, { ...pendenteForm, id: nextId() }]);
+      setPendenteData(d => upsertPendente(d, item));
     } else {
-      setPendenteData(d => d.map(r => r.id === pendenteForm.id ? pendenteForm : r));
+      setPendenteData(d => upsertPendente(d, item));
     }
     setPendenteModal(null);
   }
 
   function deletePendente(id: string) {
-    setPendenteData(d => d.filter(r => r.id !== id));
+    setPendenteData(d => normalizePendentes(d.filter(r => r.id !== id)));
     setDeleteConfirm(null);
   }
 
@@ -274,16 +363,20 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   }
 
   function saveAbrMai() {
+    const item = {
+      ...abrMaiForm,
+      id: abrMaiModal?.mode === 'create' ? nextId() : abrMaiForm.id,
+    };
     if (abrMaiModal?.mode === 'create') {
-      setAbrMaiData(d => [...d, { ...abrMaiForm, id: nextId() }]);
+      setAbrMaiData(d => upsertAbrMai(d, item));
     } else {
-      setAbrMaiData(d => d.map(r => r.id === abrMaiForm.id ? abrMaiForm : r));
+      setAbrMaiData(d => upsertAbrMai(d, item));
     }
     setAbrMaiModal(null);
   }
 
   function deleteAbrMai(id: string) {
-    setAbrMaiData(d => d.filter(r => r.id !== id));
+    setAbrMaiData(d => normalizeAbrMai(d.filter(r => r.id !== id)));
     setDeleteConfirm(null);
   }
 
