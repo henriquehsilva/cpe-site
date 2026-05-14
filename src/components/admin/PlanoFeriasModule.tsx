@@ -16,7 +16,7 @@ import { usePersistentState } from '../../hooks/usePersistentState';
 const MONTH_LABELS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const MONTH_FULL   = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const TAB_PENDENTES = 12;
-const TAB_ABRMAIS   = 13;
+const HIDDEN_SUBMODULE_TITLES = ['maio/junho', 'maio junho'];
 
 const HDR = [
   ['ESTADO DE GOIÁS'],
@@ -161,7 +161,6 @@ function upsertSubmoduloRegistro(rows: FeriasSubmoduloRegistro[], item: FeriasSu
 function exportXLSX(
   mensal: FeriasPessoa[],
   pendentes: FeriasPendente[],
-  abrMai: FeriasAbrilMaio[],
   submodulos: FeriasSubmodulo[],
   submoduloRegistros: FeriasSubmoduloRegistro[],
 ) {
@@ -202,20 +201,6 @@ function exportXLSX(
   ];
   XLSX.utils.book_append_sheet(wb, wsPend, 'Pendentes');
 
-  // Abr/Mai 2026 sheet
-  const wsAm = XLSX.utils.aoa_to_sheet([
-    ...HDR,
-    ['RETORNAM DE FÉRIAS DE ABRIL / ENTRAM DE FÉRIAS EM MAIO / LESP 2026'],
-    [],
-    ['Seção', 'Nº', 'Graduação', 'RG', 'Nome', 'Função', 'Dias', 'Início', 'Fim', 'Disp. Cmdo Geral', 'Pronto', 'Observação'],
-    ...normalizeAbrMai(abrMai).map(r => [r.secao, r.num, r.graduacao, r.rg, r.nome, r.funcao, r.dias, r.inicio, r.fim, r.dispCmdo, r.pronto, r.observacao]),
-  ]);
-  wsAm['!cols'] = [
-    { wch: 14 }, { wch: 4 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
-    { wch: 14 }, { wch: 6 }, { wch: 8 }, { wch: 8 }, { wch: 16 }, { wch: 8 }, { wch: 24 },
-  ];
-  XLSX.utils.book_append_sheet(wb, wsAm, 'Abr-Mai-2026');
-
   for (const submodulo of submodulos) {
     const rows = normalizeSubmoduloRegistros(submoduloRegistros)
       .filter(r => r.submoduloId === submodulo.id);
@@ -241,7 +226,6 @@ function exportXLSX(
 function exportPrint(
   mensal: FeriasPessoa[],
   pendentes: FeriasPendente[],
-  abrMai: FeriasAbrilMaio[],
   submodulos: FeriasSubmodulo[],
   submoduloRegistros: FeriasSubmoduloRegistro[],
 ) {
@@ -255,10 +239,6 @@ function exportPrint(
 
   const pendTrs = normalizePendentes(pendentes).map(r =>
     `<tr><td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.inclusao}</td>${r.exercicios.map(e => `<td>${e.dias}</td><td>${e.exercicio}</td>`).join('')}</tr>`
-  ).join('');
-
-  const amTrs = normalizeAbrMai(abrMai).map(r =>
-    `<tr><td>${r.secao}</td><td>${r.num}</td><td>${r.graduacao}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.funcao}</td><td>${r.dias}</td><td>${r.inicio}</td><td>${r.fim}</td><td>${r.dispCmdo}</td><td>${r.pronto}</td><td>${r.observacao}</td></tr>`
   ).join('');
 
   const submoduleBlocks = submodulos.map(submodulo => {
@@ -277,8 +257,6 @@ function exportPrint(
     ${monthBlocks}
     <h3>FÉRIAS PENDENTES</h3>
     <table><thead><tr><th>Ord</th><th>Posto/Grad</th><th>RG</th><th>Nome</th><th>Inclusão</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th></tr></thead><tbody>${pendTrs}</tbody></table>
-    <h3>ABR/MAI 2026</h3>
-    <table><thead><tr><th>Seção</th><th>Nº</th><th>Graduação</th><th>RG</th><th>Nome</th><th>Função</th><th>Dias</th><th>Início</th><th>Fim</th><th>Disp. Cmdo</th><th>Pronto</th><th>Obs</th></tr></thead><tbody>${amTrs}</tbody></table>
     ${submoduleBlocks}
     </body></html>`;
 
@@ -332,8 +310,8 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
 
   const [mensalData,   setMensalData]   = usePersistentState<FeriasPessoa[]>('cpe-site:plano-ferias:mensal:v1', feriasMensalDB);
   const [pendenteData, setPendenteData] = usePersistentState<FeriasPendente[]>('cpe-site:plano-ferias:pendentes:v1', feriasPendenteDB);
-  const [abrMaiData,   setAbrMaiData]   = usePersistentState<FeriasAbrilMaio[]>('cpe-site:plano-ferias:abr-mai:v1', feriasAbrilMaioDB);
-  const [submodulos, setSubmodulos] = usePersistentState<FeriasSubmodulo[]>('cpe-site:plano-ferias:submodulos:v1', []);
+  const [abrMaiData, setAbrMaiData] = usePersistentState<FeriasAbrilMaio[]>('cpe-site:plano-ferias:abr-mai:v1', feriasAbrilMaioDB);
+  const [submodulos] = usePersistentState<FeriasSubmodulo[]>('cpe-site:plano-ferias:submodulos:v1', []);
   const [submoduloRegistros, setSubmoduloRegistros] = usePersistentState<FeriasSubmoduloRegistro[]>('cpe-site:plano-ferias:submodulo-registros:v1', []);
 
   const [activeTab, setActiveTab]     = useState<ActiveTab>(4); // Maio by default
@@ -341,9 +319,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   const [search, setSearch]           = useState('');
   const [showExport, setShowExport]   = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
-  const [showSubmoduloModal, setShowSubmoduloModal] = useState(false);
-  const [submoduloTitulo, setSubmoduloTitulo] = useState('');
-
   // Modals
   const [pessoaModal,  setPessoaModal]  = useState<PessoaModal | null>(null);
   const [pendenteModal,setPendenteModal]= useState<PendenteModal | null>(null);
@@ -359,7 +334,10 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   // ── derived data ──────────────────────────────────────────────────────────
 
   const q = search.toLowerCase();
-  const activeSubmodulo = typeof activeTab === 'string' ? submodulos.find(s => s.id === activeTab) ?? null : null;
+  const visibleSubmodulos = useMemo(() =>
+    submodulos.filter(submodulo => !HIDDEN_SUBMODULE_TITLES.includes(submodulo.titulo.trim().toLowerCase())),
+  [submodulos]);
+  const activeSubmodulo = typeof activeTab === 'string' ? visibleSubmodulos.find(s => s.id === activeTab) ?? null : null;
 
   const monthRows = useMemo(() => {
     if (typeof activeTab !== 'number') return [];
@@ -487,17 +465,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
 
   // ── handlers – Custom submodules ─────────────────────────────────────────
 
-  function createSubmodulo() {
-    const titulo = submoduloTitulo.trim();
-    if (!titulo) return;
-    const submodulo: FeriasSubmodulo = { id: nextId(), titulo };
-    setSubmodulos(current => [...current, submodulo]);
-    setActiveTab(submodulo.id);
-    setView('detail');
-    setSubmoduloTitulo('');
-    setShowSubmoduloModal(false);
-  }
-
   function openModule(tab: ActiveTab) {
     setActiveTab(tab);
     setSearch('');
@@ -533,7 +500,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
 
   const isMonthTab   = typeof activeTab === 'number' && activeTab >= 0 && activeTab <= 11;
   const isPendTab    = activeTab === TAB_PENDENTES;
-  const isAbrMaiTab  = activeTab === TAB_ABRMAIS;
   const isSubmoduloTab = typeof activeTab === 'string';
 
   const SECAO_LABELS: Record<FeriasAbrilMaio['secao'], string> = {
@@ -556,13 +522,7 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
         subtitle: 'Férias em haver',
         count: pendenteData.length,
       },
-      {
-        id: TAB_ABRMAIS,
-        title: 'Abr/Mai 2026',
-        subtitle: 'Retornos, entradas e LESP',
-        count: abrMaiData.length,
-      },
-      ...submodulos.map(submodulo => ({
+      ...visibleSubmodulos.map(submodulo => ({
         id: submodulo.id,
         title: submodulo.titulo,
         subtitle: 'Submódulo',
@@ -597,14 +557,14 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
               <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-52 py-1.5 overflow-hidden"
                 style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
                 <button
-                  onClick={() => { exportXLSX(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
+                  onClick={() => { exportXLSX(mensalData, pendenteData, visibleSubmodulos, submoduloRegistros); setShowExport(false); }}
                   className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-base transition-colors"
                   style={{ color: 'var(--adm-text)' }}
                 >
                   <FileSpreadsheet size={16} className="text-emerald-400" /> XLSX
                 </button>
                 <button
-                  onClick={() => { exportPrint(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
+                  onClick={() => { exportPrint(mensalData, pendenteData, visibleSubmodulos, submoduloRegistros); setShowExport(false); }}
                   className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-base transition-colors"
                   style={{ color: 'var(--adm-text)' }}
                 >
@@ -613,15 +573,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
               </div>
             )}
           </div>
-
-          {canCreate && (
-            <button
-              onClick={() => setShowSubmoduloModal(true)}
-              className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-base font-semibold px-4 py-2 rounded-lg transition-colors"
-            >
-              <Plus size={16} /> Novo Submódulo
-            </button>
-          )}
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -641,35 +592,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
             </button>
           ))}
         </div>
-
-        {showSubmoduloModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <div className="rounded-2xl border shadow-2xl w-full max-w-md" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
-              <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
-                <h2 className="text-base font-semibold" style={{ color: 'var(--adm-text)' }}>Novo Submódulo</h2>
-                <button onClick={() => setShowSubmoduloModal(false)} style={{ color: 'var(--adm-muted)' }}><X size={18} /></button>
-              </div>
-              <div className="px-6 py-5">
-                <label className="block text-xs font-medium mb-1" style={{ color: 'var(--adm-muted)' }}>Título</label>
-                <input
-                  type="text"
-                  className="adm-input w-full px-3 py-2 rounded-lg border text-sm"
-                  style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }}
-                  value={submoduloTitulo}
-                  onChange={e => setSubmoduloTitulo(e.target.value)}
-                  placeholder="Ex: Abril/Maio 2026"
-                  autoFocus
-                />
-              </div>
-              <div className="flex justify-end gap-3 px-6 pb-5">
-                <button onClick={() => setShowSubmoduloModal(false)} className="px-4 py-2 text-sm rounded-lg border" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>Cancelar</button>
-                <button onClick={createSubmodulo} className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity">
-                  <Save size={14} /> Criar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
@@ -720,14 +642,14 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
                 <div className="absolute right-0 mt-1 w-44 rounded-lg border shadow-lg z-20"
                   style={{ background: 'var(--adm-dropdown)', borderColor: 'var(--adm-border)' }}>
                   <button
-                    onClick={() => { exportXLSX(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
+                    onClick={() => { exportXLSX(mensalData, pendenteData, visibleSubmodulos, submoduloRegistros); setShowExport(false); }}
                     className="adm-drop-item flex items-center gap-2 w-full px-4 py-2.5 text-sm"
                     style={{ color: 'var(--adm-text)' }}
                   >
                     <FileSpreadsheet size={14} className="text-emerald-500" /> Excel (.xlsx)
                   </button>
                   <button
-                    onClick={() => { exportPrint(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
+                    onClick={() => { exportPrint(mensalData, pendenteData, visibleSubmodulos, submoduloRegistros); setShowExport(false); }}
                     className="adm-drop-item flex items-center gap-2 w-full px-4 py-2.5 text-sm"
                     style={{ color: 'var(--adm-text)' }}
                   >
@@ -737,15 +659,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
               </>
             )}
           </div>
-
-          {canCreate && (
-            <button
-              onClick={() => setShowSubmoduloModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity"
-            >
-              <Plus size={14} /> Novo Submódulo
-            </button>
-          )}
         </div>
       </div>
 
@@ -784,20 +697,7 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
             {pendenteData.length}
           </span>
         </button>
-        <button
-          onClick={() => setActiveTab(TAB_ABRMAIS)}
-          className="flex-shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1"
-          style={{
-            background: activeTab === TAB_ABRMAIS ? 'var(--adm-accent)' : 'var(--adm-input)',
-            color: activeTab === TAB_ABRMAIS ? '#fff' : 'var(--adm-muted)',
-          }}
-        >
-          Abr/Mai 2026
-          <span className={`text-[10px] px-1 py-0.5 rounded-full ${activeTab === TAB_ABRMAIS ? 'bg-white/30' : 'bg-white/10'}`}>
-            {abrMaiData.length}
-          </span>
-        </button>
-        {submodulos.map(submodulo => {
+        {visibleSubmodulos.map(submodulo => {
           const count = submoduloRegistros.filter(r => r.submoduloId === submodulo.id).length;
           return (
             <button
@@ -941,76 +841,6 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
         </div>
       )}
 
-      {/* ── Abr/Mai 2026 ── */}
-      {isAbrMaiTab && (
-        <div className="space-y-4">
-          {(['retornam-abril', 'entram-maio', 'lesp'] as const).map(secao => {
-            const rows = abrMaiRows.filter(r => r.secao === secao);
-            const secaoTitle: Record<FeriasAbrilMaio['secao'], string> = {
-              'retornam-abril': 'Retornam de Férias de Abril/2026',
-              'entram-maio':    'Entram de Férias em Maio/2026',
-              'lesp':           'LESP 2º Trim/2026 (Abr/Mai/Jun)',
-            };
-            return (
-              <div key={secao} className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--adm-border)' }}>
-                <div className="flex items-center justify-between px-4 py-3 border-b" style={{ background: 'var(--adm-tbl-head)', borderColor: 'var(--adm-border)' }}>
-                  <span className="text-sm font-semibold" style={{ color: 'var(--adm-text)' }}>
-                    {secaoTitle[secao]} — {rows.length} policial(is)
-                  </span>
-                  {canCreate && (
-                    <button
-                      onClick={() => openCreateAbrMai(secao)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity"
-                    >
-                      <Plus size={13} /> Novo
-                    </button>
-                  )}
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr style={{ background: 'var(--adm-tbl-head)' }}>
-                        {['Nº','Graduação','RG','Nome','Função','Dias','Início','Fim','Disp. Cmdo','Pronto','Obs',''].map(h => (
-                          <th key={h} className="px-3 py-2 text-left text-xs font-semibold whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.map((r, idx) => (
-                        <tr key={r.id} className="adm-row border-t transition-colors"
-                          style={{ background: idx % 2 === 0 ? 'var(--adm-surface)' : 'var(--adm-row-even)', borderColor: 'var(--adm-border)' }}>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.num}</td>
-                          <td className="px-3 py-2 text-xs font-medium" style={{ color: 'var(--adm-text)' }}>{r.graduacao}</td>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.rg}</td>
-                          <td className="px-3 py-2 text-sm font-medium whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{r.nome}</td>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.funcao}</td>
-                          <td className="px-3 py-2 text-center"><span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-400">{r.dias}</span></td>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.inicio}</td>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.fim}</td>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.dispCmdo}</td>
-                          <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.pronto}</td>
-                          <td className="px-3 py-2 text-xs max-w-[140px] truncate" style={{ color: 'var(--adm-muted)' }} title={r.observacao}>{r.observacao}</td>
-                          <td className="px-3 py-2">
-                            <div className="flex items-center gap-1">
-                              <button onClick={() => openAbrMai(r, 'view')} className="p-1 rounded hover:opacity-70" style={{ color: 'var(--adm-muted)' }}><Eye size={13} /></button>
-                              {canEdit && <button onClick={() => openAbrMai(r, 'edit')} className="p-1 rounded hover:opacity-70" style={{ color: 'var(--adm-muted)' }}><Pencil size={13} /></button>}
-                              {canDelete && <button onClick={() => setDeleteConfirm(r.id)} className="p-1 rounded hover:opacity-70 text-red-400"><Trash2 size={13} /></button>}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                      {rows.length === 0 && (
-                        <tr><td colSpan={12} className="py-8 text-center text-sm" style={{ color: 'var(--adm-muted)' }}>Nenhum registro encontrado.</td></tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
       {/* ── Custom submodule ── */}
       {isSubmoduloTab && activeSubmodulo && (
         <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--adm-border)' }}>
@@ -1084,42 +914,11 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
                 onClick={() => {
                   if (isMonthTab)  deletePessoa(deleteConfirm);
                   if (isPendTab)   deletePendente(deleteConfirm);
-                  if (isAbrMaiTab) deleteAbrMai(deleteConfirm);
                   if (isSubmoduloTab) deleteSubmoduloRegistro(deleteConfirm);
                 }}
                 className="px-4 py-2 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
               >
                 Excluir
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── New submodule modal ── */}
-      {showSubmoduloModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="rounded-2xl border shadow-2xl w-full max-w-md" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
-            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
-              <h2 className="text-base font-semibold" style={{ color: 'var(--adm-text)' }}>Novo Submódulo</h2>
-              <button onClick={() => setShowSubmoduloModal(false)} style={{ color: 'var(--adm-muted)' }}><X size={18} /></button>
-            </div>
-            <div className="px-6 py-5">
-              <label className="block text-xs font-medium mb-1" style={{ color: 'var(--adm-muted)' }}>Título</label>
-              <input
-                type="text"
-                className="adm-input w-full px-3 py-2 rounded-lg border text-sm"
-                style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }}
-                value={submoduloTitulo}
-                onChange={e => setSubmoduloTitulo(e.target.value)}
-                placeholder="Ex: Abril/Maio 2026"
-                autoFocus
-              />
-            </div>
-            <div className="flex justify-end gap-3 px-6 pb-5">
-              <button onClick={() => setShowSubmoduloModal(false)} className="px-4 py-2 text-sm rounded-lg border" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>Cancelar</button>
-              <button onClick={createSubmodulo} className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity">
-                <Save size={14} /> Criar
               </button>
             </div>
           </div>
