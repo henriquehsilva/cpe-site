@@ -290,6 +290,7 @@ function exportPrint(
 
 type ModalMode = 'view' | 'edit' | 'create';
 type ActiveTab = number | string;
+type View = 'list' | 'detail';
 
 interface FeriasSubmodulo {
   id: string;
@@ -336,6 +337,7 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   const [submoduloRegistros, setSubmoduloRegistros] = usePersistentState<FeriasSubmoduloRegistro[]>('cpe-site:plano-ferias:submodulo-registros:v1', []);
 
   const [activeTab, setActiveTab]     = useState<ActiveTab>(4); // Maio by default
+  const [view, setView] = useState<View>('list');
   const [search, setSearch]           = useState('');
   const [showExport, setShowExport]   = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -491,8 +493,15 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
     const submodulo: FeriasSubmodulo = { id: nextId(), titulo };
     setSubmodulos(current => [...current, submodulo]);
     setActiveTab(submodulo.id);
+    setView('detail');
     setSubmoduloTitulo('');
     setShowSubmoduloModal(false);
+  }
+
+  function openModule(tab: ActiveTab) {
+    setActiveTab(tab);
+    setSearch('');
+    setView('detail');
   }
 
   function openSubmoduloRegistro(item: FeriasSubmoduloRegistro, mode: ModalMode) {
@@ -533,17 +542,149 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
     'lesp':           'LESP',
   };
 
+  if (view === 'list') {
+    const moduleCards = [
+      ...MONTH_LABELS.map((label, index) => ({
+        id: index,
+        title: MONTH_FULL[index],
+        subtitle: 'Plano mensal',
+        count: mensalData.filter(r => r.mes === index + 1).length,
+      })),
+      {
+        id: TAB_PENDENTES,
+        title: 'Pendentes',
+        subtitle: 'Férias em haver',
+        count: pendenteData.length,
+      },
+      {
+        id: TAB_ABRMAIS,
+        title: 'Abr/Mai 2026',
+        subtitle: 'Retornos, entradas e LESP',
+        count: abrMaiData.length,
+      },
+      ...submodulos.map(submodulo => ({
+        id: submodulo.id,
+        title: submodulo.titulo,
+        subtitle: 'Submódulo',
+        count: submoduloRegistros.filter(r => r.submoduloId === submodulo.id).length,
+      })),
+    ];
+
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1.5 transition-colors text-base font-medium"
+            style={{ color: 'var(--adm-muted)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--adm-muted)')}
+          >
+            <ArrowLeft size={17} /> Módulos
+          </button>
+          <span style={{ color: 'var(--adm-border)' }} className="hidden sm:block">|</span>
+          <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>Plano de Férias 2026</h3>
+
+          <div className="relative">
+            <button
+              onClick={() => setShowExport(v => !v)}
+              className="flex items-center gap-2 border rounded-lg px-4 py-2 text-base font-medium transition-colors"
+              style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}
+            >
+              <Download size={16} /> Exportar
+            </button>
+            {showExport && (
+              <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-52 py-1.5 overflow-hidden"
+                style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
+                <button
+                  onClick={() => { exportXLSX(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
+                  className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-base transition-colors"
+                  style={{ color: 'var(--adm-text)' }}
+                >
+                  <FileSpreadsheet size={16} className="text-emerald-400" /> XLSX
+                </button>
+                <button
+                  onClick={() => { exportPrint(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
+                  className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-base transition-colors"
+                  style={{ color: 'var(--adm-text)' }}
+                >
+                  <Printer size={16} style={{ color: 'var(--adm-muted)' }} /> Imprimir / PDF
+                </button>
+              </div>
+            )}
+          </div>
+
+          {canCreate && (
+            <button
+              onClick={() => setShowSubmoduloModal(true)}
+              className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-base font-semibold px-4 py-2 rounded-lg transition-colors"
+            >
+              <Plus size={16} /> Novo Submódulo
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {moduleCards.map(card => (
+            <button
+              key={card.id}
+              onClick={() => openModule(card.id)}
+              className="adm-card group flex flex-col gap-3 p-5 rounded-2xl transition-all duration-200 hover:scale-105 hover:shadow-2xl border text-left"
+              style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}
+            >
+              <div className="text-xl font-black leading-tight" style={{ color: 'var(--adm-accent)' }}>{card.title}</div>
+              <div className="text-sm font-medium" style={{ color: 'var(--adm-muted)' }}>{card.subtitle}</div>
+              <div className="text-xs mt-1 pt-2 border-t flex justify-between" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>
+                <span>Registros</span>
+                <b style={{ color: 'var(--adm-text)' }}>{card.count}</b>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {showSubmoduloModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+            <div className="rounded-2xl border shadow-2xl w-full max-w-md" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
+                <h2 className="text-base font-semibold" style={{ color: 'var(--adm-text)' }}>Novo Submódulo</h2>
+                <button onClick={() => setShowSubmoduloModal(false)} style={{ color: 'var(--adm-muted)' }}><X size={18} /></button>
+              </div>
+              <div className="px-6 py-5">
+                <label className="block text-xs font-medium mb-1" style={{ color: 'var(--adm-muted)' }}>Título</label>
+                <input
+                  type="text"
+                  className="adm-input w-full px-3 py-2 rounded-lg border text-sm"
+                  style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }}
+                  value={submoduloTitulo}
+                  onChange={e => setSubmoduloTitulo(e.target.value)}
+                  placeholder="Ex: Abril/Maio 2026"
+                  autoFocus
+                />
+              </div>
+              <div className="flex justify-end gap-3 px-6 pb-5">
+                <button onClick={() => setShowSubmoduloModal(false)} className="px-4 py-2 text-sm rounded-lg border" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>Cancelar</button>
+                <button onClick={createSubmodulo} className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity">
+                  <Save size={14} /> Criar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* ── Header ── */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <button
-            onClick={onBack}
+            onClick={() => setView('list')}
             className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-70"
             style={{ color: 'var(--adm-muted)' }}
           >
-            <ArrowLeft size={16} /> Voltar
+            <ArrowLeft size={16} /> Módulos do Plano
           </button>
           <span style={{ color: 'var(--adm-border)' }}>/</span>
           <h1 className="text-lg font-bold" style={{ color: 'var(--adm-text)' }}>
