@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -10,6 +10,9 @@ export function usePersistentState<T>(
   key: string,
   initialValue: T,
 ): [T, Dispatch<SetStateAction<T>>] {
+  const documentId = useMemo(() => key.replace(/[^a-zA-Z0-9_-]/g, '_'), [key]);
+  const skipNextSave = useRef(true);
+
   const [value, setValue] = useState<T>(() => {
     if (typeof window === 'undefined') return initialValue;
 
@@ -27,7 +30,7 @@ export function usePersistentState<T>(
 
     async function load() {
       try {
-        const snap = await getDoc(doc(db, 'adminData', key));
+        const snap = await getDoc(doc(db, 'adminData', documentId));
         if (ignore) return;
 
         if (snap.exists()) {
@@ -41,8 +44,8 @@ export function usePersistentState<T>(
             }
           }
         }
-      } catch {
-        // Keep the local cache/static seed when Firestore is temporarily unavailable.
+      } catch (error) {
+        console.error(`Erro ao carregar dados persistidos de ${key}.`, error);
       } finally {
         if (!ignore) setLoaded(true);
       }
@@ -53,10 +56,15 @@ export function usePersistentState<T>(
     return () => {
       ignore = true;
     };
-  }, [key]);
+  }, [documentId, key]);
 
   useEffect(() => {
     if (!loaded) return;
+
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return;
+    }
 
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
@@ -64,13 +72,14 @@ export function usePersistentState<T>(
       // Local cache is best effort.
     }
 
-    setDoc(doc(db, 'adminData', key), {
+    setDoc(doc(db, 'adminData', documentId), {
       data: value,
+      sourceKey: key,
       updatedAt: serverTimestamp(),
-    }, { merge: true }).catch(() => {
-      // The UI keeps working; Firestore rules/configuration errors surface in the console.
+    }, { merge: true }).catch((error) => {
+      console.error(`Erro ao salvar dados persistidos de ${key}.`, error);
     });
-  }, [key, loaded, value]);
+  }, [documentId, key, loaded, value]);
 
   return [value, setValue];
 }
