@@ -47,6 +47,10 @@ function emptyAbrMai(secao: FeriasAbrilMaio['secao']): FeriasAbrilMaio {
   return { id: '', secao, num: 1, graduacao: '', rg: '', nome: '', funcao: '', dias: '', inicio: '', fim: '', dispCmdo: '', pronto: '', observacao: '' };
 }
 
+function emptySubmoduloRegistro(submoduloId: string): FeriasSubmoduloRegistro {
+  return { id: '', submoduloId, num: 1, graduacao: '', rg: '', nome: '', funcao: '', dias: '', inicio: '', fim: '', dispCmdo: '', pronto: '', observacao: '' };
+}
+
 function clampPosition(value: number, max: number) {
   const normalized = Number.isFinite(value) && value > 0 ? Math.floor(value) : max;
   return Math.min(normalized, max);
@@ -76,6 +80,14 @@ function normalizeAbrMai(rows: FeriasAbrilMaio[]) {
   const secoes: FeriasAbrilMaio['secao'][] = ['retornam-abril', 'entram-maio', 'lesp'];
   return secoes.flatMap(secao =>
     sortByPosition(rows.filter(row => row.secao === secao), row => row.num)
+      .map((row, index) => ({ ...row, num: index + 1 })),
+  );
+}
+
+function normalizeSubmoduloRegistros(rows: FeriasSubmoduloRegistro[]) {
+  const submoduloIds = [...new Set(rows.map(row => row.submoduloId))];
+  return submoduloIds.flatMap(submoduloId =>
+    sortByPosition(rows.filter(row => row.submoduloId === submoduloId), row => row.num)
       .map((row, index) => ({ ...row, num: index + 1 })),
   );
 }
@@ -126,12 +138,32 @@ function upsertAbrMai(rows: FeriasAbrilMaio[], item: FeriasAbrilMaio) {
   ]);
 }
 
+function upsertSubmoduloRegistro(rows: FeriasSubmoduloRegistro[], item: FeriasSubmoduloRegistro) {
+  const sectionRows = sortByPosition(
+    rows.filter(row => row.submoduloId === item.submoduloId && row.id !== item.id),
+    row => row.num,
+  );
+  const position = clampPosition(item.num, sectionRows.length + 1) - 1;
+  const nextSectionRows = [
+    ...sectionRows.slice(0, position),
+    { ...item, num: position + 1 },
+    ...sectionRows.slice(position),
+  ];
+
+  return normalizeSubmoduloRegistros([
+    ...rows.filter(row => row.submoduloId !== item.submoduloId && row.id !== item.id),
+    ...nextSectionRows,
+  ]);
+}
+
 // ── XLSX export ───────────────────────────────────────────────────────────────
 
 function exportXLSX(
   mensal: FeriasPessoa[],
   pendentes: FeriasPendente[],
   abrMai: FeriasAbrilMaio[],
+  submodulos: FeriasSubmodulo[],
+  submoduloRegistros: FeriasSubmoduloRegistro[],
 ) {
   const wb = XLSX.utils.book_new();
 
@@ -184,12 +216,35 @@ function exportXLSX(
   ];
   XLSX.utils.book_append_sheet(wb, wsAm, 'Abr-Mai-2026');
 
+  for (const submodulo of submodulos) {
+    const rows = normalizeSubmoduloRegistros(submoduloRegistros)
+      .filter(r => r.submoduloId === submodulo.id);
+    const wsSub = XLSX.utils.aoa_to_sheet([
+      ...HDR,
+      [submodulo.titulo.toUpperCase()],
+      [],
+      ['Nº', 'Graduação', 'RG', 'Nome', 'Função', 'Dias', 'Início', 'Fim', 'Disp. Cmdo Geral', 'Pronto', 'Observação'],
+      ...rows.map(r => [r.num, r.graduacao, r.rg, r.nome, r.funcao, r.dias, r.inicio, r.fim, r.dispCmdo, r.pronto, r.observacao]),
+    ]);
+    wsSub['!cols'] = [
+      { wch: 4 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
+      { wch: 14 }, { wch: 6 }, { wch: 8 }, { wch: 8 }, { wch: 16 }, { wch: 8 }, { wch: 24 },
+    ];
+    XLSX.utils.book_append_sheet(wb, wsSub, submodulo.titulo.slice(0, 31));
+  }
+
   XLSX.writeFile(wb, 'plano_ferias_2026.xlsx');
 }
 
 // ── print helper ──────────────────────────────────────────────────────────────
 
-function exportPrint(mensal: FeriasPessoa[], pendentes: FeriasPendente[], abrMai: FeriasAbrilMaio[]) {
+function exportPrint(
+  mensal: FeriasPessoa[],
+  pendentes: FeriasPendente[],
+  abrMai: FeriasAbrilMaio[],
+  submodulos: FeriasSubmodulo[],
+  submoduloRegistros: FeriasSubmoduloRegistro[],
+) {
   const monthBlocks = MONTH_FULL.map((label, i) => {
     const mes = i + 1;
     const rows = normalizeMensal(mensal).filter(r => r.mes === mes);
@@ -206,6 +261,15 @@ function exportPrint(mensal: FeriasPessoa[], pendentes: FeriasPendente[], abrMai
     `<tr><td>${r.secao}</td><td>${r.num}</td><td>${r.graduacao}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.funcao}</td><td>${r.dias}</td><td>${r.inicio}</td><td>${r.fim}</td><td>${r.dispCmdo}</td><td>${r.pronto}</td><td>${r.observacao}</td></tr>`
   ).join('');
 
+  const submoduleBlocks = submodulos.map(submodulo => {
+    const rows = normalizeSubmoduloRegistros(submoduloRegistros)
+      .filter(r => r.submoduloId === submodulo.id);
+    const trs = rows.map(r =>
+      `<tr><td>${r.num}</td><td>${r.graduacao}</td><td>${r.rg}</td><td>${r.nome}</td><td>${r.funcao}</td><td>${r.dias}</td><td>${r.inicio}</td><td>${r.fim}</td><td>${r.dispCmdo}</td><td>${r.pronto}</td><td>${r.observacao}</td></tr>`
+    ).join('');
+    return `<h3>${submodulo.titulo.toUpperCase()}</h3><table><thead><tr><th>Nº</th><th>Graduação</th><th>RG</th><th>Nome</th><th>Função</th><th>Dias</th><th>Início</th><th>Fim</th><th>Disp. Cmdo</th><th>Pronto</th><th>Obs</th></tr></thead><tbody>${trs}</tbody></table>`;
+  }).join('');
+
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Plano de Férias 2026</title>
     <style>body{font-family:Arial;font-size:8.5px;margin:12px}h2{font-size:11px;margin:12px 0 4px}h3{font-size:9.5px;margin:14px 0 3px}table{border-collapse:collapse;width:100%;margin-bottom:12px}th,td{border:1px solid #bbb;padding:2px 4px}th{background:#2d2d2d;color:#fff;text-transform:uppercase;font-size:7.5px}</style>
     </head><body>
@@ -215,6 +279,7 @@ function exportPrint(mensal: FeriasPessoa[], pendentes: FeriasPendente[], abrMai
     <table><thead><tr><th>Ord</th><th>Posto/Grad</th><th>RG</th><th>Nome</th><th>Inclusão</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th><th>Dias</th><th>Exerc.</th></tr></thead><tbody>${pendTrs}</tbody></table>
     <h3>ABR/MAI 2026</h3>
     <table><thead><tr><th>Seção</th><th>Nº</th><th>Graduação</th><th>RG</th><th>Nome</th><th>Função</th><th>Dias</th><th>Início</th><th>Fim</th><th>Disp. Cmdo</th><th>Pronto</th><th>Obs</th></tr></thead><tbody>${amTrs}</tbody></table>
+    ${submoduleBlocks}
     </body></html>`;
 
   const w = window.open('', '_blank');
@@ -224,10 +289,33 @@ function exportPrint(mensal: FeriasPessoa[], pendentes: FeriasPendente[], abrMai
 // ── types ─────────────────────────────────────────────────────────────────────
 
 type ModalMode = 'view' | 'edit' | 'create';
+type ActiveTab = number | string;
+
+interface FeriasSubmodulo {
+  id: string;
+  titulo: string;
+}
+
+interface FeriasSubmoduloRegistro {
+  id: string;
+  submoduloId: string;
+  num: number;
+  graduacao: string;
+  rg: string;
+  nome: string;
+  funcao: string;
+  dias: string;
+  inicio: string;
+  fim: string;
+  dispCmdo: string;
+  pronto: string;
+  observacao: string;
+}
 
 interface PessoaModal  { item: FeriasPessoa  | null; mode: ModalMode; }
 interface PendenteModal{ item: FeriasPendente| null; mode: ModalMode; }
 interface AbrMaiModal  { item: FeriasAbrilMaio|null; mode: ModalMode; secao: FeriasAbrilMaio['secao']; }
+interface SubmoduloRegistroModal { item: FeriasSubmoduloRegistro | null; mode: ModalMode; submoduloId: string; }
 
 interface Props {
   onBack: () => void;
@@ -244,27 +332,35 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
   const [mensalData,   setMensalData]   = usePersistentState<FeriasPessoa[]>('cpe-site:plano-ferias:mensal:v1', feriasMensalDB);
   const [pendenteData, setPendenteData] = usePersistentState<FeriasPendente[]>('cpe-site:plano-ferias:pendentes:v1', feriasPendenteDB);
   const [abrMaiData,   setAbrMaiData]   = usePersistentState<FeriasAbrilMaio[]>('cpe-site:plano-ferias:abr-mai:v1', feriasAbrilMaioDB);
+  const [submodulos, setSubmodulos] = usePersistentState<FeriasSubmodulo[]>('cpe-site:plano-ferias:submodulos:v1', []);
+  const [submoduloRegistros, setSubmoduloRegistros] = usePersistentState<FeriasSubmoduloRegistro[]>('cpe-site:plano-ferias:submodulo-registros:v1', []);
 
-  const [activeTab, setActiveTab]     = useState(4); // Maio by default
+  const [activeTab, setActiveTab]     = useState<ActiveTab>(4); // Maio by default
   const [search, setSearch]           = useState('');
   const [showExport, setShowExport]   = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [showSubmoduloModal, setShowSubmoduloModal] = useState(false);
+  const [submoduloTitulo, setSubmoduloTitulo] = useState('');
 
   // Modals
   const [pessoaModal,  setPessoaModal]  = useState<PessoaModal | null>(null);
   const [pendenteModal,setPendenteModal]= useState<PendenteModal | null>(null);
   const [abrMaiModal,  setAbrMaiModal]  = useState<AbrMaiModal | null>(null);
+  const [submoduloRegistroModal, setSubmoduloRegistroModal] = useState<SubmoduloRegistroModal | null>(null);
 
   // Form state for each modal type
   const [pessoaForm,   setPessoaForm]   = useState<FeriasPessoa>(emptyPessoa(1));
   const [pendenteForm, setPendenteForm] = useState<FeriasPendente>(emptyPendente());
   const [abrMaiForm,   setAbrMaiForm]   = useState<FeriasAbrilMaio>(emptyAbrMai('retornam-abril'));
+  const [submoduloRegistroForm, setSubmoduloRegistroForm] = useState<FeriasSubmoduloRegistro>(emptySubmoduloRegistro(''));
 
   // ── derived data ──────────────────────────────────────────────────────────
 
   const q = search.toLowerCase();
+  const activeSubmodulo = typeof activeTab === 'string' ? submodulos.find(s => s.id === activeTab) ?? null : null;
 
   const monthRows = useMemo(() => {
+    if (typeof activeTab !== 'number') return [];
     const mes = activeTab + 1;
     return normalizeMensal(mensalData)
       .filter(r => r.mes === mes)
@@ -282,6 +378,13 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
       .filter(r => !q || r.nome.toLowerCase().includes(q) || r.graduacao.toLowerCase().includes(q) || r.rg.includes(q)),
     [abrMaiData, q],
   );
+
+  const submoduloRows = useMemo(() => {
+    if (!activeSubmodulo) return [];
+    return normalizeSubmoduloRegistros(submoduloRegistros)
+      .filter(r => r.submoduloId === activeSubmodulo.id)
+      .filter(r => !q || r.nome.toLowerCase().includes(q) || r.graduacao.toLowerCase().includes(q) || r.rg.includes(q));
+  }, [activeSubmodulo, q, submoduloRegistros]);
 
   // ── handlers – Pessoa (monthly) ──────────────────────────────────────────
 
@@ -380,11 +483,49 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
     setDeleteConfirm(null);
   }
 
+  // ── handlers – Custom submodules ─────────────────────────────────────────
+
+  function createSubmodulo() {
+    const titulo = submoduloTitulo.trim();
+    if (!titulo) return;
+    const submodulo: FeriasSubmodulo = { id: nextId(), titulo };
+    setSubmodulos(current => [...current, submodulo]);
+    setActiveTab(submodulo.id);
+    setSubmoduloTitulo('');
+    setShowSubmoduloModal(false);
+  }
+
+  function openSubmoduloRegistro(item: FeriasSubmoduloRegistro, mode: ModalMode) {
+    setSubmoduloRegistroForm({ ...item });
+    setSubmoduloRegistroModal({ item, mode, submoduloId: item.submoduloId });
+  }
+
+  function openCreateSubmoduloRegistro(submoduloId: string) {
+    const nextNum = (submoduloRegistros.filter(r => r.submoduloId === submoduloId).reduce((m, r) => Math.max(m, r.num), 0)) + 1;
+    setSubmoduloRegistroForm({ ...emptySubmoduloRegistro(submoduloId), num: nextNum });
+    setSubmoduloRegistroModal({ item: null, mode: 'create', submoduloId });
+  }
+
+  function saveSubmoduloRegistro() {
+    const item = {
+      ...submoduloRegistroForm,
+      id: submoduloRegistroModal?.mode === 'create' ? nextId() : submoduloRegistroForm.id,
+    };
+    setSubmoduloRegistros(current => upsertSubmoduloRegistro(current, item));
+    setSubmoduloRegistroModal(null);
+  }
+
+  function deleteSubmoduloRegistro(id: string) {
+    setSubmoduloRegistros(current => normalizeSubmoduloRegistros(current.filter(r => r.id !== id)));
+    setDeleteConfirm(null);
+  }
+
   // ── render ────────────────────────────────────────────────────────────────
 
-  const isMonthTab   = activeTab >= 0 && activeTab <= 11;
+  const isMonthTab   = typeof activeTab === 'number' && activeTab >= 0 && activeTab <= 11;
   const isPendTab    = activeTab === TAB_PENDENTES;
   const isAbrMaiTab  = activeTab === TAB_ABRMAIS;
+  const isSubmoduloTab = typeof activeTab === 'string';
 
   const SECAO_LABELS: Record<FeriasAbrilMaio['secao'], string> = {
     'retornam-abril': 'Retornam Abr',
@@ -438,14 +579,14 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
                 <div className="absolute right-0 mt-1 w-44 rounded-lg border shadow-lg z-20"
                   style={{ background: 'var(--adm-dropdown)', borderColor: 'var(--adm-border)' }}>
                   <button
-                    onClick={() => { exportXLSX(mensalData, pendenteData, abrMaiData); setShowExport(false); }}
+                    onClick={() => { exportXLSX(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
                     className="adm-drop-item flex items-center gap-2 w-full px-4 py-2.5 text-sm"
                     style={{ color: 'var(--adm-text)' }}
                   >
                     <FileSpreadsheet size={14} className="text-emerald-500" /> Excel (.xlsx)
                   </button>
                   <button
-                    onClick={() => { exportPrint(mensalData, pendenteData, abrMaiData); setShowExport(false); }}
+                    onClick={() => { exportPrint(mensalData, pendenteData, abrMaiData, submodulos, submoduloRegistros); setShowExport(false); }}
                     className="adm-drop-item flex items-center gap-2 w-full px-4 py-2.5 text-sm"
                     style={{ color: 'var(--adm-text)' }}
                   >
@@ -455,6 +596,15 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
               </>
             )}
           </div>
+
+          {canCreate && (
+            <button
+              onClick={() => setShowSubmoduloModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity"
+            >
+              <Plus size={14} /> Novo Submódulo
+            </button>
+          )}
         </div>
       </div>
 
@@ -506,6 +656,25 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
             {abrMaiData.length}
           </span>
         </button>
+        {submodulos.map(submodulo => {
+          const count = submoduloRegistros.filter(r => r.submoduloId === submodulo.id).length;
+          return (
+            <button
+              key={submodulo.id}
+              onClick={() => setActiveTab(submodulo.id)}
+              className="flex-shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1"
+              style={{
+                background: activeTab === submodulo.id ? 'var(--adm-accent)' : 'var(--adm-input)',
+                color: activeTab === submodulo.id ? '#fff' : 'var(--adm-muted)',
+              }}
+            >
+              {submodulo.titulo}
+              <span className={`text-[10px] px-1 py-0.5 rounded-full ${activeTab === submodulo.id ? 'bg-white/30' : 'bg-white/10'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* ── Month table ── */}
@@ -701,6 +870,64 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
         </div>
       )}
 
+      {/* ── Custom submodule ── */}
+      {isSubmoduloTab && activeSubmodulo && (
+        <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--adm-border)' }}>
+          <div className="flex items-center justify-between px-4 py-3 border-b" style={{ background: 'var(--adm-tbl-head)', borderColor: 'var(--adm-border)' }}>
+            <span className="text-sm font-semibold" style={{ color: 'var(--adm-text)' }}>
+              {activeSubmodulo.titulo} — {submoduloRows.length} policial(is)
+            </span>
+            {canCreate && (
+              <button
+                onClick={() => openCreateSubmoduloRegistro(activeSubmodulo.id)}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity"
+              >
+                <Plus size={13} /> Novo
+              </button>
+            )}
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr style={{ background: 'var(--adm-tbl-head)' }}>
+                  {['Nº','Graduação','RG','Nome','Função','Dias','Início','Fim','Disp. Cmdo','Pronto','Obs',''].map(h => (
+                    <th key={h} className="px-3 py-2 text-left text-xs font-semibold whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {submoduloRows.map((r, idx) => (
+                  <tr key={r.id} className="adm-row border-t transition-colors"
+                    style={{ background: idx % 2 === 0 ? 'var(--adm-surface)' : 'var(--adm-row-even)', borderColor: 'var(--adm-border)' }}>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.num}</td>
+                    <td className="px-3 py-2 text-xs font-medium" style={{ color: 'var(--adm-text)' }}>{r.graduacao}</td>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.rg}</td>
+                    <td className="px-3 py-2 text-sm font-medium whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{r.nome}</td>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.funcao}</td>
+                    <td className="px-3 py-2 text-center">{r.dias ? <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-400">{r.dias}</span> : ''}</td>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.inicio}</td>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.fim}</td>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.dispCmdo}</td>
+                    <td className="px-3 py-2 text-xs" style={{ color: 'var(--adm-muted)' }}>{r.pronto}</td>
+                    <td className="px-3 py-2 text-xs max-w-[140px] truncate" style={{ color: 'var(--adm-muted)' }} title={r.observacao}>{r.observacao}</td>
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => openSubmoduloRegistro(r, 'view')} className="p-1 rounded hover:opacity-70" style={{ color: 'var(--adm-muted)' }}><Eye size={13} /></button>
+                        {canEdit && <button onClick={() => openSubmoduloRegistro(r, 'edit')} className="p-1 rounded hover:opacity-70" style={{ color: 'var(--adm-muted)' }}><Pencil size={13} /></button>}
+                        {canDelete && <button onClick={() => setDeleteConfirm(r.id)} className="p-1 rounded hover:opacity-70 text-red-400"><Trash2 size={13} /></button>}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {submoduloRows.length === 0 && (
+                  <tr><td colSpan={12} className="py-8 text-center text-sm" style={{ color: 'var(--adm-muted)' }}>Nenhum registro encontrado.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* ── Delete confirm ── */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
@@ -717,10 +944,41 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
                   if (isMonthTab)  deletePessoa(deleteConfirm);
                   if (isPendTab)   deletePendente(deleteConfirm);
                   if (isAbrMaiTab) deleteAbrMai(deleteConfirm);
+                  if (isSubmoduloTab) deleteSubmoduloRegistro(deleteConfirm);
                 }}
                 className="px-4 py-2 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
               >
                 Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── New submodule modal ── */}
+      {showSubmoduloModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="rounded-2xl border shadow-2xl w-full max-w-md" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
+              <h2 className="text-base font-semibold" style={{ color: 'var(--adm-text)' }}>Novo Submódulo</h2>
+              <button onClick={() => setShowSubmoduloModal(false)} style={{ color: 'var(--adm-muted)' }}><X size={18} /></button>
+            </div>
+            <div className="px-6 py-5">
+              <label className="block text-xs font-medium mb-1" style={{ color: 'var(--adm-muted)' }}>Título</label>
+              <input
+                type="text"
+                className="adm-input w-full px-3 py-2 rounded-lg border text-sm"
+                style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }}
+                value={submoduloTitulo}
+                onChange={e => setSubmoduloTitulo(e.target.value)}
+                placeholder="Ex: Abril/Maio 2026"
+                autoFocus
+              />
+            </div>
+            <div className="flex justify-end gap-3 px-6 pb-5">
+              <button onClick={() => setShowSubmoduloModal(false)} className="px-4 py-2 text-sm rounded-lg border" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>Cancelar</button>
+              <button onClick={createSubmodulo} className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity">
+                <Save size={14} /> Criar
               </button>
             </div>
           </div>
@@ -908,6 +1166,57 @@ export default function PlanoFeriasModule({ onBack, permissions }: Props) {
               </button>
               {abrMaiModal.mode !== 'view' && (
                 <button onClick={saveAbrMai} className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity">
+                  <Save size={14} /> Salvar
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Custom submodule record modal ── */}
+      {submoduloRegistroModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="rounded-2xl border shadow-2xl w-full max-w-xl" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
+              <h2 className="text-base font-semibold" style={{ color: 'var(--adm-text)' }}>
+                {submoduloRegistroModal.mode === 'create' ? 'Novo' : submoduloRegistroModal.mode === 'edit' ? 'Editar' : 'Detalhes'} — {submodulos.find(s => s.id === submoduloRegistroModal.submoduloId)?.titulo ?? 'Submódulo'}
+              </h2>
+              <button onClick={() => setSubmoduloRegistroModal(null)} style={{ color: 'var(--adm-muted)' }}><X size={18} /></button>
+            </div>
+            <div className="px-6 py-5 grid grid-cols-2 gap-4">
+              {[
+                { label: 'Nº', key: 'num', type: 'number', span: 1 },
+                { label: 'RG', key: 'rg', type: 'text', span: 1 },
+                { label: 'Graduação', key: 'graduacao', type: 'text', span: 2 },
+                { label: 'Nome', key: 'nome', type: 'text', span: 2 },
+                { label: 'Função', key: 'funcao', type: 'text', span: 2 },
+                { label: 'Dias', key: 'dias', type: 'text', span: 1 },
+                { label: 'Início', key: 'inicio', type: 'text', span: 1 },
+                { label: 'Fim', key: 'fim', type: 'text', span: 1 },
+                { label: 'Pronto', key: 'pronto', type: 'text', span: 1 },
+                { label: 'Disp. Cmdo Geral', key: 'dispCmdo', type: 'text', span: 2 },
+                { label: 'Observação', key: 'observacao', type: 'text', span: 2 },
+              ].map(f => (
+                <div key={f.key} className={f.span === 2 ? 'col-span-2' : ''}>
+                  <label className="block text-xs font-medium mb-1" style={{ color: 'var(--adm-muted)' }}>{f.label}</label>
+                  <input
+                    type={f.type}
+                    readOnly={submoduloRegistroModal.mode === 'view'}
+                    className="adm-input w-full px-3 py-2 rounded-lg border text-sm"
+                    style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }}
+                    value={(submoduloRegistroForm as Record<string, unknown>)[f.key] as string}
+                    onChange={e => submoduloRegistroModal.mode !== 'view' && setSubmoduloRegistroForm(p => ({ ...p, [f.key]: f.type === 'number' ? Number(e.target.value) : e.target.value }))}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end gap-3 px-6 pb-5">
+              <button onClick={() => setSubmoduloRegistroModal(null)} className="px-4 py-2 text-sm rounded-lg border" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>
+                {submoduloRegistroModal.mode === 'view' ? 'Fechar' : 'Cancelar'}
+              </button>
+              {submoduloRegistroModal.mode !== 'view' && (
+                <button onClick={saveSubmoduloRegistro} className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-cpe-red text-white hover:opacity-80 transition-opacity">
                   <Save size={14} /> Salvar
                 </button>
               )}
