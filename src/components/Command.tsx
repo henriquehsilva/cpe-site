@@ -11,7 +11,7 @@ const Command: React.FC = () => {
 
   const subcomandante = {
     avatar: "sub.png",
-    nome: "Capitão PM Rafael Gonçalves Bueno",
+    nome: "Capitão PM Rafael Bueno Gonçalves",
     patente: ""
   };
 
