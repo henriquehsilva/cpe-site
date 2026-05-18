@@ -8,6 +8,7 @@ export interface ModulePermission {
 export type ModuleKey =
   | 'efetivo'
   | 'planoFerias'
+  | 'entradaSaidaFerias'
   | 'aniversariantes'
   | 'planoChamada'
   | 'agendaAudiencias'
@@ -35,6 +36,7 @@ export interface AdminUserProfile {
 export const MODULE_LABELS: Record<ModuleKey, string> = {
   efetivo: 'Efetivo',
   planoFerias: 'Plano de Férias',
+  entradaSaidaFerias: 'Entrada / Saída de Férias',
   aniversariantes: 'Aniversariantes',
   planoChamada: 'Plano de Chamada',
   agendaAudiencias: 'Agenda Audiências',
@@ -50,6 +52,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
 export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
   'efetivo': 'efetivo',
   'plano-ferias': 'planoFerias',
+  'entrada-saida-ferias': 'entradaSaidaFerias',
   'aniversariantes': 'aniversariantes',
   'plano-chamada': 'planoChamada',
   'agenda-audiencias': 'agendaAudiencias',
@@ -72,6 +75,7 @@ export const DEFAULT_MODULE_PERMISSION: ModulePermission = {
 export const DEFAULT_PERMISSIONS: UserPermissions = {
   efetivo: { ...DEFAULT_MODULE_PERMISSION },
   planoFerias: { ...DEFAULT_MODULE_PERMISSION },
+  entradaSaidaFerias: { ...DEFAULT_MODULE_PERMISSION },
   aniversariantes: { ...DEFAULT_MODULE_PERMISSION },
   planoChamada: { ...DEFAULT_MODULE_PERMISSION },
   agendaAudiencias: { ...DEFAULT_MODULE_PERMISSION },

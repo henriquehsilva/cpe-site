@@ -4,13 +4,14 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, Crosshair, Car,
+  Settings, Camera, ArrowLeft, Crosshair, Car, ArrowRightLeft,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
 import AgendaAudienciasModule from './admin/AgendaAudienciasModule';
 import DispensaRecompensaModule from './admin/DispensaRecompensaModule';
 import PlanoFeriasModule from './admin/PlanoFeriasModule';
+import EntradaSaidaFeriasModule from './admin/EntradaSaidaFeriasModule';
 import AniversariantesModule from './admin/AniversariantesModule';
 import PlanoChamadaModule from './admin/PlanoChamadaModule';
 import SettingsModule from './admin/SettingsModule';
@@ -29,6 +30,7 @@ interface AdminDashboardProps {
 const ALL_MODULES = [
   { id: 'efetivo',            label: 'Efetivo',             icon: Users },
   { id: 'plano-ferias',       label: 'Plano de Férias',     icon: CalendarDays },
+  { id: 'entrada-saida-ferias', label: 'Entrada / Saída de Férias', icon: ArrowRightLeft },
   { id: 'aniversariantes',    label: 'Aniversariantes',     icon: Cake },
   { id: 'plano-chamada',      label: 'Plano de Chamada',    icon: PhoneCall },
   { id: 'agenda-audiencias',  label: 'Agenda Audiências',   icon: Scale },
@@ -268,6 +270,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <AgendaAudienciasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('agenda-audiencias')} />
         ) : activeModule === 'plano-ferias' ? (
           <PlanoFeriasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('plano-ferias')} />
+        ) : activeModule === 'entrada-saida-ferias' ? (
+          <EntradaSaidaFeriasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('entradaSaidaFerias')} />
         ) : activeModule === 'dispenca-recompensa' ? (
           <DispensaRecompensaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('dispenca-recompensa')} />
         ) : (
