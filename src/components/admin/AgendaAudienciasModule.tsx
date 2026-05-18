@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Eye, Pencil, Trash2, X, Save, Search,
+  Copy,
   Download, FileSpreadsheet, Printer, ChevronUp, ChevronDown, AlertCircle,
   CalendarPlus,
 } from 'lucide-react';
@@ -434,6 +435,17 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
                       <button onClick={() => openEdit(a)} title="Editar"
                         className="p-1.5 rounded-lg hover:bg-amber-400/10 text-amber-400 opacity-70 hover:opacity-100 transition-colors">
                         <Pencil size={15} />
+                      </button>
+                    )}
+                    {canCreate && (
+                      <button onClick={() => {
+                        const { id: _, ...rest } = a as any;
+                        setForm(rest);
+                        setErrors({});
+                        setModal({ mode: 'create', item: null });
+                      }} title="Duplicar"
+                        className="p-1.5 rounded-lg hover:bg-slate-400/10 text-slate-400 opacity-70 hover:opacity-100 transition-colors">
+                        <Copy size={15} />
                       </button>
                     )}
                     {canDelete && (
