@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   ArrowLeft, Plus, Eye, Pencil, Trash2, X, Save, Search,
-  Download, FileSpreadsheet, Printer, ChevronUp, ChevronDown, AlertCircle,
+  Download, FileSpreadsheet, Printer, ChevronUp, ChevronDown,
 } from 'lucide-react';
 import { entradaSaidaFeriasDB, EntradaSaidaFerias } from '../../data/entradaSaidaFerias';
 import { ModulePermission } from '../../types/rbac';
@@ -18,6 +18,7 @@ type SectionId = string;
 type SortKey = keyof Pick<EntradaSaidaFerias, 'num' | 'graduacao' | 'rg' | 'nome' | 'funcao' | 'dias' | 'inicio' | 'fim' | 'dispCmdo' | 'pronto'>;
 type SortDir = 'asc' | 'desc';
 type ModalMode = 'view' | 'edit' | 'create';
+type View = 'overview' | 'section';
 
 function nextId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -101,6 +102,7 @@ export default function EntradaSaidaFeriasModule({ onBack, permissions }: Props)
   const [customSections, setCustomSections] = usePersistentState<string[]>('cpe-site:entrada-saida-ferias:sections:v1', []);
   const [search, setSearch] = useState('');
   const [section, setSection] = useState<SectionId>('all');
+  const [view, setView] = useState<View>('overview');
   const [sortKey, setSortKey] = useState<SortKey>('num');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
   const [modal, setModal] = useState<{ mode: ModalMode; item: EntradaSaidaFerias | null } | null>(null);
@@ -123,6 +125,15 @@ export default function EntradaSaidaFeriasModule({ onBack, permissions }: Props)
       return { id, label: def ? def.label : id };
     });
   }, [customSections, data]);
+
+  const sectionSummary = useMemo(() => {
+    const counts = sections.map(s => ({
+      id: s.id,
+      label: s.label,
+      count: data.filter(item => item.secao === s.id).length,
+    }));
+    return { counts, total: data.length };
+  }, [sections, data]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -172,11 +183,44 @@ export default function EntradaSaidaFeriasModule({ onBack, permissions }: Props)
     setForm({ ...emptyForm(defaultSection), num: sectionRows.length + 1 });
     setErrors({});
     setModal({ mode: 'create', item: null });
+    if (view === 'overview') setView('section');
+  };
+
+  const openNewSectionModal = () => {
+    setSectionModalOpen(true);
+    setSectionName('');
+    setSectionError('');
+  };
+
+  const handleSaveSection = () => {
+    const trimmed = sectionName.trim();
+    if (!trimmed) {
+      setSectionError('Título obrigatório');
+      return;
+    }
+    const existing = sections.some(sec => sec.label.toLowerCase() === trimmed.toLowerCase());
+    if (existing) {
+      setSectionError('Submódulo já existe');
+      return;
+    }
+    setCustomSections(cs => [...cs, trimmed]);
+    setSection(trimmed);
+    setSectionModalOpen(false);
   };
 
   const openView = (item: EntradaSaidaFerias) => { setForm(item); setErrors({}); setModal({ mode: 'view', item }); };
   const openEdit = (item: EntradaSaidaFerias) => { setForm(item); setErrors({}); setModal({ mode: 'edit', item }); };
   const closeModal = () => setModal(null);
+
+  const openSection = (id: SectionId) => {
+    setSection(id);
+    setView('section');
+  };
+
+  const goToOverview = () => {
+    setView('overview');
+    setSection('all');
+  };
 
   const handleSave = () => {
     if (!validate()) return;
@@ -259,90 +303,116 @@ export default function EntradaSaidaFeriasModule({ onBack, permissions }: Props)
             </div>
           )}
         </div>
-        {canCreate && (
-          <button onClick={openCreate}
-            className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
-            <Plus size={15} /> Novo registro
-          </button>
-        )}
-      </div>
+        {view === 'overview' ? (
+        <> 
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--adm-text)' }}>Submódulos</p>
+              <p className="text-sm" style={{ color: 'var(--adm-muted)' }}>Clique em um submódulo para ver seus registros e adicione novos submódulos quando precisar.</p>
+            </div>
+            {canCreate && (
+              <button onClick={openNewSectionModal}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border font-semibold transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-text)', background: 'var(--adm-input)' }}>
+                <Plus size={16} /> Novo submódulo
+              </button>
+            )}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 mb-6">
+            <button onClick={() => openSection('all')}
+              className="text-left rounded-2xl border p-5 transition-all duration-200 hover:shadow-2xl"
+              style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+              <p className="text-sm font-semibold" style={{ color: 'var(--adm-muted)' }}>Todos</p>
+              <p className="text-4xl font-black mt-3" style={{ color: 'var(--adm-text)' }}>{sectionSummary.total}</p>
+            </button>
+            {sectionSummary.counts.map(card => (
+              <button key={card.id} onClick={() => openSection(card.id)}
+                className="text-left rounded-2xl border p-5 transition-all duration-200 hover:shadow-2xl"
+                style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+                <p className="text-sm font-semibold" style={{ color: 'var(--adm-muted)' }}>{card.label}</p>
+                <p className="text-4xl font-black mt-3" style={{ color: 'var(--adm-text)' }}>{card.count}</p>
+              </button>
+            ))}
+            {canCreate && (
+              <button onClick={openNewSectionModal}
+                className="text-left rounded-2xl border border-dashed p-5 transition-all duration-200 hover:border-cpe-red hover:text-cpe-red"
+                style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>
+                <p className="text-sm font-semibold">Adicionar</p>
+                <p className="text-4xl font-black mt-3" style={{ color: 'var(--adm-text)' }}>+ Submódulo</p>
+              </button>
+            )}
+          </div>
+          <div className="rounded-2xl border p-6" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+            <p className="text-sm" style={{ color: 'var(--adm-muted)' }}>
+              Clique em um submódulo para ver os registros de entrada/saída de férias. No modo de seção, você pode criar registros novos e organizar melhor cada submódulo.
+            </p>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-wrap items-center gap-3 mb-5">
+            <button onClick={goToOverview}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
+              style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}>
+              Voltar às seções
+            </button>
+            <h4 className="text-lg font-semibold flex-1" style={{ color: 'var(--adm-text)' }}>
+              {section === 'all' ? 'Todos os registros' : sections.find(s => s.id === section)?.label}
+            </h4>
+            <div className="relative min-w-[240px] flex-1 sm:flex-none">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Buscar registro..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="adm-input w-full rounded-2xl pl-10 pr-4 py-3 text-sm"
+                style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }}
+              />
+            </div>
+            {canCreate && (
+              <button onClick={openCreate}
+                className="px-3 py-1.5 rounded-lg text-sm font-semibold bg-cpe-red text-white transition-colors hover:bg-cpe-red/90">
+                <Plus size={14} /> Novo registro
+              </button>
+            )}
+            <span className="text-sm" style={{ color: 'var(--adm-muted)' }}>{filtered.length} registro{filtered.length !== 1 ? 's' : ''}</span>
+          </div>
 
-<div className="flex flex-wrap items-center gap-2 mb-4">
-          <button
-            onClick={() => setSection('all')}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
-            style={{
-              borderColor: section === 'all' ? 'var(--adm-accent)' : 'var(--adm-border)',
-              color: section === 'all' ? 'var(--adm-accent)' : 'var(--adm-muted)',
-              background: section === 'all' ? 'color-mix(in srgb, var(--adm-accent) 10%, transparent)' : 'var(--adm-input)',
-            }}>
-            Todos
-          </button>
-          {sections.map(tab => {
-            const active = section === tab.id;
-            return (
-              <button key={tab.id} onClick={() => setSection(tab.id)}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
-                style={{
-                  borderColor: active ? 'var(--adm-accent)' : 'var(--adm-border)',
-                  color: active ? 'var(--adm-accent)' : 'var(--adm-muted)',
-                  background: active ? 'color-mix(in srgb, var(--adm-accent) 10%, transparent)' : 'var(--adm-input)',
-                }}>
-                {tab.label}
-              </button>
-            );
-          })}
-          {canCreate && (
-            <>
-              <button onClick={() => { setSectionModalOpen(true); setSectionName(''); setSectionError(''); }}
-                className="ml-auto px-3 py-1.5 rounded-lg text-sm font-semibold border border-dashed transition-colors"
-                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-accent)', background: 'var(--adm-input)' }}>
-                + Nova seção
-              </button>
-              {sectionModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-                  <div className="w-full max-w-md rounded-2xl shadow-2xl border p-6"
-                    style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Nova seção</h4>
-                      <button onClick={() => setSectionModalOpen(false)} style={{ color: 'var(--adm-muted)' }}><X size={22} /></button>
-                    </div>
-                    <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Título da seção</label>
-                    <input type="text" value={sectionName}
-                      onChange={e => { setSectionName(e.target.value); setSectionError(''); }}
-                      className="adm-input w-full rounded-lg px-3 py-2.5 text-base border"
-                      style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: sectionError ? '#ef4444' : 'var(--adm-border)' }} />
-                    {sectionError && <p className="text-sm mt-2 text-red-400">{sectionError}</p>}
-                    <div className="flex justify-end gap-3 mt-5">
-                      <button onClick={() => setSectionModalOpen(false)}
-                        className="px-4 py-2.5 rounded-lg border transition-colors"
-                        style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>
-                        Cancelar
-                      </button>
-                      <button onClick={() => {
-                        const trimmed = sectionName.trim();
-                        if (!trimmed) {
-                          setSectionError('Título obrigatório');
-                          return;
-                        }
-                        const existing = sections.some(sec => sec.label.toLowerCase() === trimmed.toLowerCase());
-                        if (existing) {
-                          setSectionError('Seção já existe');
-                          return;
-                        }
-                        setCustomSections(cs => [...cs, trimmed]);
-                        setSection(trimmed);
-                        setSectionModalOpen(false);
-                      }}
-                        className="px-4 py-2.5 rounded-lg bg-cpe-red text-white font-semibold hover:bg-cpe-red/80 transition-colors">
-                        Salvar seção
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <button
+              onClick={() => setSection('all')}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
+              style={{
+                borderColor: section === 'all' ? 'var(--adm-accent)' : 'var(--adm-border)',
+                color: section === 'all' ? 'var(--adm-accent)' : 'var(--adm-muted)',
+                background: section === 'all' ? 'color-mix(in srgb, var(--adm-accent) 10%, transparent)' : 'var(--adm-input)',
+              }}>
+              Todos
+            </button>
+            {sections.map(tab => {
+              const active = section === tab.id;
+              return (
+                <button key={tab.id} onClick={() => setSection(tab.id)}
+                  className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
+                  style={{
+                    borderColor: active ? 'var(--adm-accent)' : 'var(--adm-border)',
+                    color: active ? 'var(--adm-accent)' : 'var(--adm-muted)',
+                    background: active ? 'color-mix(in srgb, var(--adm-accent) 10%, transparent)' : 'var(--adm-input)',
+                  }}>
+                  {tab.label}
+                </button>
+              );
+            })}
+            {canCreate && (
+              <>
+                <button onClick={() => { setSectionModalOpen(true); setSectionName(''); setSectionError(''); }}
+                  className="ml-auto px-3 py-1.5 rounded-lg text-sm font-semibold border border-dashed transition-colors"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-accent)', background: 'var(--adm-input)' }}>
+                  + Nova seção
+                </button>
+              </>
+            )}
           </div>
 
           <div className="overflow-x-auto">
@@ -416,6 +486,38 @@ export default function EntradaSaidaFeriasModule({ onBack, permissions }: Props)
           </tbody>
         </table>
       </div>
+    </>
+  )}
+      </div>
+
+      {sectionModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl shadow-2xl border p-6"
+            style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Novo submódulo</h4>
+              <button onClick={() => setSectionModalOpen(false)} style={{ color: 'var(--adm-muted)' }}><X size={22} /></button>
+            </div>
+            <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Título do submódulo</label>
+            <input type="text" value={sectionName}
+              onChange={e => { setSectionName(e.target.value); setSectionError(''); }}
+              className="adm-input w-full rounded-lg px-3 py-2.5 text-base border"
+              style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: sectionError ? '#ef4444' : 'var(--adm-border)' }} />
+            {sectionError && <p className="text-sm mt-2 text-red-400">{sectionError}</p>}
+            <div className="flex justify-end gap-3 mt-5">
+              <button onClick={() => setSectionModalOpen(false)}
+                className="px-4 py-2.5 rounded-lg border transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>
+                Cancelar
+              </button>
+              <button onClick={handleSaveSection}
+                className="px-4 py-2.5 rounded-lg bg-cpe-red text-white font-semibold hover:bg-cpe-red/80 transition-colors">
+                Salvar submódulo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
