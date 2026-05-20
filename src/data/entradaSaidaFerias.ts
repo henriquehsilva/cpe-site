@@ -14,51 +14,98 @@ export interface EntradaSaidaFerias {
   observacao: string;
 }
 
-const _entradaSaida: ReadonlyArray<readonly [
-  string,
-  number,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string
-]> = [
-  ['retornam-abril', 1, '3º SGT PM', '35324', 'VICTOR Gomes do Nascimento Dionizio', 'OPERACIONAL', '30', '01/04', '30/04', '01/05 a 05/05', '06/05', 'EXERCÍCIO 2025'],
-  ['retornam-abril', 2, 'CB PM', '38380', 'Thiago SANTOS e Sa', 'OPERACIONAL', '30', '05/04', '04/05', '06/05 a 10/05', '11/05', 'EXERC. 2022/2023'],
-  ['retornam-abril', 3, 'CB PM', '37528', 'JONATAS Martins de Oliveira', 'OPERACIONAL', '2', '27/04', '28/04', '29/04 a 03/05', '04/05', 'EXERCÍCIO 2024'],
-  ['retornam-abril', 4, 'SD PM', '39229', 'JÚLIO César de Paulo Sousa', 'OPERACIONAL', '30', '11/04', '10/05', '11/05 a 15/05', '16/05', 'EXERCÍCIO 2024'],
-  ['entram-maio', 1, '1º SGT PM', '31309', 'URBANO Neto Gomes Nascimento', 'OPERACIONAL', '30', '02/05', '31/05', '01/06 a 05/06', '06/06', 'EXERCÍCIO 2025'],
-  ['entram-maio', 2, '2º SGT PM', '32573', 'GABRIELA Alves Landin dos Santos', 'ADM - P/3', '30', '04/05', '02/06', '-', '03/06', 'EXERC. 2021/2022'],
-  ['entram-maio', 3, '2º SGT PM', '34980', 'Fernando ELIAS de Souza', 'OPERACIONAL', '30', '09/05', '07/06', '08/06 a 12/06', '13/06', 'EXERCÍCIO 2025'],
-  ['entram-maio', 4, '3º SGT PM', '34359', 'EDSON de Souza Júnior', 'OPERACIONAL', '30', '17/05', '15/06', '-', '16/06', 'EXERCÍCIO 2022'],
-  ['entram-maio', 5, 'CB PM', '37757', 'Lucas MOREIRA do Nascimento', 'OPERACIONAL', '30', '03/05', '01/06', '02/06 a 06/06', '07/06', 'EXERCÍCIO 2025'],
-  ['entram-maio', 6, 'SD PM', '39151', 'Hygor Correa BENJAMIM de Sousa', 'OPERACIONAL', '30', '03/05', '01/06', 'NÃO VAI TIRAR', '02/06', 'EXERCÍCIO 2025'],
-  ['entram-maio', 7, 'SD PM', '39926', 'Matheus FRANCO de Almeida', 'OPERACIONAL', '30', '13/05', '11/06', '12/06 a 16/06', '17/06', 'EXERCÍCIO 2024'],
-  ['entram-maio', 8, 'SD PM', '39821', 'Johnatan William de Oliveira RAMALHO', 'OPERACIONAL', '30', '08/05', '06/06', '07/06 a 11/06', '12/06', 'EXERCÍCIO 2023'],
-  ['lesp', 1, '1º SGT PM', '27238', 'Sidney Rodrigues UESSUGI', 'OPERACIONAL', '91', '01/04', '30/06', '-', '01/07', ''],
-  ['lesp', 2, 'CB PM', '37597', 'Junio Ferreira Nunes', 'CPE 20', '91', '01/04', '30/06', '-', '01/07', ''],
-  ['lesp', 3, 'CB PM', '37596', 'Júnio Albuquerque ARAÚJO', 'OPERACIONAL', '91', '01/04', '30/06', '-', '01/07', ''],
-];
+export const ENTRADA_SAIDA_SECTIONS = [
+  { id: 'retornam-abril', label: 'Retornam de Abril/2026' },
+  { id: 'entram-maio', label: 'Entram em Maio/2026' },
+  { id: 'lesp', label: 'LESP 2º Trim/2026 (ABR/MAI/JUN)' },
+] as const;
 
-export const entradaSaidaFeriasDB: EntradaSaidaFerias[] = _entradaSaida.map(
-  ([secao, num, graduacao, rg, nome, funcao, dias, inicio, fim, dispCmdo, pronto, obs], i) => ({
-    id: `esf${i + 1}`,
-    secao,
-    num,
-    graduacao,
-    rg,
-    nome,
-    funcao,
-    dias,
-    inicio,
-    fim,
-    dispCmdo,
-    pronto,
-    observacao: obs,
-  }),
-);
+function splitCsvLine(line: string): string[] {
+  const cols: string[] = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+    if (char === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      cols.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  cols.push(current);
+  return cols;
+}
+
+function detectSection(line: string): string | null {
+  const value = line.trim().toUpperCase();
+  if (value.includes('RETORNAM')) return 'retornam-abril';
+  if (value.includes('ENTRAM')) return 'entram-maio';
+  if (value.includes('LESP')) return 'lesp';
+  return null;
+}
+
+// @ts-ignore: allow importing CSV with ?raw
+import csvText from './entradaSaidaFerias.csv?raw';
+
+function parseEntradaSaidaFromCsv(csv: string): EntradaSaidaFerias[] {
+  const lines = csv.split(/\r?\n/).map((line) => line.trim());
+  const items: EntradaSaidaFerias[] = [];
+  let section = ENTRADA_SAIDA_SECTIONS[0].id;
+  let idCounter = 1;
+
+  for (const line of lines) {
+    if (!line) continue;
+    if (line.toUpperCase().includes('SEI ')) continue;
+
+    const overrideSection = detectSection(line);
+    if (overrideSection) {
+      section = overrideSection;
+      continue;
+    }
+
+    const cols = splitCsvLine(line).map((cell) => cell.trim());
+    if (cols.length === 0 || !/^[0-9]+$/.test(cols[0])) continue;
+
+    const num = Number(cols[0]) || 0;
+    const graduacao = cols[1] ?? '';
+    const rg = cols[2] ?? '';
+    const nome = cols[3] ?? '';
+    const funcao = cols[4] ?? '';
+    const dias = cols[5] ?? '';
+    const inicio = cols[6] ?? '';
+    const fim = cols[7] ?? '';
+    const dispCmdo = cols[8] ?? '';
+    const pronto = cols[9] ?? '';
+    const observacao = cols[10] ?? '';
+
+    items.push({
+      id: `esf${idCounter++}`,
+      secao: section,
+      num,
+      graduacao,
+      rg,
+      nome,
+      funcao,
+      dias,
+      inicio,
+      fim,
+      dispCmdo,
+      pronto,
+      observacao,
+    });
+  }
+
+  return items;
+}
+
+export const entradaSaidaFeriasDB: EntradaSaidaFerias[] = parseEntradaSaidaFromCsv(csvText);

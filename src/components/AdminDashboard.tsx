@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, Crosshair, Car, ArrowRightLeft,
+  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
@@ -29,9 +29,7 @@ interface AdminDashboardProps {
 
 const ALL_MODULES = [
   { id: 'efetivo',            label: 'Efetivo',             icon: Users },
-  { id: 'plano-ferias',       label: 'Plano de Férias',     icon: CalendarDays },
-  { id: 'entrada-saida-ferias', label: 'Entrada / Saída de Férias', icon: ArrowRightLeft },
-  { id: 'aniversariantes',    label: 'Aniversariantes',     icon: Cake },
+  { id: 'plano-ferias',       label: 'Plano de Férias',     icon: CalendarDays },  { id: 'entrada-saida-ferias', label: 'Entrada / Saída de Férias', icon: ArrowRightLeft },  { id: 'aniversariantes',    label: 'Aniversariantes',     icon: Cake },
   { id: 'plano-chamada',      label: 'Plano de Chamada',    icon: PhoneCall },
   { id: 'agenda-audiencias',  label: 'Agenda Audiências',   icon: Scale },
   { id: 'medalhas',           label: 'Medalhas',            icon: Award },
