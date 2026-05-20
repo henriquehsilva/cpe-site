@@ -19,9 +19,9 @@ const Contacts: React.FC = () => {
   const contactInfo = {
     emailGeral: "31cipm.3crpm@gmail.com",
     telefone1: "62 99624-9821",
-    telefone2: "62 99910-6969",
+    telefone2: "62 99910-6782 / 62 99910-6969",
     endereco:
-      "CPE Anápolis - 31ª CIPM/CPE, Av. A, Qd. 08 Lt. 01, Cidade Jardim, Anápolis - GO",
+      "CPE Anápolis - 31ª CIPM/CPE, Av. A, Qd. 08 Lt. 01, Cidade Jardim, Anápolis - GO, CEP: 75080-170",
   };
 
   const handleSubmit = (e: React.FormEvent) => {

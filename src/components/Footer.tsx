@@ -54,14 +54,14 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Contact Summary */}
-          <div className="lg:col-span-1">
+          {/* <div className="lg:col-span-1">
             <h4 className="text-lg font-semibold text-white mb-4">Contato</h4>
             <div className="space-y-3 text-gray-400">
               <p>Anápolis, Goiás</p>
               <p>Av. A, Quadra 08, Lote 01</p>
               <p>Cidade Jardim</p>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Divider */}
