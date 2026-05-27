@@ -285,6 +285,11 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const fss = { background: 'var(--adm-input)', color: 'var(--adm-text)',  border: '1px solid var(--adm-border)', fontSize: 12 };
   const cls = 'adm-input rounded px-2 py-1 text-sm border w-full';
 
+  const emptyBox = (
+    <span className="inline-block w-24 h-[18px] rounded border border-dashed align-middle"
+      style={{ borderColor: 'var(--adm-border)', opacity: 0.45 }} />
+  );
+
   // ── render: list ─────────────────────────────────────────────────────────
   if (view === 'list') {
     return (
@@ -561,7 +566,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                     <td key={col} className="px-3 py-2" style={{ color: row[col] === 'S. E. R.' ? 'var(--adm-subtle)' : 'var(--adm-text)' }}>
                       {editMode
                         ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={cls} style={fss} />
-                        : row[col]}
+                        : row[col] || emptyBox}
                     </td>
                   ))}
 
@@ -571,7 +576,9 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                       ? row.adminNome !== undefined
                         ? <input value={row.adminNome} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={cls} style={fss} />
                         : <span style={{ color: 'var(--adm-subtle)' }}>—</span>
-                      : row.adminNome ?? ''}
+                      : row.adminNome !== undefined
+                        ? row.adminNome || emptyBox
+                        : null}
                   </td>
 
                   {/* admin funcao */}
@@ -580,7 +587,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                       ? row.adminFuncao !== undefined
                         ? <input value={row.adminFuncao} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={cls} style={fss} />
                         : null
-                      : row.adminFuncao ?? ''}
+                      : row.adminFuncao || ''}
                   </td>
 
                   {/* ser nome */}
@@ -589,7 +596,9 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                       ? row.serNome !== undefined
                         ? <input value={row.serNome} onChange={e => setDraftRow(i, 'serNome', e.target.value)} className={cls} style={fss} />
                         : null
-                      : row.serNome ?? ''}
+                      : row.serNome !== undefined
+                        ? row.serNome || emptyBox
+                        : null}
                   </td>
 
                   {/* ser status */}
@@ -598,7 +607,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                       ? row.serStatus !== undefined
                         ? <input value={row.serStatus} onChange={e => setDraftRow(i, 'serStatus', e.target.value)} className={cls} style={fss} />
                         : null
-                      : row.serStatus ?? ''}
+                      : row.serStatus || ''}
                   </td>
 
                   {/* delete row */}
