@@ -1,5 +1,5 @@
-const CACHE = 'cpe-v2';
-const PRECACHE = ['/', '/manifest.json', '/logo-pwa.jpeg'];
+const CACHE = 'cpe-v4';
+const PRECACHE = ['/', '/manifest.json', '/logo-pwa2.jpeg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
