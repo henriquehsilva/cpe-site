@@ -100,14 +100,14 @@ function exportPrint(cg: CaraterGeral) {
     <title>Caráter Geral ${cg.data}</title>
     <style>
       body{font-family:Arial;font-size:9px;margin:12px}
+      h1{font-size:14px;text-align:center;margin:0 0 12px}
       h2{font-size:12px;margin:14px 0 5px}
       table{border-collapse:collapse;width:100%;margin-bottom:12px}
       th,td{border:1px solid #bbb;padding:2px 5px;white-space:nowrap}
       th{background:#2d2d2d;color:#fff;font-size:8px;text-transform:uppercase}
-      .placa{font-weight:700;font-size:11px}
+      .placa{font-weight:700;font-size:13px}
     </style></head><body>
-    <h2>CARÁTER GERAL CPE — ${cg.data}</h2>
-    <h2>VEÍCULOS EM ACOMPANHAMENTO</h2>
+    <h1>CARÁTER GERAL CPE — ${cg.data}</h1>
     <table>
       <thead><tr><th>Placa</th><th>Marca/Modelo</th><th>Cor/Milhar</th><th>Ano</th><th>Art</th><th>Data</th></tr></thead>
       <tbody>${vRows}</tbody>
