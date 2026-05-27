@@ -104,7 +104,7 @@ function exportPrint(cg: CaraterGeral) {
       h2{font-size:14px;margin:14px 0 5px}
       table{border-collapse:collapse;width:100%;margin-bottom:12px}
       th,td{border:1px solid #bbb;padding:3px 6px;white-space:nowrap}
-      th{background:#2d2d2d;color:#fff;font-size:11px;text-transform:uppercase}
+      th{background:#2d2d2d;color:#fff;font-size:11px;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact}
       .placa{font-weight:700;font-size:14px}
     </style></head><body>
     <h1>CARÁTER GERAL CPE — ${cg.data}</h1>
