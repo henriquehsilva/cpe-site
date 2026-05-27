@@ -16,6 +16,12 @@ function nextId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
+function reorderAfterDelete<T extends { ord: number }>(deletedOrd: number, list: T[]): T[] {
+  return list
+    .map(m => m.ord > deletedOrd ? { ...m, ord: m.ord - 1 } : m)
+    .sort((a, b) => a.ord - b.ord);
+}
+
 function emptyDisp() {
   return Array.from({ length: 5 }, () => ({ data: '', dopm: '' }));
 }
@@ -227,7 +233,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const saveCmdo = () => {
     if (!cmdoForm.nome.trim()) { setCmdoErr({ nome: 'Nome obrigatório' }); return; }
     if (cmdoModal?.mode === 'create') {
-      setCmdoData(d => [...d, { ...cmdoForm, id: nextId() }]);
+      setCmdoData(d => [...d, { ...cmdoForm, id: nextId() }].sort((a, b) => a.ord - b.ord));
     } else if (cmdoModal?.mode === 'edit' && cmdoModal.item) {
       setCmdoData(d => d.map(r => r.id === cmdoModal.item!.id ? { ...cmdoForm, id: r.id } : r));
     }
@@ -236,7 +242,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
   const deleteCmdo = () => {
     if (!delCmdo) return;
-    setCmdoData(d => d.filter(r => r.id !== delCmdo.id));
+    setCmdoData(d => reorderAfterDelete(delCmdo.ord, d.filter(r => r.id !== delCmdo.id)));
     setDelCmdo(null);
   };
 
@@ -270,7 +276,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     if (!anualForm.nome.trim()) { setAnualErr({ nome: 'Nome obrigatório' }); return; }
     const cleaned = { ...anualForm, dispensas: anualForm.dispensas.map(d => ({ ...d })) };
     if (anualModal?.mode === 'create') {
-      setAnualData(d => [...d, { ...cleaned, id: nextId() }]);
+      setAnualData(d => [...d, { ...cleaned, id: nextId() }].sort((a, b) => a.ord - b.ord));
     } else if (anualModal?.mode === 'edit' && anualModal.item) {
       setAnualData(d => d.map(r => r.id === anualModal.item!.id ? { ...cleaned, id: r.id } : r));
     }
@@ -279,7 +285,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
   const deleteAnual = () => {
     if (!delAnual) return;
-    setAnualData(d => d.filter(r => r.id !== delAnual.id));
+    setAnualData(d => reorderAfterDelete(delAnual.ord, d.filter(r => r.id !== delAnual.id)));
     setDelAnual(null);
   };
 
