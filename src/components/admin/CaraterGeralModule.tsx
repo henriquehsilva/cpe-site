@@ -119,8 +119,9 @@ function exportPrint(cg: CaraterGeral) {
     <h2>EFETIVO</h2>
     <table><tbody>${efHtml}</tbody></table>
   </body></html>`;
-  const w = window.open('', '_blank');
-  if (w) { w.document.write(html); w.document.close(); w.print(); }
+  const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+  const w = window.open(url, '_blank');
+  if (w) w.onload = () => { w.print(); URL.revokeObjectURL(url); };
 }
 
 // ── component ─────────────────────────────────────────────────────────────────
@@ -460,7 +461,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                     </>
                   ) : (
                     <>
-                      <td className="px-3 py-2 font-semibold whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{v.placa}</td>
+                      <td className="px-3 py-2 font-semibold whitespace-nowrap text-sm" style={{ color: 'var(--adm-text)' }}>{v.placa}</td>
                       <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>{v.marcaModelo}</td>
                       <td className="px-3 py-2" style={{ color: 'var(--adm-muted)' }}>{v.corMilhar}</td>
                       <td className="px-3 py-2 tabular-nums" style={{ color: 'var(--adm-muted)' }}>{v.ano}</td>
@@ -560,9 +561,9 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   </div>
                 ) : (
                   <>
-                    <div className="text-xs font-bold uppercase tracking-wide truncate" style={{ color: 'var(--adm-accent)' }}>{u.nome || '—'}</div>
+                    <div className="text-xs font-bold uppercase tracking-wide truncate text-center" style={{ color: 'var(--adm-accent)' }}>{u.nome || '—'}</div>
                     {u.telefone && (
-                      <div className="flex items-center gap-1 mt-0.5">
+                      <div className="flex items-center justify-center gap-1 mt-0.5">
                         <Phone size={10} style={{ color: 'var(--adm-subtle)' }} />
                         <span className="text-xs tabular-nums" style={{ color: 'var(--adm-muted)' }}>{u.telefone}</span>
                       </div>
