@@ -181,6 +181,8 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const [afModal, setAfModal]       = useState<{ mode: 'create' | 'edit'; item: MapaAfastamento | null } | null>(null);
   const [afForm, setAfForm]         = useState<Omit<MapaAfastamento, 'id'>>({ tipo: 'LESP', nome: '', retorno: '' });
   const [afError, setAfError]       = useState('');
+  const [inlineCell, setInlineCell] = useState<{ rowIdx: number; col: keyof MapaRow } | null>(null);
+  const [inlineVal, setInlineVal]   = useState('');
 
   // sorted month list
   const sorted = useMemo(() =>
@@ -279,6 +281,27 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   };
   const deleteAf = (id: string) =>
     setDraft(d => d ? { ...d, afastamentos: d.afastamentos.filter(a => a.id !== id) } : d);
+
+  // ── inline cell editing (view mode) ──────────────────────────────────────
+  const startInline = (rowIdx: number, col: keyof MapaRow, currentVal: string) => {
+    setInlineCell({ rowIdx, col });
+    setInlineVal(currentVal);
+  };
+
+  const commitInline = () => {
+    if (!inlineCell || !selected) return;
+    const updated: MapaEfetivo = {
+      ...selected,
+      linhas: selected.linhas.map((r, i) =>
+        i === inlineCell.rowIdx ? { ...r, [inlineCell.col]: inlineVal } : r
+      ),
+    };
+    setData(d => d.map(m => m.id === selected.id ? updated : m));
+    setSelected(updated);
+    setInlineCell(null);
+  };
+
+  const cancelInline = () => setInlineCell(null);
 
   // ── styles ────────────────────────────────────────────────────────────────
   const fs  = { background: 'var(--adm-input)', color: 'var(--adm-text)',  border: '1px solid var(--adm-border)' };
@@ -566,48 +589,76 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                     <td key={col} className="px-3 py-2" style={{ color: row[col] === 'S. E. R.' ? 'var(--adm-subtle)' : 'var(--adm-text)' }}>
                       {editMode
                         ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={cls} style={fss} />
-                        : row[col] || emptyBox}
+                        : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === col
+                          ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
+                              onBlur={commitInline}
+                              onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
+                              className={cls} style={fss} />
+                          : <span onClick={canEdit ? () => startInline(i, col, row[col]) : undefined}
+                              className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
+                              {row[col] || emptyBox}
+                            </span>}
                     </td>
                   ))}
 
                   {/* admin nome */}
                   <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>
                     {editMode
-                      ? row.adminNome !== undefined
-                        ? <input value={row.adminNome} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={cls} style={fss} />
-                        : <span style={{ color: 'var(--adm-subtle)' }}>—</span>
-                      : row.adminNome !== undefined
-                        ? row.adminNome || emptyBox
-                        : null}
+                      ? <input value={row.adminNome ?? ''} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={cls} style={fss} />
+                      : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminNome'
+                        ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
+                            onBlur={commitInline}
+                            onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
+                            className={cls} style={fss} />
+                        : <span onClick={canEdit ? () => startInline(i, 'adminNome', row.adminNome ?? '') : undefined}
+                            className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
+                            {row.adminNome || emptyBox}
+                          </span>}
                   </td>
 
                   {/* admin funcao */}
                   <td className="px-3 py-2 italic" style={{ color: 'var(--adm-muted)', fontSize: 11 }}>
                     {editMode
-                      ? row.adminFuncao !== undefined
-                        ? <input value={row.adminFuncao} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={cls} style={fss} />
-                        : null
-                      : row.adminFuncao || ''}
+                      ? <input value={row.adminFuncao ?? ''} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={cls} style={fss} />
+                      : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminFuncao'
+                        ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
+                            onBlur={commitInline}
+                            onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
+                            className={cls} style={fss} />
+                        : <span onClick={canEdit ? () => startInline(i, 'adminFuncao', row.adminFuncao ?? '') : undefined}
+                            className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
+                            {row.adminFuncao || emptyBox}
+                          </span>}
                   </td>
 
                   {/* ser nome */}
                   <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>
                     {editMode
-                      ? row.serNome !== undefined
-                        ? <input value={row.serNome} onChange={e => setDraftRow(i, 'serNome', e.target.value)} className={cls} style={fss} />
-                        : null
-                      : row.serNome !== undefined
-                        ? row.serNome || emptyBox
-                        : null}
+                      ? <input value={row.serNome ?? ''} onChange={e => setDraftRow(i, 'serNome', e.target.value)} className={cls} style={fss} />
+                      : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'serNome'
+                        ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
+                            onBlur={commitInline}
+                            onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
+                            className={cls} style={fss} />
+                        : <span onClick={canEdit ? () => startInline(i, 'serNome', row.serNome ?? '') : undefined}
+                            className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
+                            {row.serNome || emptyBox}
+                          </span>}
                   </td>
 
                   {/* ser status */}
                   <td className="px-3 py-2 italic" style={{ color: 'var(--adm-muted)', fontSize: 11 }}>
                     {editMode
-                      ? row.serStatus !== undefined
-                        ? <input value={row.serStatus} onChange={e => setDraftRow(i, 'serStatus', e.target.value)} className={cls} style={fss} />
-                        : null
-                      : row.serStatus || ''}
+                      ? <input value={row.serStatus ?? ''} onChange={e => setDraftRow(i, 'serStatus', e.target.value)} className={cls} style={fss} />
+                      : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'serStatus'
+                        ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
+                            onBlur={commitInline}
+                            onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
+                            className={cls} style={fss} />
+                        : <span onClick={canEdit ? () => startInline(i, 'serStatus', row.serStatus ?? '') : undefined}
+                            className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
+                            {row.serStatus || emptyBox}
+                          </span>}
                   </td>
 
                   {/* delete row */}
