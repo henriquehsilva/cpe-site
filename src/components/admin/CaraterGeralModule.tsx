@@ -97,17 +97,7 @@ function exportPrint(cg: CaraterGeral) {
     efHtml += '<tr><td colspan="5" style="height:10px;border:none"></td></tr>';
   }
 
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-    <title>Caráter Geral ${cg.data}</title>
-    <style>
-      body{font-family:Arial;font-size:12px;margin:12px}
-      h1{font-size:17px;text-align:center;margin:0 0 12px}
-      h2{font-size:14px;margin:14px 0 5px}
-      table{border-collapse:collapse;width:100%;margin-bottom:12px}
-      th,td{border:1px solid #bbb;padding:3px 6px;white-space:nowrap}
-      th{background:#2d2d2d;color:#fff;font-size:11px;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-      .placa{font-weight:700;font-size:14px}
-    </style></head><body>
+  const body = `
     <h1>CARÁTER GERAL CPE — ${cg.data}</h1>
     <table>
       <thead><tr><th>Placa</th><th>Marca/Modelo</th><th>Cor/Milhar</th><th>Ano</th><th>Art</th><th>Data</th></tr></thead>
@@ -119,7 +109,24 @@ function exportPrint(cg: CaraterGeral) {
       <tbody>${alRows}</tbody>
     </table>
     <h2>EFETIVO</h2>
-    <table style="font-size:9px"><tbody>${efHtml}</tbody></table>
+    <table style="font-size:9px"><tbody>${efHtml}</tbody></table>`;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>Caráter Geral ${cg.data}</title>
+    <style>
+      body{font-family:Arial;font-size:12px;margin:0;padding:0}
+      h1{font-size:17px;text-align:center;margin:0 0 12px}
+      h2{font-size:14px;margin:14px 0 5px}
+      table{border-collapse:collapse;width:100%;margin-bottom:12px}
+      th,td{border:1px solid #bbb;padding:3px 6px;white-space:nowrap}
+      th{background:#2d2d2d;color:#fff;font-size:11px;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .placa{font-weight:700;font-size:14px}
+      .copy{zoom:0.5;padding:6px 12px;box-sizing:border-box}
+      .cut{border-top:1px dashed #aaa;text-align:center;font-size:9px;color:#aaa;padding:2px 0;letter-spacing:2px}
+    </style></head><body>
+    <div class="copy">${body}</div>
+    <div class="cut">✂ &nbsp; recortar &nbsp; ✂</div>
+    <div class="copy">${body}</div>
   </body></html>`;
   const url = URL.createObjectURL(new Blob([html], { type: 'text/html; charset=utf-8' }));
 
