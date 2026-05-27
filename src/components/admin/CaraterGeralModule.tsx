@@ -99,13 +99,13 @@ function exportPrint(cg: CaraterGeral) {
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
     <title>Caráter Geral ${cg.data}</title>
     <style>
-      body{font-family:Arial;font-size:9px;margin:12px}
-      h1{font-size:14px;text-align:center;margin:0 0 12px}
-      h2{font-size:12px;margin:14px 0 5px}
+      body{font-family:Arial;font-size:12px;margin:12px}
+      h1{font-size:17px;text-align:center;margin:0 0 12px}
+      h2{font-size:14px;margin:14px 0 5px}
       table{border-collapse:collapse;width:100%;margin-bottom:12px}
-      th,td{border:1px solid #bbb;padding:2px 5px;white-space:nowrap}
-      th{background:#2d2d2d;color:#fff;font-size:8px;text-transform:uppercase}
-      .placa{font-weight:700;font-size:13px}
+      th,td{border:1px solid #bbb;padding:3px 6px;white-space:nowrap}
+      th{background:#2d2d2d;color:#fff;font-size:11px;text-transform:uppercase}
+      .placa{font-weight:700;font-size:14px}
     </style></head><body>
     <h1>CARÁTER GERAL CPE — ${cg.data}</h1>
     <table>
@@ -120,9 +120,29 @@ function exportPrint(cg: CaraterGeral) {
     <h2>EFETIVO</h2>
     <table><tbody>${efHtml}</tbody></table>
   </body></html>`;
-  const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
-  const w = window.open(url, '_blank');
-  if (w) w.onload = () => { w.print(); URL.revokeObjectURL(url); };
+  const url = URL.createObjectURL(new Blob([html], { type: 'text/html; charset=utf-8' }));
+
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:none;z-index:99999;background:#fff';
+  document.body.appendChild(iframe);
+
+  const cleanup = () => {
+    if (document.body.contains(iframe)) {
+      document.body.removeChild(iframe);
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  iframe.addEventListener('load', () => {
+    try {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+    } catch { /* iOS Safari não suporta print em iframe */ }
+    window.addEventListener('focus', cleanup, { once: true });
+    setTimeout(cleanup, 60_000);
+  });
+
+  iframe.src = url;
 }
 
 // ── component ─────────────────────────────────────────────────────────────────
