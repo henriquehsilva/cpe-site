@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car,
+  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car, ClipboardList,
 } from 'lucide-react';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
@@ -18,6 +18,7 @@ import SettingsModule from './admin/SettingsModule';
 import FotosModule from './admin/FotosModule';
 import ArmamentoModule from './admin/ArmamentoModule';
 import ViaturasModule from './admin/ViaturasModule';
+import CaraterGeralModule from './admin/CaraterGeralModule';
 import ProfileModal from './admin/ProfileModal';
 import { THEMES } from '../data/themes';
 import { useRBAC } from '../contexts/RBACContext';
@@ -39,6 +40,7 @@ const ALL_MODULES = [
   { id: 'mapa-efetivo',       label: 'Mapa do Efetivo',     icon: CalendarDays },
   { id: 'armamento',          label: 'Armamento',           icon: Crosshair },
   { id: 'viaturas',           label: 'Viaturas',            icon: Car },
+  { id: 'carater-geral',      label: 'Caráter Geral',       icon: ClipboardList },
 ];
 
 const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
@@ -272,6 +274,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <EntradaSaidaFeriasModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('entradaSaidaFerias')} />
         ) : activeModule === 'dispenca-recompensa' ? (
           <DispensaRecompensaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('dispenca-recompensa')} />
+        ) : activeModule === 'carater-geral' ? (
+          <CaraterGeralModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('carater-geral')} />
         ) : (
           <>
             <div className="mb-8 sm:mb-10">
