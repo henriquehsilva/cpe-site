@@ -121,12 +121,8 @@ function exportPrint(cg: CaraterGeral) {
       th,td{border:1px solid #bbb;padding:3px 6px;white-space:nowrap}
       th{background:#2d2d2d;color:#fff;font-size:11px;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact}
       .placa{font-weight:700;font-size:14px}
-      .copy{zoom:0.5;padding:6px 12px;box-sizing:border-box}
-      .cut{border-top:1px dashed #aaa;text-align:center;font-size:9px;color:#aaa;padding:2px 0;letter-spacing:2px}
     </style></head><body>
-    <div class="copy">${body}</div>
-    <div class="cut">✂ &nbsp; recortar &nbsp; ✂</div>
-    <div class="copy">${body}</div>
+    <div style="padding:12px">${body}</div>
   </body></html>`;
   const url = URL.createObjectURL(new Blob([html], { type: 'text/html; charset=utf-8' }));
 
