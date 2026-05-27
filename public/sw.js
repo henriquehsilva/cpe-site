@@ -1,5 +1,5 @@
-const CACHE = 'cpe-v1';
-const PRECACHE = ['/', '/manifest.json', '/android-chrome-192x192.png', '/android-chrome-512x512.png', '/apple-touch-icon.png'];
+const CACHE = 'cpe-v2';
+const PRECACHE = ['/', '/manifest.json', '/logo-pwa.jpeg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
