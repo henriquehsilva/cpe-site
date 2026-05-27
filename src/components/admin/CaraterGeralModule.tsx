@@ -82,7 +82,8 @@ function exportPrint(cg: CaraterGeral) {
       <td class="placa">${v.placa}</td><td>${v.marcaModelo}</td><td>${v.corMilhar}</td>
       <td>${v.ano}</td><td>${v.art}</td><td>${v.dataInfracao}</td>
     </tr>`).join('');
-  const alRows = cg.alertas.map(a => `<tr><td class="placa">${a.placa}</td><td>${a.descricao}</td></tr>`).join('');
+  const blankRow = `<tr><td class="placa">&nbsp;</td><td>&nbsp;</td></tr>`;
+  const alRows = cg.alertas.map(a => `<tr><td class="placa">${a.placa}</td><td>${a.descricao}</td></tr>`).join('') + blankRow + blankRow;
 
   // efetivo grid: 5 per row
   let efHtml = '';
@@ -113,12 +114,12 @@ function exportPrint(cg: CaraterGeral) {
       <tbody>${vRows}</tbody>
     </table>
     <h2>ALERTAS</h2>
-    <table style="width:auto">
+    <table style="width:100%">
       <thead><tr><th>Placa</th><th>Descrição</th></tr></thead>
       <tbody>${alRows}</tbody>
     </table>
     <h2>EFETIVO</h2>
-    <table><tbody>${efHtml}</tbody></table>
+    <table style="font-size:9px"><tbody>${efHtml}</tbody></table>
   </body></html>`;
   const url = URL.createObjectURL(new Blob([html], { type: 'text/html; charset=utf-8' }));
 
