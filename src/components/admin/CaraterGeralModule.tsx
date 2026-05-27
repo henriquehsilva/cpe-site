@@ -79,10 +79,10 @@ function exportXLSX(cg: CaraterGeral) {
 function exportPrint(cg: CaraterGeral) {
   const vRows = cg.veiculos.map(v => `
     <tr>
-      <td>${v.placa}</td><td>${v.marcaModelo}</td><td>${v.corMilhar}</td>
+      <td class="placa">${v.placa}</td><td>${v.marcaModelo}</td><td>${v.corMilhar}</td>
       <td>${v.ano}</td><td>${v.art}</td><td>${v.dataInfracao}</td>
     </tr>`).join('');
-  const alRows = cg.alertas.map(a => `<tr><td>${a.placa}</td><td>${a.descricao}</td></tr>`).join('');
+  const alRows = cg.alertas.map(a => `<tr><td class="placa">${a.placa}</td><td>${a.descricao}</td></tr>`).join('');
 
   // efetivo grid: 5 per row
   let efHtml = '';
@@ -104,6 +104,7 @@ function exportPrint(cg: CaraterGeral) {
       table{border-collapse:collapse;width:100%;margin-bottom:12px}
       th,td{border:1px solid #bbb;padding:2px 5px;white-space:nowrap}
       th{background:#2d2d2d;color:#fff;font-size:8px;text-transform:uppercase}
+      .placa{font-weight:700;font-size:11px}
     </style></head><body>
     <h2>CARÁTER GERAL CPE — ${cg.data}</h2>
     <h2>VEÍCULOS EM ACOMPANHAMENTO</h2>
