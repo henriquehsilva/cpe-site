@@ -4,8 +4,9 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car, ClipboardList,
+  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car, ClipboardList, Download,
 } from 'lucide-react';
+import { downloadBackup } from '../utils/backupUtils';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
 import AgendaAudienciasModule from './admin/AgendaAudienciasModule';
@@ -166,23 +167,37 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
             {/* Desktop actions (hidden on mobile) */}
             <div className="hidden sm:flex items-center gap-2">
 
-              {/* Settings — super admin only */}
+              {/* Settings + Backup — super admin only */}
               {isSuperAdmin && (
-                <button
-                  onClick={() => setActiveModule(activeModule === 'settings' ? null : 'settings')}
-                  title="Configurações"
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors text-sm font-medium"
-                  style={{
-                    borderColor: activeModule === 'settings' ? 'var(--adm-accent)' : 'var(--adm-border)',
-                    color: activeModule === 'settings' ? 'var(--adm-accent)' : 'var(--adm-muted)',
-                    background: 'transparent',
-                  }}
-                  onMouseEnter={e => { if (activeModule !== 'settings') e.currentTarget.style.color = 'var(--adm-text)'; }}
-                  onMouseLeave={e => { if (activeModule !== 'settings') e.currentTarget.style.color = 'var(--adm-muted)'; }}
-                >
-                  <Settings size={16} />
-                  <span className="hidden lg:inline">Configurações</span>
-                </button>
+                <>
+                  <button
+                    onClick={() => setActiveModule(activeModule === 'settings' ? null : 'settings')}
+                    title="Configurações"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors text-sm font-medium"
+                    style={{
+                      borderColor: activeModule === 'settings' ? 'var(--adm-accent)' : 'var(--adm-border)',
+                      color: activeModule === 'settings' ? 'var(--adm-accent)' : 'var(--adm-muted)',
+                      background: 'transparent',
+                    }}
+                    onMouseEnter={e => { if (activeModule !== 'settings') e.currentTarget.style.color = 'var(--adm-text)'; }}
+                    onMouseLeave={e => { if (activeModule !== 'settings') e.currentTarget.style.color = 'var(--adm-muted)'; }}
+                  >
+                    <Settings size={16} />
+                    <span className="hidden lg:inline">Configurações</span>
+                  </button>
+
+                  <button
+                    onClick={downloadBackup}
+                    title="Baixar backup de todos os módulos"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors text-sm font-medium"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--adm-muted)')}
+                  >
+                    <Download size={16} />
+                    <span className="hidden lg:inline">Backup</span>
+                  </button>
+                </>
               )}
 
               {/* Theme picker */}

@@ -2,13 +2,19 @@ import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Pencil, Trash2, X, Save, Download,
-  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Phone,
+  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Phone, Search,
 } from 'lucide-react';
 import {
   caraterGeralDB, CaraterGeral, CaraterVeiculo, CaraterAlerta, CaraterUnidade,
 } from '../../data/caraterGeral';
+import {
+  caraterVeiculosHistoricoDB, caraterAlertasHistoricoDB,
+  CaraterVeiculoHistorico, CaraterAlertaHistorico,
+} from '../../data/caraterGeralHistorico';
 import { ModulePermission } from '../../types/rbac';
 import { usePersistentState } from '../../hooks/usePersistentState';
+
+type SubModule = 'diario' | 'historico' | 'alertas';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -163,6 +169,9 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const canEdit   = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
 
+  const [subModule, setSubModule] = useState<SubModule>('diario');
+
+  // diário
   const [data, setData]           = usePersistentState<CaraterGeral[]>('cpe-site:carater-geral:v2', caraterGeralDB);
   const [view, setView]           = useState<View>('list');
   const [selected, setSelected]   = useState<CaraterGeral | null>(null);
@@ -173,6 +182,28 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const [newDataErr, setNewDataErr] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<CaraterGeral | null>(null);
   const [showExport, setShowExport] = useState(false);
+
+  // histórico de veículos
+  const [veicHist, setVeicHist] = usePersistentState<CaraterVeiculoHistorico[]>(
+    'cpe-site:carater-historico-veiculos:v1', caraterVeiculosHistoricoDB,
+  );
+  const [veicSearch, setVeicSearch] = useState('');
+  const [veicSort, setVeicSort]     = useState<'asc' | 'desc'>('asc');
+  const [veicPage, setVeicPage]     = useState(1);
+  const [veicModal, setVeicModal] = useState<CaraterVeiculoHistorico | null | 'new'>(null);
+  const [veicForm, setVeicForm]   = useState<Omit<CaraterVeiculoHistorico, 'id'>>({ placa: '', marcaModelo: '', corMilhar: '', ano: '', art: '', dataInfracao: '' });
+  const [veicDel, setVeicDel]     = useState<CaraterVeiculoHistorico | null>(null);
+
+  // alertas históricos
+  const [alertHist, setAlertHist] = usePersistentState<CaraterAlertaHistorico[]>(
+    'cpe-site:carater-alertas-historico:v1', caraterAlertasHistoricoDB,
+  );
+  const [alertSearch, setAlertSearch] = useState('');
+  const [alertSort, setAlertSort]     = useState<'asc' | 'desc'>('asc');
+  const [alertPage, setAlertPage]     = useState(1);
+  const [alertModal, setAlertModal]   = useState<CaraterAlertaHistorico | null | 'new'>(null);
+  const [alertForm, setAlertForm]     = useState<Omit<CaraterAlertaHistorico, 'id'>>({ placa: '', descricao: '' });
+  const [alertDel, setAlertDel]       = useState<CaraterAlertaHistorico | null>(null);
 
   const sorted = useMemo(() =>
     [...data].sort((a, b) => {
@@ -274,11 +305,411 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const fss = { background: 'var(--adm-input)', color: 'var(--adm-text)', border: '1px solid var(--adm-border)', fontSize: 12 };
   const cls = 'adm-input rounded px-2 py-1 text-sm border w-full';
 
+  // ── shared tab bar ─────────────────────────────────────────────────────────
+  const tabBar = (
+    <div className="flex gap-1 mb-6 border-b" style={{ borderColor: 'var(--adm-border)' }}>
+      {(['diario', 'historico', 'alertas'] as SubModule[]).map(tab => {
+        const labels: Record<SubModule, string> = { diario: 'Caráter Diário', historico: 'Hist. Veículos', alertas: 'Alertas Históricos' };
+        const active = subModule === tab;
+        return (
+          <button key={tab} onClick={() => setSubModule(tab)}
+            className="px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition-colors"
+            style={{
+              borderColor: active ? 'var(--adm-accent)' : 'transparent',
+              color: active ? 'var(--adm-accent)' : 'var(--adm-muted)',
+            }}>
+            {labels[tab]}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  // ── filtered lists (hooks must be before any early return) ──────────────────
+  const veicFiltered = useMemo(() => {
+    const q = veicSearch.trim().toLowerCase();
+    const list = q
+      ? veicHist.filter(v =>
+          v.placa.toLowerCase().includes(q) ||
+          v.marcaModelo.toLowerCase().includes(q) ||
+          v.corMilhar.toLowerCase().includes(q)
+        )
+      : [...veicHist];
+    return list.sort((a, b) =>
+      veicSort === 'asc'
+        ? a.placa.localeCompare(b.placa, 'pt-BR')
+        : b.placa.localeCompare(a.placa, 'pt-BR')
+    );
+  }, [veicHist, veicSearch, veicSort]);
+
+  const alertFiltered = useMemo(() => {
+    const q = alertSearch.trim().toLowerCase();
+    const list = q
+      ? alertHist.filter(a =>
+          a.placa.toLowerCase().includes(q) ||
+          a.descricao.toLowerCase().includes(q)
+        )
+      : [...alertHist];
+    return list.sort((a, b) =>
+      alertSort === 'asc'
+        ? a.placa.localeCompare(b.placa, 'pt-BR')
+        : b.placa.localeCompare(a.placa, 'pt-BR')
+    );
+  }, [alertHist, alertSearch, alertSort]);
+
+  // ── histórico de veículos view ─────────────────────────────────────────────
+  if (subModule === 'historico' && view === 'list') {
+    const saveVeic = () => {
+      if (veicModal === 'new') {
+        setVeicHist(d => [...d, { id: nextId(), ...veicForm }]);
+      } else if (veicModal) {
+        setVeicHist(d => d.map(v => v.id === veicModal.id ? { ...veicModal, ...veicForm } : v));
+      }
+      setVeicModal(null);
+    };
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <button onClick={onBack} className="flex items-center gap-1.5 transition-colors text-base font-medium"
+            style={{ color: 'var(--adm-muted)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--adm-muted)')}>
+            <ArrowLeft size={17} /> Módulos
+          </button>
+          <span style={{ color: 'var(--adm-border)' }} className="hidden sm:block">|</span>
+          <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>Caráter Geral</h3>
+        </div>
+        {tabBar}
+        <div className="flex flex-wrap gap-3 mb-4">
+          <div className="flex items-center gap-2 flex-1 min-w-[200px] rounded-lg border px-3 py-2"
+            style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)' }}>
+            <Search size={15} style={{ color: 'var(--adm-muted)' }} />
+            <input value={veicSearch} onChange={e => { setVeicSearch(e.target.value); setVeicPage(1); }}
+              placeholder="Buscar placa, modelo, cor…"
+              className="bg-transparent text-sm outline-none w-full"
+              style={{ color: 'var(--adm-text)' }} />
+          </div>
+          {canCreate && (
+            <button onClick={() => { setVeicForm({ placa: '', marcaModelo: '', corMilhar: '', ano: '', art: '', dataInfracao: '' }); setVeicModal('new'); }}
+              className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+              <Plus size={15} /> Novo
+            </button>
+          )}
+        </div>
+        <div className="overflow-auto rounded-xl border" style={{ borderColor: 'var(--adm-border)' }}>
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr style={{ background: 'var(--adm-tbl-head)', color: 'var(--adm-text)' }}>
+                <th
+                  className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap cursor-pointer select-none"
+                  onClick={() => { setVeicSort(s => s === 'asc' ? 'desc' : 'asc'); setVeicPage(1); }}
+                >
+                  Placa {veicSort === 'asc' ? '▲' : '▼'}
+                </th>
+                {['Marca/Modelo','Cor/Milhar','Ano','Art','Data',''].map(h => (
+                  <th key={h} className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {veicFiltered.slice((veicPage - 1) * 50, veicPage * 50).map((v, i) => (
+                <tr key={v.id} className="adm-row border-t" style={{ background: i % 2 === 0 ? 'var(--adm-surface)' : 'var(--adm-row-even)', borderColor: 'var(--adm-border)' }}>
+                  <td className="px-3 py-1.5 font-bold whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{v.placa}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{v.marcaModelo}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.corMilhar}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.ano}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.art}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.dataInfracao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap">
+                    <div className="flex gap-2">
+                      {canEdit && (
+                        <button onClick={() => { setVeicForm({ placa: v.placa, marcaModelo: v.marcaModelo, corMilhar: v.corMilhar, ano: v.ano, art: v.art, dataInfracao: v.dataInfracao }); setVeicModal(v); }}
+                          style={{ color: 'var(--adm-muted)' }}><Pencil size={14} /></button>
+                      )}
+                      {canDelete && (
+                        <button onClick={() => setVeicDel(v)} style={{ color: '#ef4444' }}><Trash2 size={14} /></button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {veicFiltered.length === 0 && (
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-sm" style={{ color: 'var(--adm-muted)' }}>Nenhum veículo encontrado.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* paginação veículos */}
+        {(() => {
+          const total = veicFiltered.length;
+          const pages = Math.ceil(total / 50);
+          const start = (veicPage - 1) * 50 + 1;
+          const end   = Math.min(veicPage * 50, total);
+          return (
+            <div className="flex items-center justify-between mt-2 flex-wrap gap-2">
+              <p className="text-xs" style={{ color: 'var(--adm-muted)' }}>
+                {total === 0 ? '0 registros' : `${start}–${end} de ${total}`}
+              </p>
+              {pages > 1 && (
+                <div className="flex items-center gap-1">
+                  <button disabled={veicPage === 1} onClick={() => setVeicPage(1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>«</button>
+                  <button disabled={veicPage === 1} onClick={() => setVeicPage(p => p - 1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>‹</button>
+                  <span className="px-2 text-xs" style={{ color: 'var(--adm-text)' }}>{veicPage} / {pages}</span>
+                  <button disabled={veicPage === pages} onClick={() => setVeicPage(p => p + 1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>›</button>
+                  <button disabled={veicPage === pages} onClick={() => setVeicPage(pages)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>»</button>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* modal add/edit */}
+        {veicModal !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-lg rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <div className="flex items-center justify-between mb-5">
+                <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>
+                  {veicModal === 'new' ? 'Novo Veículo' : 'Editar Veículo'}
+                </h4>
+                <button onClick={() => setVeicModal(null)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {(['placa','marcaModelo','corMilhar','ano','art','dataInfracao'] as const).map(f => (
+                  <div key={f} className={f === 'marcaModelo' ? 'col-span-2' : ''}>
+                    <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>
+                      {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : 'Data Infração'}
+                    </label>
+                    <input value={veicForm[f]} onChange={e => setVeicForm(p => ({ ...p, [f]: e.target.value }))}
+                      className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
+                      style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 justify-end mt-5">
+                <button onClick={() => setVeicModal(null)}
+                  className="px-4 py-2 text-sm rounded-lg border"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={saveVeic}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Save size={14} /> Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* delete confirm */}
+        {veicDel && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <h4 className="font-bold text-xl mb-2" style={{ color: 'var(--adm-text)' }}>Confirmar exclusão</h4>
+              <p className="text-sm mb-5" style={{ color: 'var(--adm-muted)' }}>
+                Excluir <span className="font-bold" style={{ color: 'var(--adm-text)' }}>{veicDel.placa}</span>?
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button onClick={() => setVeicDel(null)}
+                  className="px-4 py-2 text-sm rounded-lg border"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={() => { setVeicHist(d => d.filter(v => v.id !== veicDel!.id)); setVeicDel(null); }}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Trash2 size={14} /> Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── alertas históricos view ────────────────────────────────────────────────
+  if (subModule === 'alertas' && view === 'list') {
+    const saveAlert = () => {
+      if (alertModal === 'new') {
+        setAlertHist(d => [...d, { id: nextId(), ...alertForm }]);
+      } else if (alertModal) {
+        setAlertHist(d => d.map(a => a.id === alertModal.id ? { ...alertModal, ...alertForm } : a));
+      }
+      setAlertModal(null);
+    };
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <button onClick={onBack} className="flex items-center gap-1.5 transition-colors text-base font-medium"
+            style={{ color: 'var(--adm-muted)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--adm-muted)')}>
+            <ArrowLeft size={17} /> Módulos
+          </button>
+          <span style={{ color: 'var(--adm-border)' }} className="hidden sm:block">|</span>
+          <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>Caráter Geral</h3>
+        </div>
+        {tabBar}
+        <div className="flex flex-wrap gap-3 mb-4">
+          <div className="flex items-center gap-2 flex-1 min-w-[200px] rounded-lg border px-3 py-2"
+            style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)' }}>
+            <Search size={15} style={{ color: 'var(--adm-muted)' }} />
+            <input value={alertSearch} onChange={e => { setAlertSearch(e.target.value); setAlertPage(1); }}
+              placeholder="Buscar placa ou descrição…"
+              className="bg-transparent text-sm outline-none w-full"
+              style={{ color: 'var(--adm-text)' }} />
+          </div>
+          {canCreate && (
+            <button onClick={() => { setAlertForm({ placa: '', descricao: '' }); setAlertModal('new'); }}
+              className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+              <Plus size={15} /> Novo
+            </button>
+          )}
+        </div>
+        <div className="overflow-auto rounded-xl border" style={{ borderColor: 'var(--adm-border)' }}>
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr style={{ background: 'var(--adm-tbl-head)', color: 'var(--adm-text)' }}>
+                <th
+                  className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap cursor-pointer select-none"
+                  onClick={() => { setAlertSort(s => s === 'asc' ? 'desc' : 'asc'); setAlertPage(1); }}
+                >
+                  Placa {alertSort === 'asc' ? '▲' : '▼'}
+                </th>
+                {['Descrição',''].map(h => (
+                  <th key={h} className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {alertFiltered.slice((alertPage - 1) * 50, alertPage * 50).map((a, i) => (
+                <tr key={a.id} className="adm-row border-t" style={{ background: i % 2 === 0 ? 'var(--adm-surface)' : 'var(--adm-row-even)', borderColor: 'var(--adm-border)' }}>
+                  <td className="px-3 py-1.5 font-bold whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{a.placa}</td>
+                  <td className="px-3 py-1.5" style={{ color: 'var(--adm-text)' }}>{a.descricao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap">
+                    <div className="flex gap-2">
+                      {canEdit && (
+                        <button onClick={() => { setAlertForm({ placa: a.placa, descricao: a.descricao }); setAlertModal(a); }}
+                          style={{ color: 'var(--adm-muted)' }}><Pencil size={14} /></button>
+                      )}
+                      {canDelete && (
+                        <button onClick={() => setAlertDel(a)} style={{ color: '#ef4444' }}><Trash2 size={14} /></button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {alertFiltered.length === 0 && (
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-sm" style={{ color: 'var(--adm-muted)' }}>Nenhum alerta encontrado.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* paginação alertas */}
+        {(() => {
+          const total = alertFiltered.length;
+          const pages = Math.ceil(total / 50);
+          const start = (alertPage - 1) * 50 + 1;
+          const end   = Math.min(alertPage * 50, total);
+          return (
+            <div className="flex items-center justify-between mt-2 flex-wrap gap-2">
+              <p className="text-xs" style={{ color: 'var(--adm-muted)' }}>
+                {total === 0 ? '0 registros' : `${start}–${end} de ${total}`}
+              </p>
+              {pages > 1 && (
+                <div className="flex items-center gap-1">
+                  <button disabled={alertPage === 1} onClick={() => setAlertPage(1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>«</button>
+                  <button disabled={alertPage === 1} onClick={() => setAlertPage(p => p - 1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>‹</button>
+                  <span className="px-2 text-xs" style={{ color: 'var(--adm-text)' }}>{alertPage} / {pages}</span>
+                  <button disabled={alertPage === pages} onClick={() => setAlertPage(p => p + 1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>›</button>
+                  <button disabled={alertPage === pages} onClick={() => setAlertPage(pages)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>»</button>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* modal add/edit */}
+        {alertModal !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-lg rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <div className="flex items-center justify-between mb-5">
+                <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>
+                  {alertModal === 'new' ? 'Novo Alerta' : 'Editar Alerta'}
+                </h4>
+                <button onClick={() => setAlertModal(null)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>Placa</label>
+                  <input value={alertForm.placa} onChange={e => setAlertForm(p => ({ ...p, placa: e.target.value }))}
+                    className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
+                    style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>Descrição</label>
+                  <textarea rows={3} value={alertForm.descricao} onChange={e => setAlertForm(p => ({ ...p, descricao: e.target.value }))}
+                    className="adm-input w-full rounded-lg px-3 py-2 text-sm border resize-none"
+                    style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
+                </div>
+              </div>
+              <div className="flex gap-3 justify-end mt-5">
+                <button onClick={() => setAlertModal(null)}
+                  className="px-4 py-2 text-sm rounded-lg border"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={saveAlert}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Save size={14} /> Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* delete confirm */}
+        {alertDel && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <h4 className="font-bold text-xl mb-2" style={{ color: 'var(--adm-text)' }}>Confirmar exclusão</h4>
+              <p className="text-sm mb-5" style={{ color: 'var(--adm-muted)' }}>
+                Excluir alerta da placa <span className="font-bold" style={{ color: 'var(--adm-text)' }}>{alertDel.placa}</span>?
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button onClick={() => setAlertDel(null)}
+                  className="px-4 py-2 text-sm rounded-lg border"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={() => { setAlertHist(d => d.filter(a => a.id !== alertDel!.id)); setAlertDel(null); }}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Trash2 size={14} /> Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // ── list view ──────────────────────────────────────────────────────────────
   if (view === 'list') {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
           <button onClick={onBack} className="flex items-center gap-1.5 transition-colors text-base font-medium"
             style={{ color: 'var(--adm-muted)' }}
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
@@ -294,6 +725,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
             </button>
           )}
         </div>
+        {tabBar}
 
         {sorted.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 rounded-2xl border"
