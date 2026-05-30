@@ -11,10 +11,14 @@ import {
   caraterVeiculosHistoricoDB, caraterAlertasHistoricoDB,
   CaraterVeiculoHistorico, CaraterAlertaHistorico,
 } from '../../data/caraterGeralHistorico';
+import {
+  caraterRecuperadosDB,
+  CaraterRecuperado,
+} from '../../data/caraterGeralRecuperados';
 import { ModulePermission } from '../../types/rbac';
 import { usePersistentState } from '../../hooks/usePersistentState';
 
-type SubModule = 'diario' | 'historico' | 'alertas';
+type SubModule = 'diario' | 'historico' | 'recuperados' | 'alertas';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -205,6 +209,18 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const [alertForm, setAlertForm]     = useState<Omit<CaraterAlertaHistorico, 'id'>>({ placa: '', descricao: '' });
   const [alertDel, setAlertDel]       = useState<CaraterAlertaHistorico | null>(null);
 
+  const [recuperados, setRecuperados] = usePersistentState<CaraterRecuperado[]>(
+    'cpe-site:carater-recuperados:v1', caraterRecuperadosDB,
+  );
+  const [recuperadoSearch, setRecuperadoSearch] = useState('');
+  const [recuperadoSort, setRecuperadoSort] = useState<'asc' | 'desc'>('asc');
+  const [recuperadoPage, setRecuperadoPage] = useState(1);
+  const [recuperadoModal, setRecuperadoModal] = useState<CaraterRecuperado | null | 'new'>(null);
+  const [recuperadoForm, setRecuperadoForm] = useState<Omit<CaraterRecuperado, 'id'>>({
+    placa: '', marcaModelo: '', corMilhar: '', ano: '', art: '', dataInfracao: '', raiRecuperacao: '', dataRecuperacao: '',
+  });
+  const [recuperadoDel, setRecuperadoDel] = useState<CaraterRecuperado | null>(null);
+
   const sorted = useMemo(() =>
     [...data].sort((a, b) => {
       const p = (s: string) => { const [d, m, y] = s.split('/'); return new Date(+y, +m - 1, +d).getTime(); };
@@ -308,8 +324,13 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   // ── shared tab bar ─────────────────────────────────────────────────────────
   const tabBar = (
     <div className="flex gap-1 mb-6 border-b" style={{ borderColor: 'var(--adm-border)' }}>
-      {(['diario', 'historico', 'alertas'] as SubModule[]).map(tab => {
-        const labels: Record<SubModule, string> = { diario: 'Caráter Diário', historico: 'Hist. Veículos', alertas: 'Alertas Históricos' };
+      {(['diario', 'historico', 'recuperados', 'alertas'] as SubModule[]).map(tab => {
+        const labels: Record<SubModule, string> = {
+          diario: 'Caráter Diário',
+          historico: 'Hist. Veículos',
+          recuperados: 'Recuperados',
+          alertas: 'Alertas Históricos',
+        };
         const active = subModule === tab;
         return (
           <button key={tab} onClick={() => setSubModule(tab)}
@@ -356,6 +377,24 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
         : b.placa.localeCompare(a.placa, 'pt-BR')
     );
   }, [alertHist, alertSearch, alertSort]);
+
+  const recuperadoFiltered = useMemo(() => {
+    const q = recuperadoSearch.trim().toLowerCase();
+    const list = q
+      ? recuperados.filter(r =>
+          r.placa.toLowerCase().includes(q) ||
+          r.marcaModelo.toLowerCase().includes(q) ||
+          r.corMilhar.toLowerCase().includes(q) ||
+          r.raiRecuperacao.toLowerCase().includes(q) ||
+          r.dataRecuperacao.toLowerCase().includes(q)
+        )
+      : [...recuperados];
+    return list.sort((a, b) =>
+      recuperadoSort === 'asc'
+        ? a.placa.localeCompare(b.placa, 'pt-BR')
+        : b.placa.localeCompare(a.placa, 'pt-BR')
+    );
+  }, [recuperados, recuperadoSearch, recuperadoSort]);
 
   // ── histórico de veículos view ─────────────────────────────────────────────
   if (subModule === 'historico' && view === 'list') {
@@ -521,6 +560,184 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   className="px-4 py-2 text-sm rounded-lg border"
                   style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
                 <button onClick={() => { setVeicHist(d => d.filter(v => v.id !== veicDel!.id)); setVeicDel(null); }}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Trash2 size={14} /> Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── recuperados view ───────────────────────────────────────────────────────
+  if (subModule === 'recuperados' && view === 'list') {
+    const saveRecuperado = () => {
+      if (recuperadoModal === 'new') {
+        setRecuperados(d => [...d, { id: nextId(), ...recuperadoForm }]);
+      } else if (recuperadoModal) {
+        setRecuperados(d => d.map(r => r.id === recuperadoModal.id ? { ...recuperadoModal, ...recuperadoForm } : r));
+      }
+      setRecuperadoModal(null);
+    };
+
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <button onClick={onBack} className="flex items-center gap-1.5 transition-colors text-base font-medium"
+            style={{ color: 'var(--adm-muted)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--adm-text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--adm-muted)')}>
+            <ArrowLeft size={17} /> Módulos
+          </button>
+          <span style={{ color: 'var(--adm-border)' }} className="hidden sm:block">|</span>
+          <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>Caráter Geral</h3>
+        </div>
+        {tabBar}
+        <div className="flex flex-wrap gap-3 mb-4">
+          <div className="flex items-center gap-2 flex-1 min-w-[200px] rounded-lg border px-3 py-2"
+            style={{ background: 'var(--adm-input)', borderColor: 'var(--adm-border)' }}>
+            <Search size={15} style={{ color: 'var(--adm-muted)' }} />
+            <input value={recuperadoSearch} onChange={e => { setRecuperadoSearch(e.target.value); setRecuperadoPage(1); }}
+              placeholder="Buscar placa, modelo, cor, RAI ou data…"
+              className="bg-transparent text-sm outline-none w-full"
+              style={{ color: 'var(--adm-text)' }} />
+          </div>
+          {canCreate && (
+            <button onClick={() => {
+              setRecuperadoForm({ placa: '', marcaModelo: '', corMilhar: '', ano: '', art: '', dataInfracao: '', raiRecuperacao: '', dataRecuperacao: '' });
+              setRecuperadoModal('new');
+            }}
+              className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+              <Plus size={15} /> Novo
+            </button>
+          )}
+        </div>
+        <div className="overflow-auto rounded-xl border" style={{ borderColor: 'var(--adm-border)' }}>
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr style={{ background: 'var(--adm-tbl-head)', color: 'var(--adm-text)' }}>
+                <th
+                  className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap cursor-pointer select-none"
+                  onClick={() => { setRecuperadoSort(s => s === 'asc' ? 'desc' : 'asc'); setRecuperadoPage(1); }}
+                >
+                  Placa {recuperadoSort === 'asc' ? '▲' : '▼'}
+                </th>
+                {['Marca/Modelo','Cor/Milhar','Ano','Art','Data','RAI Recuperação','Data Recup',''].map(h => (
+                  <th key={h} className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {recuperadoFiltered.slice((recuperadoPage - 1) * 50, recuperadoPage * 50).map((r, i) => (
+                <tr key={r.id} className="adm-row border-t" style={{ background: i % 2 === 0 ? 'var(--adm-surface)' : 'var(--adm-row-even)', borderColor: 'var(--adm-border)' }}>
+                  <td className="px-3 py-1.5 font-bold whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{r.placa}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-text)' }}>{r.marcaModelo}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.corMilhar}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.ano}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.art}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.dataInfracao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.raiRecuperacao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.dataRecuperacao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap">
+                    <div className="flex gap-2">
+                      {canEdit && (
+                        <button onClick={() => { setRecuperadoForm({ placa: r.placa, marcaModelo: r.marcaModelo, corMilhar: r.corMilhar, ano: r.ano, art: r.art, dataInfracao: r.dataInfracao, raiRecuperacao: r.raiRecuperacao, dataRecuperacao: r.dataRecuperacao }); setRecuperadoModal(r); }}
+                          style={{ color: 'var(--adm-muted)' }}><Pencil size={14} /></button>
+                      )}
+                      {canDelete && (
+                        <button onClick={() => setRecuperadoDel(r)} style={{ color: '#ef4444' }}><Trash2 size={14} /></button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {recuperadoFiltered.length === 0 && (
+                <tr><td colSpan={9} className="px-4 py-8 text-center text-sm" style={{ color: 'var(--adm-muted)' }}>Nenhum registro encontrado.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {(() => {
+          const total = recuperadoFiltered.length;
+          const pages = Math.ceil(total / 50);
+          const start = (recuperadoPage - 1) * 50 + 1;
+          const end = Math.min(recuperadoPage * 50, total);
+          return (
+            <div className="flex items-center justify-between mt-2 flex-wrap gap-2">
+              <p className="text-xs" style={{ color: 'var(--adm-muted)' }}>
+                {total === 0 ? '0 registros' : `${start}–${end} de ${total}`}
+              </p>
+              {pages > 1 && (
+                <div className="flex items-center gap-1">
+                  <button disabled={recuperadoPage === 1} onClick={() => setRecuperadoPage(1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>«</button>
+                  <button disabled={recuperadoPage === 1} onClick={() => setRecuperadoPage(p => p - 1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>‹</button>
+                  <span className="px-2 text-xs" style={{ color: 'var(--adm-text)' }}>{recuperadoPage} / {pages}</span>
+                  <button disabled={recuperadoPage === pages} onClick={() => setRecuperadoPage(p => p + 1)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>›</button>
+                  <button disabled={recuperadoPage === pages} onClick={() => setRecuperadoPage(pages)}
+                    className="px-2 py-1 text-xs rounded border disabled:opacity-30"
+                    style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>»</button>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        {recuperadoModal !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-2xl rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <div className="flex items-center justify-between mb-5">
+                <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>
+                  {recuperadoModal === 'new' ? 'Novo Registro Recuperado' : 'Editar Registro Recuperado'}
+                </h4>
+                <button onClick={() => setRecuperadoModal(null)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {(['placa','marcaModelo','corMilhar','ano','art','dataInfracao','raiRecuperacao','dataRecuperacao'] as const).map(f => (
+                  <div key={f} className={f === 'marcaModelo' || f === 'raiRecuperacao' ? 'col-span-2' : ''}>
+                    <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>
+                      {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : f === 'dataInfracao' ? 'Data' : f === 'raiRecuperacao' ? 'RAI Recuperação' : 'Data Recup'}
+                    </label>
+                    <input value={recuperadoForm[f]} onChange={e => setRecuperadoForm(p => ({ ...p, [f]: e.target.value }))}
+                      className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
+                      style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 justify-end mt-5">
+                <button onClick={() => setRecuperadoModal(null)}
+                  className="px-4 py-2 text-sm rounded-lg border"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={saveRecuperado}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Save size={14} /> Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {recuperadoDel && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <h4 className="font-bold text-xl mb-2" style={{ color: 'var(--adm-text)' }}>Confirmar exclusão</h4>
+              <p className="text-sm mb-5" style={{ color: 'var(--adm-muted)' }}>
+                Excluir registro de <span className="font-bold" style={{ color: 'var(--adm-text)' }}>{recuperadoDel.placa}</span>?
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button onClick={() => setRecuperadoDel(null)}
+                  className="px-4 py-2 text-sm rounded-lg border"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={() => { setRecuperados(d => d.filter(r => r.id !== recuperadoDel!.id)); setRecuperadoDel(null); }}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
                   <Trash2 size={14} /> Excluir
                 </button>
