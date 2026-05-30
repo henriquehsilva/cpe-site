@@ -197,6 +197,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const [veicModal, setVeicModal] = useState<CaraterVeiculoHistorico | null | 'new'>(null);
   const [veicForm, setVeicForm]   = useState<Omit<CaraterVeiculoHistorico, 'id'>>({ placa: '', marcaModelo: '', corMilhar: '', ano: '', art: '', dataInfracao: '' });
   const [veicDel, setVeicDel]     = useState<CaraterVeiculoHistorico | null>(null);
+  const [veiculosSort, setVeiculosSort] = useState<'asc' | 'desc'>('asc');
 
   // alertas históricos
   const [alertHist, setAlertHist] = usePersistentState<CaraterAlertaHistorico[]>(
@@ -1000,6 +1001,12 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   // ── detail view ────────────────────────────────────────────────────────────
   const cg  = editMode && draft ? draft : selected!;
   const idx = sorted.findIndex(c => c.id === cg.id);
+  const sortedVeiculos = [...cg.veiculos].sort((a, b) =>
+    veiculosSort === 'asc'
+      ? a.placa.localeCompare(b.placa, 'pt-BR')
+      : b.placa.localeCompare(a.placa, 'pt-BR')
+  );
+  const displayedVeiculos = editMode ? cg.veiculos : sortedVeiculos;
 
   return (
     <div className="flex flex-col h-full">
@@ -1105,7 +1112,12 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
           <table className="w-full text-xs" style={{ minWidth: 700 }}>
             <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
               <tr className="font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
-                <th className="px-3 py-2.5 text-left">Placa</th>
+                <th
+                  className="px-3 py-2.5 text-left cursor-pointer select-none"
+                  onClick={() => setVeiculosSort(s => s === 'asc' ? 'desc' : 'asc')}
+                >
+                  Placa {veiculosSort === 'asc' ? '▲' : '▼'}
+                </th>
                 <th className="px-3 py-2.5 text-left">Marca/Modelo</th>
                 <th className="px-3 py-2.5 text-left">Cor/Milhar</th>
                 <th className="px-3 py-2.5 text-left w-16">Ano</th>
@@ -1115,7 +1127,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
               </tr>
             </thead>
             <tbody>
-              {cg.veiculos.map((v, i) => (
+              {displayedVeiculos.map((v, i) => (
                 <tr key={v.id} className="adm-row border-t transition-colors"
                   style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
                   {editMode ? (
