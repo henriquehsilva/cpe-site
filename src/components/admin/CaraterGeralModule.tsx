@@ -312,8 +312,8 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
     <div className="flex gap-1 mb-6 border-b" style={{ borderColor: 'var(--adm-border)' }}>
       {(['diario', 'historico', 'alertas', 'recuperados'] as SubModule[]).map(tab => {
         const labels: Record<SubModule, string> = {
-          diario: 'Carater',
-          historico: 'Historico Veiculos',
+          diario: 'Caráter',
+          historico: 'Histórico Veículos',
           recuperados: 'Recuperados',
           alertas: 'Alertas Antigos',
         };
