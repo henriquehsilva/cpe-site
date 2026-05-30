@@ -181,9 +181,6 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const [selected, setSelected]   = useState<CaraterGeral | null>(null);
   const [editMode, setEditMode]   = useState(false);
   const [draft, setDraft]         = useState<CaraterGeral | null>(null);
-  const [showNewModal, setShowNewModal] = useState(false);
-  const [newDataStr, setNewDataStr] = useState('');
-  const [newDataErr, setNewDataErr] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<CaraterGeral | null>(null);
   const [showExport, setShowExport] = useState(false);
 
@@ -298,18 +295,6 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
       return { ...d, unidades };
     });
 
-  // ── create ─────────────────────────────────────────────────────────────────
-  const handleCreate = () => {
-    if (!newDataStr.trim()) { setNewDataErr('Data obrigatória'); return; }
-    if (data.some(c => c.data === newDataStr.trim())) { setNewDataErr('Já existe registro para esta data'); return; }
-    const novo: CaraterGeral = { id: nextId(), ...emptyCarater(newDataStr.trim()) };
-    setData(d => [...d, novo]);
-    setShowNewModal(false);
-    setNewDataStr('');
-    openDetail(novo);
-    setTimeout(() => startEdit(), 50);
-  };
-
   const handleDelete = () => {
     if (!deleteTarget) return;
     setData(d => d.filter(c => c.id !== deleteTarget.id));
@@ -325,12 +310,12 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   // ── shared tab bar ─────────────────────────────────────────────────────────
   const tabBar = (
     <div className="flex gap-1 mb-6 border-b" style={{ borderColor: 'var(--adm-border)' }}>
-      {(['diario', 'historico', 'recuperados', 'alertas'] as SubModule[]).map(tab => {
+      {(['diario', 'historico', 'alertas', 'recuperados'] as SubModule[]).map(tab => {
         const labels: Record<SubModule, string> = {
-          diario: 'Caráter Diário',
-          historico: 'Hist. Veículos',
+          diario: 'Carater',
+          historico: 'Historico Veiculos',
           recuperados: 'Recuperados',
-          alertas: 'Alertas Históricos',
+          alertas: 'Alertas Antigos',
         };
         const active = subModule === tab;
         return (
@@ -936,12 +921,6 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
           </button>
           <span style={{ color: 'var(--adm-border)' }} className="hidden sm:block">|</span>
           <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>Caráter Geral</h3>
-          {canCreate && (
-            <button onClick={() => { setNewDataStr(''); setNewDataErr(''); setShowNewModal(true); }}
-              className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-base font-semibold px-4 py-2 rounded-lg transition-colors">
-              <Plus size={16} /> Nova Data
-            </button>
-          )}
         </div>
         {tabBar}
 
@@ -949,7 +928,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
           <div className="flex flex-col items-center justify-center py-20 rounded-2xl border"
             style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
             <p className="text-lg font-semibold" style={{ color: 'var(--adm-text)' }}>Nenhum registro</p>
-            <p className="text-sm mt-1" style={{ color: 'var(--adm-muted)' }}>Clique em "Nova Data" para começar.</p>
+            <p className="text-sm mt-1" style={{ color: 'var(--adm-muted)' }}>Nenhum registro disponível no momento.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -968,32 +947,6 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
           </div>
         )}
 
-        {showNewModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-            <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
-              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
-              <div className="flex items-center justify-between mb-5">
-                <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Nova Data</h4>
-                <button onClick={() => setShowNewModal(false)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
-              </div>
-              <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Data (DD/MM/AAAA)</label>
-              <input value={newDataStr} onChange={e => { setNewDataStr(e.target.value); setNewDataErr(''); }}
-                placeholder="27/05/2026"
-                className="adm-input w-full rounded-lg px-3 py-2.5 text-base border mb-1"
-                style={{ ...fs, ...(newDataErr ? { borderColor: '#ef4444' } : {}) }} />
-              {newDataErr && <p className="text-sm text-red-400 flex items-center gap-1 mb-3"><AlertCircle size={13} /> {newDataErr}</p>}
-              <div className="flex gap-3 justify-end mt-4">
-                <button onClick={() => setShowNewModal(false)}
-                  className="px-5 py-2.5 text-base rounded-lg border"
-                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
-                <button onClick={handleCreate}
-                  className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
-                  <Plus size={16} /> Criar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
