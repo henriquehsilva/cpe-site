@@ -42,6 +42,12 @@ function emptyCarater(data: string): Omit<CaraterGeral, 'id'> {
   return { data, veiculos: [], alertas: [], unidades: [] };
 }
 
+function formatPlaca(raw: string): string {
+  const v = raw.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (v.length > 4) return v.slice(0, 4) + '-' + v.slice(4, 7);
+  return v;
+}
+
 // ── XLSX export ───────────────────────────────────────────────────────────────
 
 function exportXLSX(cg: CaraterGeral) {
@@ -219,11 +225,14 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   });
   const [recuperadoDel, setRecuperadoDel] = useState<CaraterRecuperado | null>(null);
 
-  // migration
+  // migration — veículos
   const [migVeic, setMigVeic] = useState<CaraterVeiculo | CaraterVeiculoHistorico | null>(null);
   const [migDest, setMigDest] = useState<'historico' | 'recuperados'>('historico');
   const [migRai, setMigRai] = useState('');
   const [migDataRec, setMigDataRec] = useState('');
+
+  // migration — alertas
+  const [migAlerta, setMigAlerta] = useState<CaraterAlerta | null>(null);
 
   const sorted = useMemo(() =>
     [...data].sort((a, b) => {
@@ -475,6 +484,47 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
     </div>
   );
 
+  const confirmMigrateAlerta = () => {
+    if (!migAlerta) return;
+    setAlertHist(d => [...d, { id: nextId(), placa: migAlerta.placa, descricao: migAlerta.descricao }]);
+    setMigAlerta(null);
+  };
+
+  const migrateAlertaModal = migAlerta !== null && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md rounded-2xl shadow-2xl border p-6"
+        style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Migrar Alerta</h4>
+          <button onClick={() => setMigAlerta(null)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+        </div>
+        <div className="mb-4 p-3 rounded-xl border" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+          <div className="font-bold text-base" style={{ color: 'var(--adm-accent)' }}>{migAlerta.placa}</div>
+          <div className="text-sm mt-0.5" style={{ color: 'var(--adm-text)' }}>{migAlerta.descricao}</div>
+        </div>
+        <p className="text-sm mb-4" style={{ color: 'var(--adm-muted)' }}>
+          Mover para: <span className="font-semibold" style={{ color: 'var(--adm-text)' }}>Alertas Antigos</span>
+        </p>
+        {alertHist.some(h => h.placa === migAlerta.placa) && (
+          <div className="flex items-center gap-2 p-3 rounded-lg text-xs mb-4"
+            style={{ background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.3)', color: '#ca8a04' }}>
+            <AlertCircle size={13} />
+            Esta placa já existe nos Alertas Antigos. Será adicionada como nova entrada.
+          </div>
+        )}
+        <div className="flex gap-3 justify-end">
+          <button onClick={() => setMigAlerta(null)}
+            className="px-4 py-2 text-sm rounded-lg border"
+            style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+          <button onClick={confirmMigrateAlerta}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+            <MoveRight size={14} /> Confirmar Migração
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   // ── histórico de veículos view ─────────────────────────────────────────────
   if (subModule === 'historico' && view === 'list') {
     const saveVeic = () => {
@@ -614,7 +664,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                     <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>
                       {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : 'Data Infração'}
                     </label>
-                    <input value={veicForm[f]} onChange={e => setVeicForm(p => ({ ...p, [f]: e.target.value }))}
+                    <input value={veicForm[f]} onChange={e => setVeicForm(p => ({ ...p, [f]: f === 'placa' ? formatPlaca(e.target.value) : e.target.value }))}
                       className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
                       style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
                   </div>
@@ -794,7 +844,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                     <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>
                       {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : f === 'dataInfracao' ? 'Data' : f === 'raiRecuperacao' ? 'RAI Recuperação' : 'Data Recup'}
                     </label>
-                    <input value={recuperadoForm[f]} onChange={e => setRecuperadoForm(p => ({ ...p, [f]: e.target.value }))}
+                    <input value={recuperadoForm[f]} onChange={e => setRecuperadoForm(p => ({ ...p, [f]: f === 'placa' ? formatPlaca(e.target.value) : e.target.value }))}
                       className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
                       style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
                   </div>
@@ -961,7 +1011,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>Placa</label>
-                  <input value={alertForm.placa} onChange={e => setAlertForm(p => ({ ...p, placa: e.target.value }))}
+                  <input value={alertForm.placa} onChange={e => setAlertForm(p => ({ ...p, placa: formatPlaca(e.target.value) }))}
                     className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
                     style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
                 </div>
@@ -1187,7 +1237,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
                   {editMode ? (
                     <>
-                      <td className="px-2 py-1.5"><input value={v.placa} onChange={e => setVeiculo(i, 'placa', e.target.value)} className={cls} style={fss} /></td>
+                      <td className="px-2 py-1.5"><input value={v.placa} onChange={e => setVeiculo(i, 'placa', formatPlaca(e.target.value))} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.marcaModelo} onChange={e => setVeiculo(i, 'marcaModelo', e.target.value)} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.corMilhar} onChange={e => setVeiculo(i, 'corMilhar', e.target.value)} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.ano} onChange={e => setVeiculo(i, 'ano', e.target.value)} className={cls} style={fss} /></td>
@@ -1255,7 +1305,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
               <tr className="font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
                 <th className="px-3 py-2.5 text-left w-36">Placa</th>
                 <th className="px-3 py-2.5 text-left">Descrição</th>
-                {editMode && <th className="w-8"></th>}
+                <th className="w-20"></th>
               </tr>
             </thead>
             <tbody>
@@ -1264,9 +1314,9 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
                   {editMode ? (
                     <>
-                      <td className="px-2 py-1.5 w-36"><input value={a.placa} onChange={e => setAlerta(i, 'placa', e.target.value)} className={cls} style={fss} /></td>
+                      <td className="px-2 py-1.5 w-36"><input value={a.placa} onChange={e => setAlerta(i, 'placa', formatPlaca(e.target.value))} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={a.descricao} onChange={e => setAlerta(i, 'descricao', e.target.value)} className={cls} style={fss} /></td>
-                      <td className="px-1 py-1.5 text-center">
+                      <td className="px-1 py-1.5 text-center" colSpan={2}>
                         <button onClick={() => removeAlerta(i)}
                           className="p-1 rounded hover:bg-cpe-red/10 text-cpe-red opacity-60 hover:opacity-100 transition-colors">
                           <X size={13} />
@@ -1277,12 +1327,22 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                     <>
                       <td className="px-3 py-2 font-semibold whitespace-nowrap" style={{ color: 'var(--adm-accent)' }}>{a.placa}</td>
                       <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>{a.descricao}</td>
+                      <td className="px-2 py-1.5 whitespace-nowrap">
+                        {canCreate && (
+                          <button onClick={() => setMigAlerta(a)}
+                            title="Migrar para Alertas Antigos"
+                            className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
+                            style={{ color: 'var(--adm-muted)', borderColor: 'var(--adm-border)' }}>
+                            <MoveRight size={11} /> Ant.
+                          </button>
+                        )}
+                      </td>
                     </>
                   )}
                 </tr>
               ))}
               {cg.alertas.length === 0 && (
-                <tr><td colSpan={3} className="px-4 py-8 text-center" style={{ color: 'var(--adm-subtle)' }}>Sem alertas.</td></tr>
+                <tr><td colSpan={4} className="px-4 py-8 text-center" style={{ color: 'var(--adm-subtle)' }}>Sem alertas.</td></tr>
               )}
             </tbody>
           </table>
@@ -1397,6 +1457,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
           </div>
         </div>
       )}
+      {migrateAlertaModal}
       {migrateModal}
     </div>
   );

@@ -31,6 +31,7 @@ type ModalMode = 'create' | 'edit';
 const emptyForm = (): Omit<AdminUserProfile, 'id' | 'createdAt' | 'updatedAt'> => ({
   email: '',
   displayName: '',
+  avatarUrl: '',
   status: 'active',
   permissions: JSON.parse(JSON.stringify(DEFAULT_PERMISSIONS)),
 });
@@ -73,6 +74,7 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
             id: d.id,
             email: data.email ?? '',
             displayName: data.displayName ?? '',
+            avatarUrl: data.avatarUrl ?? '',
             status: data.status ?? 'inactive',
             createdAt: data.createdAt?.toDate() ?? new Date(),
             updatedAt: data.updatedAt?.toDate() ?? new Date(),
@@ -109,7 +111,7 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
   };
 
   const openEdit = (user: AdminUserProfile) => {
-    setForm({ email: user.email, displayName: user.displayName, status: user.status, permissions: user.permissions });
+    setForm({ email: user.email, displayName: user.displayName, avatarUrl: user.avatarUrl ?? '', status: user.status, permissions: user.permissions });
     setPermGrid(buildPermGrid(user.permissions));
     setFormErrors({});
     setModal({ mode: 'edit', user });
@@ -495,11 +497,16 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
                     value={form.email}
                     onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                     placeholder="email@exemplo.com"
-                    disabled={modal.mode === 'edit'}
-                    className="adm-input w-full px-3 py-2.5 text-sm rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="adm-input w-full px-3 py-2.5 text-sm rounded-lg border"
                     style={{ background: 'var(--adm-input)', borderColor: formErrors.email ? '#ef4444' : 'var(--adm-border)', color: 'var(--adm-text)' }}
                   />
                   {formErrors.email && <p className="text-xs text-red-400 mt-1">{formErrors.email}</p>}
+                  {modal.mode === 'edit' && (
+                    <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: '#ca8a04' }}>
+                      <AlertCircle size={11} />
+                      Atualiza apenas o registro. O email de login no Firebase Auth não é alterado automaticamente.
+                    </p>
+                  )}
                 </div>
                 {modal.mode === 'create' && (
                   <div>
