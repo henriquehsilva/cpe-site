@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Pencil, Trash2, X, Save, Download,
-  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Phone, Search,
+  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Phone, Search, MoveRight,
 } from 'lucide-react';
 import {
   caraterGeralDB, CaraterGeral, CaraterVeiculo, CaraterAlerta, CaraterUnidade,
@@ -219,6 +219,12 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   });
   const [recuperadoDel, setRecuperadoDel] = useState<CaraterRecuperado | null>(null);
 
+  // migration
+  const [migVeic, setMigVeic] = useState<CaraterVeiculo | CaraterVeiculoHistorico | null>(null);
+  const [migDest, setMigDest] = useState<'historico' | 'recuperados'>('historico');
+  const [migRai, setMigRai] = useState('');
+  const [migDataRec, setMigDataRec] = useState('');
+
   const sorted = useMemo(() =>
     [...data].sort((a, b) => {
       const p = (s: string) => { const [d, m, y] = s.split('/'); return new Date(+y, +m - 1, +d).getTime(); };
@@ -382,6 +388,93 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
     );
   }, [recuperados, recuperadoSearch, recuperadoSort]);
 
+  // ── migration helpers ──────────────────────────────────────────────────────
+  const openMigrate = (v: CaraterVeiculo | CaraterVeiculoHistorico, dest: 'historico' | 'recuperados') => {
+    setMigVeic(v);
+    setMigDest(dest);
+    setMigRai('');
+    setMigDataRec('');
+  };
+
+  const confirmMigrate = () => {
+    if (!migVeic) return;
+    const base = {
+      placa: migVeic.placa,
+      marcaModelo: migVeic.marcaModelo,
+      corMilhar: migVeic.corMilhar,
+      ano: migVeic.ano,
+      art: migVeic.art,
+      dataInfracao: migVeic.dataInfracao,
+    };
+    if (migDest === 'historico') {
+      setVeicHist(d => [...d, { id: nextId(), ...base }]);
+    } else {
+      setRecuperados(d => [...d, { id: nextId(), ...base, raiRecuperacao: migRai, dataRecuperacao: migDataRec }]);
+    }
+    setMigVeic(null);
+  };
+
+  const migrateModal = migVeic !== null && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md rounded-2xl shadow-2xl border p-6"
+        style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Migrar Veículo</h4>
+          <button onClick={() => setMigVeic(null)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+        </div>
+        <div className="mb-4 p-3 rounded-xl border" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+          <div className="font-bold text-base" style={{ color: 'var(--adm-accent)' }}>{migVeic.placa}</div>
+          <div className="text-sm mt-0.5" style={{ color: 'var(--adm-text)' }}>{migVeic.marcaModelo}</div>
+          <div className="text-xs mt-0.5" style={{ color: 'var(--adm-muted)' }}>{migVeic.corMilhar} · {migVeic.ano} · Art. {migVeic.art}</div>
+        </div>
+
+        <p className="text-sm mb-3" style={{ color: 'var(--adm-muted)' }}>
+          Destino:{' '}
+          <span className="font-semibold" style={{ color: 'var(--adm-text)' }}>
+            {migDest === 'historico' ? 'Histórico de Veículos' : 'Recuperados'}
+          </span>
+        </p>
+
+        {migDest === 'historico' && veicHist.some(h => h.placa === migVeic.placa) && (
+          <div className="flex items-center gap-2 p-3 rounded-lg text-xs mb-3"
+            style={{ background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.3)', color: '#ca8a04' }}>
+            <AlertCircle size={13} />
+            Esta placa já existe no Histórico. Será adicionada como nova entrada.
+          </div>
+        )}
+
+        {migDest === 'recuperados' && (
+          <div className="space-y-3 mb-3">
+            <div>
+              <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>RAI Recuperação</label>
+              <input value={migRai} onChange={e => setMigRai(e.target.value)}
+                className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
+                style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }}
+                placeholder="Ex: 47320517" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>Data Recuperação</label>
+              <input value={migDataRec} onChange={e => setMigDataRec(e.target.value)}
+                className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
+                style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }}
+                placeholder="Ex: 01/06/2026" />
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-3 justify-end mt-4">
+          <button onClick={() => setMigVeic(null)}
+            className="px-4 py-2 text-sm rounded-lg border"
+            style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+          <button onClick={confirmMigrate}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+            <MoveRight size={14} /> Confirmar Migração
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   // ── histórico de veículos view ─────────────────────────────────────────────
   if (subModule === 'historico' && view === 'list') {
     const saveVeic = () => {
@@ -446,13 +539,21 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.art}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.dataInfracao}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                       {canEdit && (
                         <button onClick={() => { setVeicForm({ placa: v.placa, marcaModelo: v.marcaModelo, corMilhar: v.corMilhar, ano: v.ano, art: v.art, dataInfracao: v.dataInfracao }); setVeicModal(v); }}
                           style={{ color: 'var(--adm-muted)' }}><Pencil size={14} /></button>
                       )}
                       {canDelete && (
                         <button onClick={() => setVeicDel(v)} style={{ color: '#ef4444' }}><Trash2 size={14} /></button>
+                      )}
+                      {canCreate && (
+                        <button onClick={() => openMigrate(v, 'recuperados')}
+                          title="Migrar para Recuperados"
+                          className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
+                          style={{ color: '#22c55e', borderColor: 'rgba(34,197,94,0.3)' }}>
+                          <MoveRight size={11} /> Rec.
+                        </button>
                       )}
                     </div>
                   </td>
@@ -553,6 +654,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
             </div>
           </div>
         )}
+        {migrateModal}
       </div>
     );
   }
@@ -1076,7 +1178,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                 <th className="px-3 py-2.5 text-left w-16">Ano</th>
                 <th className="px-3 py-2.5 text-left w-14">Art</th>
                 <th className="px-3 py-2.5 text-left w-16">Data</th>
-                {editMode && <th className="w-8"></th>}
+                <th className="w-28"></th>
               </tr>
             </thead>
             <tbody>
@@ -1091,7 +1193,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                       <td className="px-2 py-1.5"><input value={v.ano} onChange={e => setVeiculo(i, 'ano', e.target.value)} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.art} onChange={e => setVeiculo(i, 'art', e.target.value)} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.dataInfracao} onChange={e => setVeiculo(i, 'dataInfracao', e.target.value)} className={cls} style={fss} /></td>
-                      <td className="px-1 py-1.5 text-center">
+                      <td className="px-1 py-1.5 text-center" colSpan={2}>
                         <button onClick={() => removeVeiculo(i)}
                           className="p-1 rounded hover:bg-cpe-red/10 text-cpe-red opacity-60 hover:opacity-100 transition-colors">
                           <X size={13} />
@@ -1106,12 +1208,30 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                       <td className="px-3 py-2 tabular-nums" style={{ color: 'var(--adm-muted)' }}>{v.ano}</td>
                       <td className="px-3 py-2" style={{ color: 'var(--adm-muted)' }}>{v.art}</td>
                       <td className="px-3 py-2 tabular-nums" style={{ color: 'var(--adm-muted)' }}>{v.dataInfracao}</td>
+                      <td className="px-2 py-1.5 whitespace-nowrap">
+                        {canCreate && (
+                          <div className="flex gap-1.5">
+                            <button onClick={() => openMigrate(v, 'historico')}
+                              title="Migrar para Histórico de Veículos"
+                              className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
+                              style={{ color: 'var(--adm-muted)', borderColor: 'var(--adm-border)' }}>
+                              <MoveRight size={11} /> Hist.
+                            </button>
+                            <button onClick={() => openMigrate(v, 'recuperados')}
+                              title="Migrar para Recuperados"
+                              className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
+                              style={{ color: '#22c55e', borderColor: 'rgba(34,197,94,0.3)' }}>
+                              <MoveRight size={11} /> Rec.
+                            </button>
+                          </div>
+                        )}
+                      </td>
                     </>
                   )}
                 </tr>
               ))}
               {cg.veiculos.length === 0 && (
-                <tr><td colSpan={7} className="px-4 py-10 text-center" style={{ color: 'var(--adm-subtle)' }}>Nenhum veículo.</td></tr>
+                <tr><td colSpan={8} className="px-4 py-10 text-center" style={{ color: 'var(--adm-subtle)' }}>Nenhum veículo.</td></tr>
               )}
             </tbody>
           </table>
@@ -1277,6 +1397,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
           </div>
         </div>
       )}
+      {migrateModal}
     </div>
   );
 }
