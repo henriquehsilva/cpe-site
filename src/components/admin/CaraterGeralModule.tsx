@@ -484,10 +484,9 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
             </div>
             <div>
               <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>Data Recuperação</label>
-              <input value={migDataRec} onChange={e => setMigDataRec(e.target.value)}
+              <input type="date" value={toInputDate(migDataRec)} onChange={e => setMigDataRec(fromInputDate(e.target.value))}
                 className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
-                style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }}
-                placeholder="Ex: 01/06/2026" />
+                style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
             </div>
           </div>
         )}
@@ -1159,8 +1158,8 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
             style={{ color: 'var(--adm-muted)' }}><ChevronLeft size={18} /></button>
           <h3 className="font-bold text-xl px-1" style={{ color: 'var(--adm-text)' }}>
             {editMode
-              ? <input value={draft!.data} onChange={e => setDF('data', e.target.value)}
-                  className="adm-input rounded-lg px-3 py-1 text-xl font-bold border w-36"
+              ? <input type="date" value={toInputDate(draft!.data)} onChange={e => setDF('data', fromInputDate(e.target.value))}
+                  className="adm-input rounded-lg px-3 py-1 text-sm font-bold border"
                   style={fs} />
               : cg.data}
             {editMode && <span className="ml-2 text-sm text-amber-400 font-normal">— editando</span>}
