@@ -2,15 +2,15 @@ import { useState, useEffect, useMemo } from 'react';
 import {
   ArrowLeft, Plus, Pencil, Trash2, Search, X, Save,
   AlertCircle, Users, ShieldCheck, CheckCircle2, XCircle,
-  Loader2, RefreshCw, Eye, EyeOff, Lock, UserCheck, UserX,
+  Loader2, RefreshCw, Eye, EyeOff, Lock, UserCheck, UserX, KeyRound,
 } from 'lucide-react';
 import {
   collection, getDocs, addDoc, updateDoc, deleteDoc,
   doc, serverTimestamp, query, orderBy,
 } from 'firebase/firestore';
 import { initializeApp, deleteApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { db, firebaseConfig } from '../../firebase';
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { auth, db, firebaseConfig } from '../../firebase';
 import {
   AdminUserProfile,
   ModuleKey,
@@ -62,6 +62,8 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<AdminUserProfile | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [resetingId, setResetingId] = useState<string | null>(null);
+  const [resetSentId, setResetSentId] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -188,6 +190,20 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
       setError('Erro ao salvar. Verifique as regras de segurança do Firestore no Firebase Console.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const resetPassword = async (user: AdminUserProfile) => {
+    setResetingId(user.id);
+    try {
+      await sendPasswordResetEmail(auth, user.email);
+      setResetSentId(user.id);
+      setTimeout(() => setResetSentId(null), 3000);
+    } catch (err) {
+      console.error('[SettingsModule] resetPassword error:', err);
+      setError('Erro ao enviar email de redefinição de senha.');
+    } finally {
+      setResetingId(null);
     }
   };
 
@@ -431,6 +447,19 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
                       </td>
                       <td className="px-4 py-3.5">
                         <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => resetPassword(user)}
+                            disabled={resetingId === user.id}
+                            title="Enviar email de redefinição de senha"
+                            className="p-2 rounded-lg transition-colors disabled:opacity-40 opacity-70 hover:opacity-100 hover:bg-blue-500/10 text-blue-400"
+                          >
+                            {resetingId === user.id
+                              ? <Loader2 size={15} className="animate-spin" />
+                              : resetSentId === user.id
+                                ? <CheckCircle2 size={15} className="text-green-500" />
+                                : <KeyRound size={15} />
+                            }
+                          </button>
                           <button
                             onClick={() => toggleStatus(user)}
                             disabled={togglingId === user.id}
