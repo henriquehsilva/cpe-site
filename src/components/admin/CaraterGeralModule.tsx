@@ -249,6 +249,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   // migration — veículos
   const [migVeic, setMigVeic] = useState<CaraterVeiculo | CaraterVeiculoHistorico | null>(null);
   const [migDest, setMigDest] = useState<'historico' | 'recuperados'>('historico');
+  const [migSource, setMigSource] = useState<'carater' | 'historico'>('carater');
   const [migRai, setMigRai] = useState('');
   const [migDataRec, setMigDataRec] = useState('');
 
@@ -419,9 +420,10 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   }, [recuperados, recuperadoSearch, recuperadoSort]);
 
   // ── migration helpers ──────────────────────────────────────────────────────
-  const openMigrate = (v: CaraterVeiculo | CaraterVeiculoHistorico, dest: 'historico' | 'recuperados') => {
+  const openMigrate = (v: CaraterVeiculo | CaraterVeiculoHistorico, dest: 'historico' | 'recuperados', source: 'carater' | 'historico') => {
     setMigVeic(v);
     setMigDest(dest);
+    setMigSource(source);
     setMigRai('');
     setMigDataRec('');
   };
@@ -440,6 +442,16 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
       setVeicHist(d => [...d, { id: nextId(), ...base }]);
     } else {
       setRecuperados(d => [...d, { id: nextId(), ...base, raiRecuperacao: migRai, dataRecuperacao: migDataRec }]);
+    }
+    // Remove do registro de origem
+    const id = migVeic.id;
+    if (migSource === 'carater') {
+      setData(d => d.map(cg =>
+        cg.id === selected?.id ? { ...cg, veiculos: cg.veiculos.filter(v => v.id !== id) } : cg
+      ));
+      setSelected(s => s ? { ...s, veiculos: s.veiculos.filter(v => v.id !== id) } : s);
+    } else {
+      setVeicHist(d => d.filter(v => v.id !== id));
     }
     setMigVeic(null);
   };
@@ -507,6 +519,11 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const confirmMigrateAlerta = () => {
     if (!migAlerta) return;
     setAlertHist(d => [...d, { id: nextId(), placa: migAlerta.placa, descricao: migAlerta.descricao }]);
+    const id = migAlerta.id;
+    setData(d => d.map(cg =>
+      cg.id === selected?.id ? { ...cg, alertas: cg.alertas.filter(a => a.id !== id) } : cg
+    ));
+    setSelected(s => s ? { ...s, alertas: s.alertas.filter(a => a.id !== id) } : s);
     setMigAlerta(null);
   };
 
@@ -618,7 +635,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                         <button onClick={() => setVeicDel(v)} style={{ color: '#ef4444' }}><Trash2 size={14} /></button>
                       )}
                       {canCreate && (
-                        <button onClick={() => openMigrate(v, 'recuperados')}
+                        <button onClick={() => openMigrate(v, 'recuperados', 'historico')}
                           title="Migrar para Recuperados"
                           className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
                           style={{ color: '#22c55e', borderColor: 'rgba(34,197,94,0.3)' }}>
@@ -1287,13 +1304,13 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                       <td className="px-2 py-1.5 whitespace-nowrap">
                         {canCreate && (
                           <div className="flex gap-1.5">
-                            <button onClick={() => openMigrate(v, 'historico')}
+                            <button onClick={() => openMigrate(v, 'historico', 'carater')}
                               title="Migrar para Histórico de Veículos"
                               className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
                               style={{ color: 'var(--adm-muted)', borderColor: 'var(--adm-border)' }}>
                               <MoveRight size={11} /> Hist.
                             </button>
-                            <button onClick={() => openMigrate(v, 'recuperados')}
+                            <button onClick={() => openMigrate(v, 'recuperados', 'carater')}
                               title="Migrar para Recuperados"
                               className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border transition-colors"
                               style={{ color: '#22c55e', borderColor: 'rgba(34,197,94,0.3)' }}>
