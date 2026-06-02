@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import {
   ArrowLeft, Plus, Pencil, Trash2, Search, X, Save,
   AlertCircle, Users, ShieldCheck, CheckCircle2, XCircle,
-  Loader2, RefreshCw, Eye, EyeOff, Lock,
+  Loader2, RefreshCw, Eye, EyeOff, Lock, UserCheck, UserX,
 } from 'lucide-react';
 import {
   collection, getDocs, addDoc, updateDoc, deleteDoc,
@@ -61,6 +61,7 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<AdminUserProfile | null>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -187,6 +188,20 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
       setError('Erro ao salvar. Verifique as regras de segurança do Firestore no Firebase Console.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const toggleStatus = async (user: AdminUserProfile) => {
+    setTogglingId(user.id);
+    const newStatus = user.status === 'active' ? 'inactive' : 'active';
+    try {
+      await updateDoc(doc(db, 'adminUsers', user.id), { status: newStatus, updatedAt: serverTimestamp() });
+      fetchUsers();
+    } catch (err) {
+      console.error('[SettingsModule] toggleStatus error:', err);
+      setError('Erro ao alterar status do usuário.');
+    } finally {
+      setTogglingId(null);
     }
   };
 
@@ -416,6 +431,23 @@ export default function SettingsModule({ onBack }: SettingsModuleProps) {
                       </td>
                       <td className="px-4 py-3.5">
                         <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => toggleStatus(user)}
+                            disabled={togglingId === user.id}
+                            title={user.status === 'active' ? 'Desativar usuário' : 'Aprovar usuário'}
+                            className={`p-2 rounded-lg transition-colors disabled:opacity-40 opacity-70 hover:opacity-100 ${
+                              user.status === 'active'
+                                ? 'hover:bg-orange-400/10 text-orange-400'
+                                : 'hover:bg-green-500/10 text-green-500'
+                            }`}
+                          >
+                            {togglingId === user.id
+                              ? <Loader2 size={15} className="animate-spin" />
+                              : user.status === 'active'
+                                ? <UserX size={15} />
+                                : <UserCheck size={15} />
+                            }
+                          </button>
                           <button
                             onClick={() => openEdit(user)}
                             title="Editar"
