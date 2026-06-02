@@ -38,14 +38,35 @@ function emptyUnidade(): CaraterUnidade {
   return { id: nextId(), nome: '', telefone: '', integrantes: [] };
 }
 
-function emptyCarater(data: string): Omit<CaraterGeral, 'id'> {
-  return { data, veiculos: [], alertas: [], unidades: [] };
-}
-
 function formatPlaca(raw: string): string {
   const v = raw.toUpperCase().replace(/[^A-Z0-9]/g, '');
   if (v.length > 4) return v.slice(0, 4) + '-' + v.slice(4, 7);
   return v;
+}
+
+// DD/MM/AAAA → AAAA-MM-DD  (para <input type="date">)
+function toInputDate(dmy: string): string {
+  if (!dmy) return '';
+  const parts = dmy.split('/');
+  if (parts.length < 3) return '';
+  const [d, m, y] = parts;
+  const year = y.length === 2 ? `20${y}` : y;
+  return `${year}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+}
+
+// AAAA-MM-DD → DD/MM/AAAA
+function fromInputDate(ymd: string): string {
+  if (!ymd) return '';
+  const [y, m, d] = ymd.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// Garante exibição com ano (ex: "14/05" → "14/05/2026")
+function displayDate(dateStr: string): string {
+  if (!dateStr) return '—';
+  const parts = dateStr.split('/');
+  if (parts.length === 2) return `${dateStr}/${new Date().getFullYear()}`;
+  return dateStr;
 }
 
 // ── XLSX export ───────────────────────────────────────────────────────────────
@@ -116,7 +137,7 @@ function exportPrint(cg: CaraterGeral) {
   const body = `
     <h1>CARÁTER GERAL CPE — ${cg.data}</h1>
     <table>
-      <thead><tr><th>Placa</th><th>Marca/Modelo</th><th>Cor/Milhar</th><th>Ano</th><th>Art</th><th>Data</th></tr></thead>
+      <thead><tr><th>Placa</th><th>Marca/Modelo</th><th>Cor/Milhar</th><th>Ano</th><th>Art</th><th>Data (dd/mm/aaaa)</th></tr></thead>
       <tbody>${vRows}</tbody>
     </table>
     <h2>ALERTAS</h2>
@@ -574,7 +595,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                 >
                   Placa {veicSort === 'asc' ? '▲' : '▼'}
                 </th>
-                {['Marca/Modelo','Cor/Milhar','Ano','Art','Data',''].map(h => (
+                {['Marca/Modelo','Cor/Milhar','Ano','Art','Data (dd/mm/aaaa)',''].map(h => (
                   <th key={h} className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -587,7 +608,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.corMilhar}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.ano}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.art}</td>
-                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{v.dataInfracao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{displayDate(v.dataInfracao)}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap">
                     <div className="flex gap-2 items-center">
                       {canEdit && (
@@ -662,9 +683,12 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                 {(['placa','marcaModelo','corMilhar','ano','art','dataInfracao'] as const).map(f => (
                   <div key={f} className={f === 'marcaModelo' ? 'col-span-2' : ''}>
                     <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>
-                      {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : 'Data Infração'}
+                      {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : 'Data Infração (dd/mm/aaaa)'}
                     </label>
-                    <input value={veicForm[f]} onChange={e => setVeicForm(p => ({ ...p, [f]: f === 'placa' ? formatPlaca(e.target.value) : e.target.value }))}
+                    <input
+                      type={f === 'dataInfracao' ? 'date' : 'text'}
+                      value={f === 'dataInfracao' ? toInputDate(veicForm[f]) : veicForm[f]}
+                      onChange={e => setVeicForm(p => ({ ...p, [f]: f === 'placa' ? formatPlaca(e.target.value) : f === 'dataInfracao' ? fromInputDate(e.target.value) : e.target.value }))}
                       className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
                       style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
                   </div>
@@ -762,7 +786,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                 >
                   Placa {recuperadoSort === 'asc' ? '▲' : '▼'}
                 </th>
-                {['Marca/Modelo','Cor/Milhar','Ano','Art','Data','RAI Recuperação','Data Recup',''].map(h => (
+                {['Marca/Modelo','Cor/Milhar','Ano','Art','Data (dd/mm/aaaa)','RAI Recuperação','Data Recup (dd/mm/aaaa)',''].map(h => (
                   <th key={h} className="px-3 py-2 text-left font-semibold text-xs uppercase whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -775,9 +799,9 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.corMilhar}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.ano}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.art}</td>
-                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.dataInfracao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{displayDate(r.dataInfracao)}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.raiRecuperacao}</td>
-                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{r.dataRecuperacao}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap" style={{ color: 'var(--adm-muted)' }}>{displayDate(r.dataRecuperacao)}</td>
                   <td className="px-3 py-1.5 whitespace-nowrap">
                     <div className="flex gap-2">
                       {canEdit && (
@@ -842,9 +866,12 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                 {(['placa','marcaModelo','corMilhar','ano','art','dataInfracao','raiRecuperacao','dataRecuperacao'] as const).map(f => (
                   <div key={f} className={f === 'marcaModelo' || f === 'raiRecuperacao' ? 'col-span-2' : ''}>
                     <label className="block text-xs font-semibold mb-1" style={{ color: 'var(--adm-muted)' }}>
-                      {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : f === 'dataInfracao' ? 'Data' : f === 'raiRecuperacao' ? 'RAI Recuperação' : 'Data Recup'}
+                      {f === 'placa' ? 'Placa' : f === 'marcaModelo' ? 'Marca/Modelo' : f === 'corMilhar' ? 'Cor/Milhar' : f === 'ano' ? 'Ano' : f === 'art' ? 'Art' : f === 'dataInfracao' ? 'Data Infração (dd/mm/aaaa)' : f === 'raiRecuperacao' ? 'RAI Recuperação' : 'Data Recuperação (dd/mm/aaaa)'}
                     </label>
-                    <input value={recuperadoForm[f]} onChange={e => setRecuperadoForm(p => ({ ...p, [f]: f === 'placa' ? formatPlaca(e.target.value) : e.target.value }))}
+                    <input
+                      type={f === 'dataInfracao' || f === 'dataRecuperacao' ? 'date' : 'text'}
+                      value={f === 'dataInfracao' || f === 'dataRecuperacao' ? toInputDate(recuperadoForm[f]) : recuperadoForm[f]}
+                      onChange={e => setRecuperadoForm(p => ({ ...p, [f]: f === 'placa' ? formatPlaca(e.target.value) : (f === 'dataInfracao' || f === 'dataRecuperacao') ? fromInputDate(e.target.value) : e.target.value }))}
                       className="adm-input w-full rounded-lg px-3 py-2 text-sm border"
                       style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', borderColor: 'var(--adm-border)' }} />
                   </div>
@@ -1227,7 +1254,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                 <th className="px-3 py-2.5 text-left">Cor/Milhar</th>
                 <th className="px-3 py-2.5 text-left w-16">Ano</th>
                 <th className="px-3 py-2.5 text-left w-14">Art</th>
-                <th className="px-3 py-2.5 text-left w-16">Data</th>
+                <th className="px-3 py-2.5 text-left">Data (dd/mm/aaaa)</th>
                 <th className="w-28"></th>
               </tr>
             </thead>
@@ -1242,7 +1269,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                       <td className="px-2 py-1.5"><input value={v.corMilhar} onChange={e => setVeiculo(i, 'corMilhar', e.target.value)} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.ano} onChange={e => setVeiculo(i, 'ano', e.target.value)} className={cls} style={fss} /></td>
                       <td className="px-2 py-1.5"><input value={v.art} onChange={e => setVeiculo(i, 'art', e.target.value)} className={cls} style={fss} /></td>
-                      <td className="px-2 py-1.5"><input value={v.dataInfracao} onChange={e => setVeiculo(i, 'dataInfracao', e.target.value)} className={cls} style={fss} /></td>
+                      <td className="px-2 py-1.5"><input type="date" value={toInputDate(v.dataInfracao)} onChange={e => setVeiculo(i, 'dataInfracao', fromInputDate(e.target.value))} className={cls} style={fss} /></td>
                       <td className="px-1 py-1.5 text-center" colSpan={2}>
                         <button onClick={() => removeVeiculo(i)}
                           className="p-1 rounded hover:bg-cpe-red/10 text-cpe-red opacity-60 hover:opacity-100 transition-colors">
@@ -1257,7 +1284,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
                       <td className="px-3 py-2" style={{ color: 'var(--adm-muted)' }}>{v.corMilhar}</td>
                       <td className="px-3 py-2 tabular-nums" style={{ color: 'var(--adm-muted)' }}>{v.ano}</td>
                       <td className="px-3 py-2" style={{ color: 'var(--adm-muted)' }}>{v.art}</td>
-                      <td className="px-3 py-2 tabular-nums" style={{ color: 'var(--adm-muted)' }}>{v.dataInfracao}</td>
+                      <td className="px-3 py-2 tabular-nums" style={{ color: 'var(--adm-muted)' }}>{displayDate(v.dataInfracao)}</td>
                       <td className="px-2 py-1.5 whitespace-nowrap">
                         {canCreate && (
                           <div className="flex gap-1.5">
