@@ -71,19 +71,25 @@ function displayDate(dateStr: string): string {
 
 // ── XLSX export ───────────────────────────────────────────────────────────────
 
+function sortByPlaca<T extends { placa: string }>(arr: T[]): T[] {
+  return [...arr].sort((a, b) => a.placa.localeCompare(b.placa, 'pt-BR'));
+}
+
 function exportXLSX(cg: CaraterGeral) {
   const wb = XLSX.utils.book_new();
+  const veiculos = sortByPlaca(cg.veiculos);
+  const alertas  = sortByPlaca(cg.alertas);
 
   // Sheet: Veículos
   const wsV = XLSX.utils.aoa_to_sheet([
     [`CARÁTER GERAL — ${cg.data}`],
     [],
     ['PLACA', 'MARCA/MODELO', 'COR/MILHAR', 'ANO', 'ART', 'DATA'],
-    ...cg.veiculos.map(v => [v.placa, v.marcaModelo, v.corMilhar, v.ano, v.art, v.dataInfracao]),
+    ...veiculos.map(v => [v.placa, v.marcaModelo, v.corMilhar, v.ano, v.art, v.dataInfracao]),
     [],
     ['ALERTA'],
     ['PLACA', 'DESCRIÇÃO'],
-    ...cg.alertas.map(a => [a.placa, a.descricao]),
+    ...alertas.map(a => [a.placa, a.descricao]),
   ]);
   wsV['!cols'] = [{ wch: 22 }, { wch: 28 }, { wch: 13 }, { wch: 7 }, { wch: 5 }, { wch: 7 }];
   XLSX.utils.book_append_sheet(wb, wsV, 'Veículos');
@@ -114,13 +120,15 @@ function exportXLSX(cg: CaraterGeral) {
 }
 
 function exportPrint(cg: CaraterGeral) {
-  const vRows = cg.veiculos.map(v => `
+  const veiculos = sortByPlaca(cg.veiculos);
+  const alertas  = sortByPlaca(cg.alertas);
+  const vRows = veiculos.map(v => `
     <tr>
       <td class="placa">${v.placa}</td><td>${v.marcaModelo}</td><td>${v.corMilhar}</td>
       <td>${v.ano}</td><td>${v.art}</td><td>${v.dataInfracao}</td>
     </tr>`).join('');
   const blankRow = `<tr><td class="placa">&nbsp;</td><td>&nbsp;</td></tr>`;
-  const alRows = cg.alertas.map(a => `<tr><td class="placa">${a.placa}</td><td>${a.descricao}</td></tr>`).join('') + blankRow + blankRow;
+  const alRows = alertas.map(a => `<tr><td class="placa">${a.placa}</td><td>${a.descricao}</td></tr>`).join('') + blankRow + blankRow;
 
   // efetivo grid: 5 per row
   let efHtml = '';
