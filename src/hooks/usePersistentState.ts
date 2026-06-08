@@ -43,6 +43,9 @@ export function usePersistentState<T>(
               // Local cache is best effort.
             }
           }
+        } else {
+          // No Firestore data yet — seed it immediately from the initial value.
+          skipNextSave.current = false;
         }
       } catch (error) {
         console.error(`Erro ao carregar dados persistidos de ${key}.`, error);

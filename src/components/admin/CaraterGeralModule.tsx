@@ -221,7 +221,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
 
   // histórico de veículos
   const [veicHist, setVeicHist] = usePersistentState<CaraterVeiculoHistorico[]>(
-    'cpe-site:carater-historico-veiculos:v1', caraterVeiculosHistoricoDB,
+    'cpe-site:carater-historico-veiculos:v2', caraterVeiculosHistoricoDB,
   );
   const [veicSearch, setVeicSearch] = useState('');
   const [veicSort, setVeicSort]     = useState<'asc' | 'desc'>('asc');
@@ -243,7 +243,7 @@ export default function CaraterGeralModule({ onBack, permissions }: Props) {
   const [alertDel, setAlertDel]       = useState<CaraterAlertaHistorico | null>(null);
 
   const [recuperados, setRecuperados] = usePersistentState<CaraterRecuperado[]>(
-    'cpe-site:carater-recuperados:v1', caraterRecuperadosDB,
+    'cpe-site:carater-recuperados:v2', caraterRecuperadosDB,
   );
   const [recuperadoSearch, setRecuperadoSearch] = useState('');
   const [recuperadoSort, setRecuperadoSort] = useState<'asc' | 'desc'>('asc');
