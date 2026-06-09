@@ -329,23 +329,25 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           <h3 className="font-bold text-2xl flex-1" style={{ color: 'var(--adm-text)' }}>Mapa do Efetivo</h3>
 
           {/* export all */}
-          <div className="relative">
-            <button onClick={() => setShowExport(v => !v)}
-              className="flex items-center gap-2 border rounded-lg px-4 py-2 text-base font-medium transition-colors"
-              style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}>
-              <Download size={16} /> Exportar
-            </button>
-            {showExport && (
-              <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-52 py-1.5 overflow-hidden"
-                style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
-                <button onClick={() => { exportXLSX(sorted); setShowExport(false); }}
-                  className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-base transition-colors"
-                  style={{ color: 'var(--adm-text)' }}>
-                  <FileSpreadsheet size={16} className="text-emerald-400" /> XLSX (todas as abas)
-                </button>
-              </div>
-            )}
-          </div>
+          {canEdit && (
+            <div className="relative">
+              <button onClick={() => setShowExport(v => !v)}
+                className="flex items-center gap-2 border rounded-lg px-4 py-2 text-base font-medium transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}>
+                <Download size={16} /> Exportar
+              </button>
+              {showExport && (
+                <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-52 py-1.5 overflow-hidden"
+                  style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
+                  <button onClick={() => { exportXLSX(sorted); setShowExport(false); }}
+                    className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-base transition-colors"
+                    style={{ color: 'var(--adm-text)' }}>
+                    <FileSpreadsheet size={16} className="text-emerald-400" /> XLSX (todas as abas)
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {canCreate && (
             <button onClick={() => setShowNewModal(true)}
@@ -473,33 +475,35 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
         {!editMode && (
           <>
-            <div className="relative">
-              <button onClick={() => setShowExport(v => !v)}
-                className="flex items-center gap-2 border rounded-lg px-3 py-2 text-sm font-medium transition-colors"
-                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}>
-                <Download size={15} /> Exportar
-              </button>
-              {showExport && (
-                <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-52 py-1.5 overflow-hidden"
-                  style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
-                  <button onClick={() => { exportXLSX([m]); setShowExport(false); }}
-                    className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
-                    style={{ color: 'var(--adm-text)' }}>
-                    <FileSpreadsheet size={15} className="text-emerald-400" /> Este mês (XLSX)
-                  </button>
-                  <button onClick={() => { exportXLSX(sorted); setShowExport(false); }}
-                    className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
-                    style={{ color: 'var(--adm-text)' }}>
-                    <FileSpreadsheet size={15} className="text-blue-400" /> Todos os meses (XLSX)
-                  </button>
-                  <button onClick={() => { exportPrint(m); setShowExport(false); }}
-                    className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
-                    style={{ color: 'var(--adm-text)' }}>
-                    <Printer size={15} style={{ color: 'var(--adm-muted)' }} /> Imprimir / PDF
-                  </button>
-                </div>
-              )}
-            </div>
+            {canEdit && (
+              <div className="relative">
+                <button onClick={() => setShowExport(v => !v)}
+                  className="flex items-center gap-2 border rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}>
+                  <Download size={15} /> Exportar
+                </button>
+                {showExport && (
+                  <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-52 py-1.5 overflow-hidden"
+                    style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
+                    <button onClick={() => { exportXLSX([m]); setShowExport(false); }}
+                      className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
+                      style={{ color: 'var(--adm-text)' }}>
+                      <FileSpreadsheet size={15} className="text-emerald-400" /> Este mês (XLSX)
+                    </button>
+                    <button onClick={() => { exportXLSX(sorted); setShowExport(false); }}
+                      className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
+                      style={{ color: 'var(--adm-text)' }}>
+                      <FileSpreadsheet size={15} className="text-blue-400" /> Todos os meses (XLSX)
+                    </button>
+                    <button onClick={() => { exportPrint(m); setShowExport(false); }}
+                      className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
+                      style={{ color: 'var(--adm-text)' }}>
+                      <Printer size={15} style={{ color: 'var(--adm-muted)' }} /> Imprimir / PDF
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
             {canEdit && (
               <button onClick={startEdit}
                 className="flex items-center gap-2 border rounded-lg px-3 py-2 text-sm font-medium transition-colors"
