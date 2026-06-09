@@ -101,6 +101,24 @@ function exportPrint(m: MapaEfetivo) {
   const afHtml = m.afastamentos.map(a =>
     `<tr><td>${a.tipo}</td><td>${a.nome}</td><td>${a.retorno}</td></tr>`).join('');
 
+  const cntRows: [string, number][] = [
+    ['Pelotão A',     m.contagens.pelA],
+    ['Pelotão B',     m.contagens.pelB],
+    ['Pelotão C',     m.contagens.pelC],
+    ['Pelotão D',     m.contagens.pelD],
+    ['Diagonal',      m.contagens.diagonal],
+    ['Dia a Reserva', m.contagens.diaReserva],
+    ['Administração', m.contagens.administracao],
+    ['Afas. LESP',    m.contagens.lesp],
+    ['Afas. Férias',  m.contagens.ferias],
+    ['Afas. Curso',   m.contagens.curso],
+    ['Afas. JCS',     m.contagens.jcs],
+    ['Afas. Outros',  m.contagens.outros],
+  ];
+  const cntHtml = cntRows.map(([lbl, val]) =>
+    `<tr><td>${lbl}</td><td class="num">${val}</td></tr>`).join('') +
+    `<tr class="total"><td><b>TOTAL</b></td><td class="num"><b>${m.contagens.total}</b></td></tr>`;
+
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
     <title>Mapa ${MESES_NOME[m.mes - 1]} ${m.ano}</title>
     <style>
@@ -112,7 +130,10 @@ function exportPrint(m: MapaEfetivo) {
       .lbl{font-weight:bold;background:#f5f5f5;font-size:9px}
       .fn{font-size:9px;color:#555;font-style:italic}
       .dias td{background:#eef;font-size:9px}
-      .af table{width:auto}
+      .bottom{display:flex;gap:24px;align-items:flex-start}
+      .bottom table{width:auto;min-width:160px}
+      .num{text-align:right;font-weight:600}
+      .total td{background:#f0f0f0;border-top:2px solid #888}
     </style></head><body>
     <h2>MAPA DO EFETIVO — ${MESES_NOME[m.mes - 1].toUpperCase()} / ${m.ano}</h2>
     <table>
@@ -130,12 +151,21 @@ function exportPrint(m: MapaEfetivo) {
       </thead>
       <tbody>${rowsHtml}</tbody>
     </table>
-    <div class="af">
-      <h2>Afastamentos</h2>
-      <table style="width:auto">
-        <thead><tr><th>Tipo</th><th>Nome</th><th>Retorno</th></tr></thead>
-        <tbody>${afHtml}</tbody>
-      </table>
+    <div class="bottom">
+      <div>
+        <h2>Afastamentos</h2>
+        <table>
+          <thead><tr><th>Tipo</th><th>Nome</th><th>Retorno</th></tr></thead>
+          <tbody>${afHtml || '<tr><td colspan="3" style="color:#999">—</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div>
+        <h2>Efetivo em Serviço</h2>
+        <table>
+          <thead><tr><th>Categoria</th><th>Qtd</th></tr></thead>
+          <tbody>${cntHtml}</tbody>
+        </table>
+      </div>
     </div>
     </body></html>`;
   const w = window.open('', '_blank');
