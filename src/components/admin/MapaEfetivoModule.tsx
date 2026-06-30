@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Pencil, Trash2, X, Save, Download,
-  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Copy,
+  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Copy, FileInput,
 } from 'lucide-react';
 import {
   mapaEfetivoDB, MapaEfetivo, MapaRow, MapaAfastamento,
@@ -209,6 +209,8 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const [dupSource, setDupSource]   = useState<MapaEfetivo | null>(null);
   const [dupMes, setDupMes]         = useState(1);
   const [dupAno, setDupAno]         = useState(new Date().getFullYear());
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importFromId, setImportFromId]       = useState('');
   const [deleteTarget, setDeleteTarget] = useState<MapaEfetivo | null>(null);
   const [showExport, setShowExport] = useState(false);
   const [afModal, setAfModal]       = useState<{ mode: 'create' | 'edit'; item: MapaAfastamento | null } | null>(null);
@@ -279,6 +281,26 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
     setShowNewModal(false);
     openDetail(novo);
     setTimeout(() => startEdit(), 50);
+  };
+
+  // ── import from another month ────────────────────────────────────────────
+  const openImportModal = () => {
+    const others = sorted.filter(s => s.id !== (draft?.id ?? selected?.id));
+    if (others.length > 0) setImportFromId(others[0].id);
+    setShowImportModal(true);
+  };
+
+  const handleImport = () => {
+    const src = data.find(s => s.id === importFromId);
+    if (!src || !draft) return;
+    setDraft(d => d ? {
+      ...d,
+      diasServico:  { ...src.diasServico },
+      linhas:       JSON.parse(JSON.stringify(src.linhas)),
+      afastamentos: JSON.parse(JSON.stringify(src.afastamentos)),
+      contagens:    JSON.parse(JSON.stringify(src.contagens)),
+    } : d);
+    setShowImportModal(false);
   };
 
   // ── duplicate ────────────────────────────────────────────────────────────
@@ -637,6 +659,13 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
         {editMode && (
           <>
+            {sorted.filter(s => s.id !== draft?.id).length > 0 && (
+              <button onClick={openImportModal}
+                className="flex items-center gap-2 border rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'var(--adm-input)' }}>
+                <FileInput size={15} /> Importar de...
+              </button>
+            )}
             <button onClick={cancelEdit}
               className="px-4 py-2 text-sm rounded-lg border transition-colors"
               style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>
@@ -958,6 +987,43 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
               <button onClick={saveAf}
                 className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
                 <Save size={16} /> Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── import from modal ────────────────────────────────────────────── */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
+            style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Importar dados de...</h4>
+              <button onClick={() => setShowImportModal(false)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+            </div>
+            <p className="text-sm mb-4" style={{ color: 'var(--adm-muted)' }}>
+              Todos os dados do mês selecionado (efetivo, afastamentos e contagens) serão copiados para{' '}
+              <span className="font-semibold" style={{ color: 'var(--adm-text)' }}>
+                {draft && `${MESES_NOME[draft.mes - 1]} / ${draft.ano}`}
+              </span>.
+            </p>
+            <div className="mb-5">
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Mês de origem</label>
+              <select value={importFromId} onChange={e => setImportFromId(e.target.value)}
+                className="adm-input w-full rounded-lg px-3 py-2.5 text-base border" style={fs}>
+                {sorted.filter(s => s.id !== draft?.id).map(s => (
+                  <option key={s.id} value={s.id}>{MESES_NOME[s.mes - 1]} / {s.ano}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setShowImportModal(false)}
+                className="px-5 py-2.5 text-base rounded-lg border transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+              <button onClick={handleImport}
+                className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                <FileInput size={16} /> Importar
               </button>
             </div>
           </div>
