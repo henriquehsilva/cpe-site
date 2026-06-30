@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Pencil, Trash2, X, Save, Download,
-  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle,
+  FileSpreadsheet, Printer, ChevronLeft, ChevronRight, AlertCircle, Copy,
 } from 'lucide-react';
 import {
   mapaEfetivoDB, MapaEfetivo, MapaRow, MapaAfastamento,
@@ -206,6 +206,9 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const [showNewModal, setShowNewModal] = useState(false);
   const [newMes, setNewMes]         = useState(1);
   const [newAno, setNewAno]         = useState(new Date().getFullYear());
+  const [dupSource, setDupSource]   = useState<MapaEfetivo | null>(null);
+  const [dupMes, setDupMes]         = useState(1);
+  const [dupAno, setDupAno]         = useState(new Date().getFullYear());
   const [deleteTarget, setDeleteTarget] = useState<MapaEfetivo | null>(null);
   const [showExport, setShowExport] = useState(false);
   const [afModal, setAfModal]       = useState<{ mode: 'create' | 'edit'; item: MapaAfastamento | null } | null>(null);
@@ -276,6 +279,29 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
     setShowNewModal(false);
     openDetail(novo);
     setTimeout(() => startEdit(), 50);
+  };
+
+  // ── duplicate ────────────────────────────────────────────────────────────
+  const openDup = (e: React.MouseEvent, m: MapaEfetivo) => {
+    e.stopPropagation();
+    const nextMes = m.mes === 12 ? 1 : m.mes + 1;
+    const nextAno = m.mes === 12 ? m.ano + 1 : m.ano;
+    setDupSource(m);
+    setDupMes(nextMes);
+    setDupAno(nextAno);
+  };
+
+  const handleDuplicate = () => {
+    if (!dupSource) return;
+    const novo: MapaEfetivo = {
+      ...JSON.parse(JSON.stringify(dupSource)),
+      id: nextId(),
+      mes: dupMes,
+      ano: dupAno,
+    };
+    setData(d => [...d, novo]);
+    setDupSource(null);
+    openDetail(novo);
   };
 
   // ── delete ───────────────────────────────────────────────────────────────
@@ -399,28 +425,87 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
             {sorted.map(m => {
               const total = m.contagens.pelA + m.contagens.pelB + m.contagens.pelC + m.contagens.pelD;
               return (
-                <button key={m.id} onClick={() => openDetail(m)}
-                  className="adm-card group flex flex-col gap-3 p-5 rounded-2xl transition-all duration-200 hover:scale-105 hover:shadow-2xl border text-left"
-                  style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
-                  <div className="text-2xl font-black" style={{ color: 'var(--adm-accent)' }}>
-                    {MESES_NOME[m.mes - 1]}
-                  </div>
-                  <div className="text-sm font-medium" style={{ color: 'var(--adm-muted)' }}>{m.ano}</div>
-                  <div className="mt-1 grid grid-cols-2 gap-1">
-                    {[['A', m.contagens.pelA], ['B', m.contagens.pelB], ['C', m.contagens.pelC], ['D', m.contagens.pelD]].map(([lbl, cnt]) => (
-                      <div key={lbl as string} className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'var(--adm-input)', color: 'var(--adm-muted)' }}>Pel {lbl}</span>
-                        <span className="text-xs font-semibold" style={{ color: 'var(--adm-text)' }}>{cnt}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="text-xs mt-1 pt-2 border-t flex justify-between" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>
-                    <span>Total em serviço: <b style={{ color: 'var(--adm-text)' }}>{total}</b></span>
-                    <span>Total: <b style={{ color: 'var(--adm-text)' }}>{m.contagens.total}</b></span>
-                  </div>
-                </button>
+                <div key={m.id} className="relative group">
+                  <button onClick={() => openDetail(m)}
+                    className="adm-card flex flex-col gap-3 p-5 rounded-2xl transition-all duration-200 hover:scale-105 hover:shadow-2xl border text-left w-full"
+                    style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+                    <div className="text-2xl font-black" style={{ color: 'var(--adm-accent)' }}>
+                      {MESES_NOME[m.mes - 1]}
+                    </div>
+                    <div className="text-sm font-medium" style={{ color: 'var(--adm-muted)' }}>{m.ano}</div>
+                    <div className="mt-1 grid grid-cols-2 gap-1">
+                      {[['A', m.contagens.pelA], ['B', m.contagens.pelB], ['C', m.contagens.pelC], ['D', m.contagens.pelD]].map(([lbl, cnt]) => (
+                        <div key={lbl as string} className="flex items-center gap-1.5">
+                          <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: 'var(--adm-input)', color: 'var(--adm-muted)' }}>Pel {lbl}</span>
+                          <span className="text-xs font-semibold" style={{ color: 'var(--adm-text)' }}>{cnt}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-xs mt-1 pt-2 border-t flex justify-between" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>
+                      <span>Total em serviço: <b style={{ color: 'var(--adm-text)' }}>{total}</b></span>
+                      <span>Total: <b style={{ color: 'var(--adm-text)' }}>{m.contagens.total}</b></span>
+                    </div>
+                  </button>
+                  {canCreate && (
+                    <button
+                      onClick={e => openDup(e, m)}
+                      title="Duplicar mapa"
+                      className="absolute top-2 right-2 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/10"
+                      style={{ color: 'var(--adm-muted)' }}>
+                      <Copy size={14} />
+                    </button>
+                  )}
+                </div>
               );
             })}
+          </div>
+        )}
+
+        {/* duplicate modal */}
+        {dupSource && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
+              style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>Duplicar Mapa</h4>
+                <button onClick={() => setDupSource(null)} style={{ color: 'var(--adm-muted)' }}><X size={20} /></button>
+              </div>
+              <p className="text-sm mb-5" style={{ color: 'var(--adm-muted)' }}>
+                Copiando dados de{' '}
+                <span className="font-semibold" style={{ color: 'var(--adm-text)' }}>
+                  {MESES_NOME[dupSource.mes - 1]} / {dupSource.ano}
+                </span>
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-5">
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Mês destino</label>
+                  <select value={dupMes} onChange={e => setDupMes(+e.target.value)}
+                    className="adm-input w-full rounded-lg px-3 py-2.5 text-base border" style={fs}>
+                    {MESES_NOME.map((n, i) => <option key={i + 1} value={i + 1}>{n}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Ano destino</label>
+                  <input type="number" value={dupAno} onChange={e => setDupAno(+e.target.value)}
+                    className="adm-input w-full rounded-lg px-3 py-2.5 text-base border" style={fs} />
+                </div>
+              </div>
+              {data.some(m => m.mes === dupMes && m.ano === dupAno) && (
+                <p className="text-sm text-red-400 flex items-center gap-1 mb-3">
+                  <AlertCircle size={13} /> Já existe um mapa para este mês/ano.
+                </p>
+              )}
+              <div className="flex gap-3 justify-end">
+                <button onClick={() => setDupSource(null)}
+                  className="px-5 py-2.5 text-base rounded-lg border transition-colors"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={handleDuplicate}
+                  disabled={data.some(m => m.mes === dupMes && m.ano === dupAno)}
+                  className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors disabled:opacity-40">
+                  <Copy size={16} /> Duplicar
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
