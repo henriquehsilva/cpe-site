@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Eye, Pencil, Trash2, X, Save,
@@ -16,10 +16,12 @@ function nextId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
-function reorderAfterDelete<T extends { ord: number }>(deletedOrd: number, list: T[]): T[] {
+// Reatribui ord = 1..N pela ordem atual (estável), eliminando duplicatas e furos.
+function normalizeOrd<T extends { ord: number }>(list: T[]): T[] {
   return list
-    .map(m => m.ord > deletedOrd ? { ...m, ord: m.ord - 1 } : m)
-    .sort((a, b) => a.ord - b.ord);
+    .map((item, i) => ({ item, i }))
+    .sort((a, b) => a.item.ord - b.item.ord || a.i - b.i)
+    .map(({ item }, idx) => ({ ...item, ord: idx + 1 }));
 }
 
 function emptyDisp() {
@@ -159,6 +161,17 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
   const [cmdoData, setCmdoData]   = usePersistentState<DispensaCmdo[]>('cpe-site:dispensa-recompensa:cmdo:v1', dispensaCmdoDB);
   const [anualData, setAnualData] = usePersistentState<DispensaAnual[]>('cpe-site:dispensa-recompensa:anual:v1', dispensaAnualDB);
+
+  // Auto-corrige dados já persistidos com Ord duplicado ou fora de sequência.
+  useEffect(() => {
+    const normalized = normalizeOrd(cmdoData);
+    if (JSON.stringify(normalized) !== JSON.stringify(cmdoData)) setCmdoData(normalized);
+  }, [cmdoData, setCmdoData]);
+
+  useEffect(() => {
+    const normalized = normalizeOrd(anualData);
+    if (JSON.stringify(normalized) !== JSON.stringify(anualData)) setAnualData(normalized);
+  }, [anualData, setAnualData]);
   const [tab, setTab]             = useState<Tab>('cmdo');
   const [search, setSearch]       = useState('');
   const [soComDispensa, setSoComDispensa] = useState(false);
@@ -233,16 +246,16 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const saveCmdo = () => {
     if (!cmdoForm.nome.trim()) { setCmdoErr({ nome: 'Nome obrigatório' }); return; }
     if (cmdoModal?.mode === 'create') {
-      setCmdoData(d => [...d, { ...cmdoForm, id: nextId() }].sort((a, b) => a.ord - b.ord));
+      setCmdoData(d => normalizeOrd([...d, { ...cmdoForm, id: nextId() }]));
     } else if (cmdoModal?.mode === 'edit' && cmdoModal.item) {
-      setCmdoData(d => d.map(r => r.id === cmdoModal.item!.id ? { ...cmdoForm, id: r.id } : r));
+      setCmdoData(d => normalizeOrd(d.map(r => r.id === cmdoModal.item!.id ? { ...cmdoForm, id: r.id } : r)));
     }
     setCmdoModal(null);
   };
 
   const deleteCmdo = () => {
     if (!delCmdo) return;
-    setCmdoData(d => reorderAfterDelete(delCmdo.ord, d.filter(r => r.id !== delCmdo.id)));
+    setCmdoData(d => normalizeOrd(d.filter(r => r.id !== delCmdo.id)));
     setDelCmdo(null);
   };
 
@@ -276,16 +289,16 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     if (!anualForm.nome.trim()) { setAnualErr({ nome: 'Nome obrigatório' }); return; }
     const cleaned = { ...anualForm, dispensas: anualForm.dispensas.map(d => ({ ...d })) };
     if (anualModal?.mode === 'create') {
-      setAnualData(d => [...d, { ...cleaned, id: nextId() }].sort((a, b) => a.ord - b.ord));
+      setAnualData(d => normalizeOrd([...d, { ...cleaned, id: nextId() }]));
     } else if (anualModal?.mode === 'edit' && anualModal.item) {
-      setAnualData(d => d.map(r => r.id === anualModal.item!.id ? { ...cleaned, id: r.id } : r));
+      setAnualData(d => normalizeOrd(d.map(r => r.id === anualModal.item!.id ? { ...cleaned, id: r.id } : r)));
     }
     setAnualModal(null);
   };
 
   const deleteAnual = () => {
     if (!delAnual) return;
-    setAnualData(d => reorderAfterDelete(delAnual.ord, d.filter(r => r.id !== delAnual.id)));
+    setAnualData(d => normalizeOrd(d.filter(r => r.id !== delAnual.id)));
     setDelAnual(null);
   };
 
@@ -566,12 +579,13 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
             </div>
 
             <div className="px-6 py-5 grid grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto">
-              {/* Ord — atribuído automaticamente pelo sistema, não editável */}
+              {/* Ord */}
               <div>
                 <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Ord</label>
                 <input type="number" value={cmdoForm.ord}
-                  readOnly
-                  className={inputCls()} style={roS} />
+                  onChange={e => changeCmdo('ord', +e.target.value)}
+                  readOnly={cmdoModal.mode === 'view'}
+                  className={inputCls()} style={cmdoModal.mode === 'view' ? roS : fs} />
               </div>
               {/* Posto */}
               <div>
@@ -664,8 +678,9 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 <div>
                   <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Ord</label>
                   <input type="number" value={anualForm.ord}
-                    readOnly
-                    className={inputCls()} style={roS} />
+                    onChange={e => setAnualForm(f => ({ ...f, ord: +e.target.value }))}
+                    readOnly={anualModal.mode === 'view'}
+                    className={inputCls()} style={anualModal.mode === 'view' ? roS : fs} />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Posto/Grad.</label>
