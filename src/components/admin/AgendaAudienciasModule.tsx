@@ -156,7 +156,8 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
 
   const [data, setData]           = usePersistentState<Audiencia[]>('cpe-site:agenda-audiencias:v1', agendaAudienciasDB);
   const [search, setSearch]       = useState('');
-  const [activeMes, setActiveMes] = useState<string>('all'); // "all" or "YYYY-M"
+  const [activeAno, setActiveAno] = useState<number | 'all'>('all');
+  const [activeMes, setActiveMes] = useState<number | 'all'>('all');
   const [sortKey, setSortKey]     = useState<SortKey>('data');
   const [sortDir, setSortDir]     = useState<SortDir>('asc');
   const [modal, setModal]         = useState<{ mode: ModalMode; item: Audiencia | null } | null>(null);
@@ -168,19 +169,23 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
   // derived month groups (from *all* data)
   const months = useMemo(() => monthGroups(data), [data]);
 
-  // active month parsed
-  const activeGroup = useMemo(() => {
-    if (activeMes === 'all') return null;
-    const [ano, mes] = activeMes.split('-').map(Number);
-    return { ano, mes };
-  }, [activeMes]);
+  // years / months available for the selects
+  const anosDisponiveis  = useMemo(() => [...new Set(months.map(g => g.ano))].sort((a, b) => a - b), [months]);
+  const mesesDisponiveis = useMemo(() => [...new Set(months.map(g => g.mes))].sort((a, b) => a - b), [months]);
+
+  // months matching the current ano/mes selection (used for exports/title)
+  const matchingGroups = useMemo(
+    () => months.filter(g => (activeAno === 'all' || g.ano === activeAno) && (activeMes === 'all' || g.mes === activeMes)),
+    [months, activeAno, activeMes],
+  );
 
   // filtered + sorted rows
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
     return data
       .filter(a => {
-        if (activeGroup && (a.mes !== activeGroup.mes || a.ano !== activeGroup.ano)) return false;
+        if (activeAno !== 'all' && a.ano !== activeAno) return false;
+        if (activeMes !== 'all' && a.mes !== activeMes) return false;
         if (!q) return true;
         return (
           a.data.includes(q) || a.horario.includes(q) ||
@@ -191,7 +196,7 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
         );
       })
       .sort((a, b) => compare(a, b, sortKey, sortDir));
-  }, [data, search, activeGroup, sortKey, sortDir]);
+  }, [data, search, activeAno, activeMes, sortKey, sortDir]);
 
   // toggle sort
   const toggleSort = (key: SortKey) => {
@@ -225,8 +230,9 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
   const defaultMonth = months.length ? months[months.length - 1] : { mes: 5, ano: 2026 };
 
   const openCreate = () => {
-    const g = activeGroup ?? defaultMonth;
-    setForm(emptyForm(g.mes, g.ano));
+    const mes = activeMes !== 'all' ? activeMes : defaultMonth.mes;
+    const ano = activeAno !== 'all' ? activeAno : defaultMonth.ano;
+    setForm(emptyForm(mes, ano));
     setErrors({});
     setModal({ mode: 'create', item: null });
   };
@@ -265,9 +271,12 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
       : 'bg-blue-500/15 text-blue-400 border border-blue-500/30';
 
   // export title for current view
-  const printTitle = activeGroup
-    ? `Agenda de Audiências — ${MESES_AUDIENCIA[activeGroup.mes - 1]} ${activeGroup.ano}`
-    : 'Agenda de Audiências — Todos os Meses';
+  const printTitle = (() => {
+    const mesLabel = activeMes !== 'all' ? MESES_AUDIENCIA[activeMes - 1] : '';
+    const anoLabel = activeAno !== 'all' ? String(activeAno) : '';
+    const selecao  = [mesLabel, anoLabel].filter(Boolean).join(' ');
+    return selecao ? `Agenda de Audiências — ${selecao}` : 'Agenda de Audiências — Todos os Meses';
+  })();
 
   return (
     <div className="flex flex-col h-full">
@@ -304,11 +313,11 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
                 style={{ color: 'var(--adm-text)' }}>
                 <FileSpreadsheet size={15} className="text-emerald-400" /> XLSX (todas as abas)
               </button>
-              {activeGroup && (
-                <button onClick={() => { exportXLSX(data, months.filter(m => m.mes === activeGroup.mes && m.ano === activeGroup.ano)); setShowExport(false); }}
+              {(activeAno !== 'all' || activeMes !== 'all') && (
+                <button onClick={() => { exportXLSX(data, matchingGroups); setShowExport(false); }}
                   className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
                   style={{ color: 'var(--adm-text)' }}>
-                  <FileSpreadsheet size={15} className="text-blue-400" /> XLSX (este mês)
+                  <FileSpreadsheet size={15} className="text-blue-400" /> XLSX (seleção atual)
                 </button>
               )}
               <button onClick={() => { exportPrint(filtered, printTitle); setShowExport(false); }}
@@ -328,33 +337,20 @@ export default function AgendaAudienciasModule({ onBack, permissions }: Props) {
         )}
       </div>
 
-      {/* ── month tabs ───────────────────────────────────────────────── */}
+      {/* ── ano / mês selects ────────────────────────────────────────── */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <button
-          onClick={() => setActiveMes('all')}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
-          style={{
-            borderColor: activeMes === 'all' ? 'var(--adm-accent)' : 'var(--adm-border)',
-            color:       activeMes === 'all' ? 'var(--adm-accent)' : 'var(--adm-muted)',
-            background:  activeMes === 'all' ? 'color-mix(in srgb, var(--adm-accent) 10%, transparent)' : 'var(--adm-input)',
-          }}>
-          Todos
-        </button>
-        {months.map(g => {
-          const key = `${g.ano}-${g.mes}`;
-          const active = activeMes === key;
-          return (
-            <button key={key} onClick={() => setActiveMes(key)}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
-              style={{
-                borderColor: active ? 'var(--adm-accent)' : 'var(--adm-border)',
-                color:       active ? 'var(--adm-accent)' : 'var(--adm-muted)',
-                background:  active ? 'color-mix(in srgb, var(--adm-accent) 10%, transparent)' : 'var(--adm-input)',
-              }}>
-              {g.label}
-            </button>
-          );
-        })}
+        <select value={activeAno} onChange={e => setActiveAno(e.target.value === 'all' ? 'all' : +e.target.value)}
+          className="adm-input rounded-lg px-3 py-2 text-sm font-medium border"
+          style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', border: '1px solid var(--adm-border)' }}>
+          <option value="all">Todos os anos</option>
+          {anosDisponiveis.map(ano => <option key={ano} value={ano}>{ano}</option>)}
+        </select>
+        <select value={activeMes} onChange={e => setActiveMes(e.target.value === 'all' ? 'all' : +e.target.value)}
+          className="adm-input rounded-lg px-3 py-2 text-sm font-medium border"
+          style={{ background: 'var(--adm-input)', color: 'var(--adm-text)', border: '1px solid var(--adm-border)' }}>
+          <option value="all">Todos os meses</option>
+          {mesesDisponiveis.map(mes => <option key={mes} value={mes}>{MESES_AUDIENCIA[mes - 1]}</option>)}
+        </select>
       </div>
 
       {/* ── search ───────────────────────────────────────────────────── */}
