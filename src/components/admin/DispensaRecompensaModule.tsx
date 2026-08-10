@@ -24,6 +24,17 @@ function normalizeOrd<T extends { ord: number }>(list: T[]): T[] {
     .map(({ item }, idx) => ({ ...item, ord: idx + 1 }));
 }
 
+// Move o item `id` para a posição indicada pelo seu próprio `ord`, empurrando os
+// demais (que mantêm a ordem relativa entre si) e renumerando 1..N em seguida.
+function reorderToOrd<T extends { id: string; ord: number }>(list: T[], id: string): T[] {
+  const target = list.find(item => item.id === id);
+  if (!target) return normalizeOrd(list);
+  const rest = list.filter(item => item.id !== id).sort((a, b) => a.ord - b.ord);
+  const idx = Math.max(0, Math.min(rest.length, target.ord - 1));
+  const merged = [...rest.slice(0, idx), target, ...rest.slice(idx)];
+  return merged.map((item, i) => ({ ...item, ord: i + 1 }));
+}
+
 function emptyDisp() {
   return Array.from({ length: 5 }, () => ({ data: '', dopm: '' }));
 }
@@ -246,9 +257,11 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const saveCmdo = () => {
     if (!cmdoForm.nome.trim()) { setCmdoErr({ nome: 'Nome obrigatório' }); return; }
     if (cmdoModal?.mode === 'create') {
-      setCmdoData(d => normalizeOrd([...d, { ...cmdoForm, id: nextId() }]));
+      const id = nextId();
+      setCmdoData(d => reorderToOrd([...d, { ...cmdoForm, id }], id));
     } else if (cmdoModal?.mode === 'edit' && cmdoModal.item) {
-      setCmdoData(d => normalizeOrd(d.map(r => r.id === cmdoModal.item!.id ? { ...cmdoForm, id: r.id } : r)));
+      const id = cmdoModal.item.id;
+      setCmdoData(d => reorderToOrd(d.map(r => r.id === id ? { ...cmdoForm, id } : r), id));
     }
     setCmdoModal(null);
   };
@@ -289,9 +302,11 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     if (!anualForm.nome.trim()) { setAnualErr({ nome: 'Nome obrigatório' }); return; }
     const cleaned = { ...anualForm, dispensas: anualForm.dispensas.map(d => ({ ...d })) };
     if (anualModal?.mode === 'create') {
-      setAnualData(d => normalizeOrd([...d, { ...cleaned, id: nextId() }]));
+      const id = nextId();
+      setAnualData(d => reorderToOrd([...d, { ...cleaned, id }], id));
     } else if (anualModal?.mode === 'edit' && anualModal.item) {
-      setAnualData(d => normalizeOrd(d.map(r => r.id === anualModal.item!.id ? { ...cleaned, id: r.id } : r)));
+      const id = anualModal.item.id;
+      setAnualData(d => reorderToOrd(d.map(r => r.id === id ? { ...cleaned, id } : r), id));
     }
     setAnualModal(null);
   };
