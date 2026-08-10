@@ -566,13 +566,12 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
             </div>
 
             <div className="px-6 py-5 grid grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto">
-              {/* Ord */}
+              {/* Ord — atribuído automaticamente pelo sistema, não editável */}
               <div>
                 <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Ord</label>
                 <input type="number" value={cmdoForm.ord}
-                  onChange={e => changeCmdo('ord', +e.target.value)}
-                  readOnly={cmdoModal.mode === 'view'}
-                  className={inputCls()} style={cmdoModal.mode === 'view' ? roS : fs} />
+                  readOnly
+                  className={inputCls()} style={roS} />
               </div>
               {/* Posto */}
               <div>
@@ -665,9 +664,8 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 <div>
                   <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Ord</label>
                   <input type="number" value={anualForm.ord}
-                    onChange={e => setAnualForm(f => ({ ...f, ord: +e.target.value }))}
-                    readOnly={anualModal.mode === 'view'}
-                    className={inputCls()} style={anualModal.mode === 'view' ? roS : fs} />
+                    readOnly
+                    className={inputCls()} style={roS} />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Posto/Grad.</label>
