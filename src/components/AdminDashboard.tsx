@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car, ClipboardList, Download,
+  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair,   Car, ClipboardList, Download, ScrollText,
 } from 'lucide-react';
 import { downloadBackup } from '../utils/backupUtils';
 import EfetivoModule from './admin/EfetivoModule';
@@ -20,6 +20,7 @@ import FotosModule from './admin/FotosModule';
 import ArmamentoModule from './admin/ArmamentoModule';
 import ViaturasModule from './admin/ViaturasModule';
 import CaraterGeralModule from './admin/CaraterGeralModule';
+import ProcedimentosModule from './admin/ProcedimentosModule';
 import ProfileModal from './admin/ProfileModal';
 import { THEMES } from '../data/themes';
 import { useRBAC } from '../contexts/RBACContext';
@@ -42,6 +43,7 @@ const ALL_MODULES = [
   { id: 'armamento',          label: 'Armamento',           icon: Crosshair },
   { id: 'viaturas',           label: 'Viaturas',            icon: Car },
   { id: 'carater-geral',      label: 'Caráter Geral',       icon: ClipboardList },
+  { id: 'procedimentos',      label: 'Procedimentos',       icon: ScrollText },
 ];
 
 const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
@@ -291,6 +293,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <DispensaRecompensaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('dispenca-recompensa')} />
         ) : activeModule === 'carater-geral' ? (
           <CaraterGeralModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('carater-geral')} />
+        ) : activeModule === 'procedimentos' ? (
+          <ProcedimentosModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('procedimentos')} />
         ) : (
           <>
             <div className="mb-8 sm:mb-10">

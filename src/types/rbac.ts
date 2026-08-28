@@ -19,7 +19,8 @@ export type ModuleKey =
   | 'mapaEfetivo'
   | 'armamento'
   | 'viaturas'
-  | 'caraterGeral';
+  | 'caraterGeral'
+  | 'procedimentos';
 
 export type UserPermissions = Record<ModuleKey, ModulePermission>;
 
@@ -49,6 +50,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
   armamento: 'Armamento',
   viaturas: 'Viaturas',
   caraterGeral: 'Caráter Geral',
+  procedimentos: 'Procedimentos',
 };
 
 export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
@@ -66,6 +68,7 @@ export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
   'armamento': 'armamento',
   'viaturas': 'viaturas',
   'carater-geral': 'caraterGeral',
+  'procedimentos': 'procedimentos',
 };
 
 export const DEFAULT_MODULE_PERMISSION: ModulePermission = {
@@ -90,6 +93,7 @@ export const DEFAULT_PERMISSIONS: UserPermissions = {
   armamento: { ...DEFAULT_MODULE_PERMISSION },
   viaturas: { ...DEFAULT_MODULE_PERMISSION },
   caraterGeral: { ...DEFAULT_MODULE_PERMISSION },
+  procedimentos: { ...DEFAULT_MODULE_PERMISSION },
 };
 
 export const SUPER_ADMIN_EMAIL = 'sad31chagas@gmail.com';
