@@ -38,7 +38,7 @@ Required in `.env` (all `VITE_` prefixed; client-exposed):
   2. `src/components/AdminDashboard.tsx`: add to `ALL_MODULES` (menu entry), import the component, and add a render case in the big ternary.
   3. `src/components/admin/<Name>Module.tsx`: default-exported component with props `{ onBack, permissions? }`; gate create/edit/delete on `permissions` (super admin passes `undefined` = full access).
   4. `src/data/<module>.ts`: seed array passed to `usePersistentState('cpe-site:<module>:vN', seed)`.
-  - Gotcha: `ALL_MODULES` lists `medalhas` and `lesp`, but neither has a component or render case — clicking them just re-renders the module grid. Don't assume all 14 menu items have working modules; only 12 do.
+  - Gotcha: `ALL_MODULES` lists `medalhas` and `lesp`, but neither has a component or render case — clicking them just re-renders the module grid. Don't assume all 15 menu items have working modules; only 13 do.
 - **PWA**: manual service worker in `public/sw.js` (not generated). Bump the `CACHE` constant (`cpe-v5`) on every deploy.
 
 ## Tailwind

@@ -418,13 +418,13 @@ export default function ProcedimentosModule({ onBack, permissions }: Props) {
 
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-4xl rounded-2xl shadow-2xl border" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
-            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
+          <div className="w-full max-w-4xl rounded-2xl shadow-2xl border max-h-[90vh] flex flex-col overflow-hidden" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <div className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0" style={{ borderColor: 'var(--adm-border)' }}>
               <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>{modal.mode === 'create' ? 'Novo Procedimento' : modal.mode === 'edit' ? 'Editar Registro' : 'Visualizar Registro'}</h4>
               <button onClick={() => setModal(null)} className="transition-colors" style={{ color: 'var(--adm-muted)' }}><X size={22} /></button>
             </div>
 
-            <div className="px-6 py-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="px-6 py-5 grid grid-cols-1 sm:grid-cols-3 gap-4 overflow-y-auto flex-1">
               <div>
                 <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>SEI *</label>
                 <input value={form.sei} onChange={e => changeField('sei', e.target.value)} readOnly={isRO} className={inputCls(errors.sei)} style={isRO ? roStyle : { ...fieldStyle, ...(errors.sei ? { borderColor: '#ef4444' } : {}) }} />
@@ -514,7 +514,7 @@ export default function ProcedimentosModule({ onBack, permissions }: Props) {
             </div>
 
             {!isRO && (
-              <div className="flex justify-end gap-3 px-6 pb-5">
+              <div className="flex justify-end gap-3 px-6 pb-5 flex-shrink-0">
                 <button onClick={() => setModal(null)} className="px-5 py-2.5 text-base rounded-lg border transition-colors" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
                 <button onClick={handleSave} className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors"><Save size={16} /> Salvar</button>
               </div>
