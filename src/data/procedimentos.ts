@@ -1,12 +1,23 @@
 export interface ProcedimentoItem {
   id: string;
+  sei: string;
+  tipo: string;
   numero: string;
-  assunto: string;
-  interessado: string;
+  dataAbertura: string;
+  prazoDias: number;
   status: string;
-  entrada: string;
-  prazo: string;
+  responsavelInterno: string;
+  sindicante: string;
+  envolvidos: string;
+  rai: string;
+  portariaInicial: string;
+  assunto: string;
+  orgaoDestino: string;
+  dataConclusao: string;
   observacoes: string;
+  qtdPublicacoes: number;
+  qtdPortarias: number;
+  checklistPendente: boolean;
 }
 
 export const STATUS_PROCEDIMENTO: string[] = [
@@ -20,19 +31,26 @@ export const STATUS_PROCEDIMENTO: string[] = [
   'TJGO em andamento',
 ];
 
+export const TIPO_PROCEDIMENTO: string[] = [
+  'SINDICANCIA',
+  'IPM',
+  'TJGO',
+  'PAD',
+];
+
 export const procedimentosDB: ProcedimentoItem[] = [
-  { id: 'proc-1', numero: '0001/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-2', numero: '0002/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-3', numero: '0003/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-4', numero: '0004/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-5', numero: '0005/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-6', numero: '0006/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-7', numero: '0007/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-8', numero: '0008/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-9', numero: '0009/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-10', numero: '0010/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-11', numero: '0011/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-12', numero: '0012/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-13', numero: '0013/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
-  { id: 'proc-14', numero: '0014/2026', assunto: 'A instaurar', interessado: '', status: 'Não iniciado', entrada: '', prazo: '', observacoes: '' },
+  { id: 'proc-1', sei: '202600002014800', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Araujo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-2', sei: '202600002076085', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-3', sei: '202600002072753', tipo: 'IPM', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Andrade', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-4', sei: '202600002089686', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-5', sei: '202600002096641', tipo: 'IPM', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-6', sei: '202600002089684', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-7', sei: '202600002060127', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Danisclay', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-8', sei: '202600002071541', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-9', sei: '202600002035145', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Couto', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-10', sei: '202600002071321', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Couto', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-11', sei: '202600002016079', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-12', sei: '202500007095758', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-13', sei: '202500002131575', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Andrade', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
+  { id: 'proc-14', sei: '202500002068120', tipo: 'SINDICANCIA', numero: '', dataAbertura: '', prazoDias: 40, status: 'Não iniciado', responsavelInterno: 'TENENTE LEONARDO', sindicante: 'Tenente Leonardo', envolvidos: '', rai: '', portariaInicial: '', assunto: '', orgaoDestino: '', dataConclusao: '', observacoes: '', qtdPublicacoes: 0, qtdPortarias: 0, checklistPendente: false },
 ];
