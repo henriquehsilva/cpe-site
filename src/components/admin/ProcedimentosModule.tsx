@@ -105,7 +105,7 @@ export default function ProcedimentosModule({ onBack, permissions }: Props) {
   const [showExport, setShowExport] = useState(false);
   const [modal, setModal] = useState<{ mode: ModalMode; item: ProcedimentoItem | null } | null>(null);
   const [form, setForm] = useState<Omit<ProcedimentoItem, 'id'>>(emptyForm());
-  const [errors, setErrors] = useState<{ sei?: string; tipo?: string; dataAbertura?: string; prazoDias?: string; status?: string }>({});
+  const [errors, setErrors] = useState<{ sei?: string; tipo?: string; prazoDias?: string; status?: string }>({});
   const [deleteTarget, setDeleteTarget] = useState<ProcedimentoItem | null>(null);
 
   const filtered = useMemo(() => {
@@ -160,7 +160,6 @@ export default function ProcedimentosModule({ onBack, permissions }: Props) {
     const next: typeof errors = {};
     if (!form.sei.trim()) next.sei = 'SEI obrigatório';
     if (!form.tipo.trim()) next.tipo = 'Tipo obrigatório';
-    if (!form.dataAbertura.trim()) next.dataAbertura = 'Data de abertura obrigatória';
     if (!form.prazoDias || form.prazoDias <= 0) next.prazoDias = 'Prazo (dias) obrigatório';
     if (!form.status.trim()) next.status = 'Status obrigatório';
     setErrors(next);
@@ -439,9 +438,8 @@ export default function ProcedimentosModule({ onBack, permissions }: Props) {
                 <input value={form.numero} onChange={e => changeField('numero', e.target.value)} readOnly={isRO} className={inputCls()} style={isRO ? roStyle : fieldStyle} />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Data de abertura *</label>
-                <input value={form.dataAbertura} onChange={e => changeField('dataAbertura', e.target.value)} readOnly={isRO} placeholder="dd/mm/aaaa" className={inputCls(errors.dataAbertura)} style={isRO ? roStyle : { ...fieldStyle, ...(errors.dataAbertura ? { borderColor: '#ef4444' } : {}) }} />
-                {errors.dataAbertura && <p className="text-sm mt-1 text-red-400 flex items-center gap-1"><AlertCircle size={13} /> {errors.dataAbertura}</p>}
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Data de abertura</label>
+                <input value={form.dataAbertura} onChange={e => changeField('dataAbertura', e.target.value)} readOnly={isRO} placeholder="dd/mm/aaaa" className={inputCls()} style={isRO ? roStyle : fieldStyle} />
               </div>
               <div>
                 <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Prazo (dias) *</label>
