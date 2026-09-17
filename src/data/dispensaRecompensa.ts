@@ -135,6 +135,15 @@ export const dispensaCmdoDB: DispensaCmdo[] = [
   c(87, 'SD PM',      '39821', 'Johnatan William de Oliveira RAMALHO','07/06 a 11/06', '82/2026',  '202600002056915'),
 ];
 
+// Mantém a mesma relação do CMDO GERAL, com campos de dispensa independentes.
+export const outrasDispensasDB: DispensaCmdo[] = dispensaCmdoDB.map(r => ({
+  ...r,
+  id: r.id.replace('cmdo-', 'outras-'),
+  periodo: '',
+  dopm: '',
+  sei: '',
+}));
+
 // ── ANUAL 2026 ────────────────────────────────────────────────────────────────
 
 export const dispensaAnualDB: DispensaAnual[] = [

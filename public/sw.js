@@ -1,4 +1,4 @@
-const CACHE = 'cpe-v5';
+const CACHE = 'cpe-v6';
 const PRECACHE = ['/manifest.json', '/logo-pwa2.jpeg'];
 
 self.addEventListener('install', e => {

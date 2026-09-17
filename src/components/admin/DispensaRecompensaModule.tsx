@@ -5,7 +5,7 @@ import {
   Search, Download, FileSpreadsheet, Printer, AlertCircle,
 } from 'lucide-react';
 import {
-  dispensaCmdoDB, dispensaAnualDB, DispensaCmdo, DispensaAnual,
+  dispensaCmdoDB, outrasDispensasDB, dispensaAnualDB, DispensaCmdo, DispensaAnual,
 } from '../../data/dispensaRecompensa';
 import { ModulePermission } from '../../types/rbac';
 import { usePersistentState } from '../../hooks/usePersistentState';
@@ -53,7 +53,7 @@ const HDR_ROWS = [
   [],
 ];
 
-function exportXLSX(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
+function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: DispensaAnual[]) {
   const wb = XLSX.utils.book_new();
 
   // ── CMDO GERAL sheet
@@ -69,6 +69,16 @@ function exportXLSX(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
     { wch: 16 }, { wch: 10 }, { wch: 20 },
   ];
   XLSX.utils.book_append_sheet(wb, wsCmdo, 'CMDO GERAL');
+
+  const wsOutras = XLSX.utils.aoa_to_sheet([
+    ...HDR_ROWS,
+    ['Outras Dispensas'],
+    [],
+    ['Ord', 'Posto/Grad.', 'RG', 'Nome', 'Período', 'DOPM', 'Nº SEI DO ITEM'],
+    ...outras.map(r => [r.ord, r.posto, r.rg, r.nome, r.periodo, r.dopm, r.sei]),
+  ]);
+  wsOutras['!cols'] = wsCmdo['!cols'];
+  XLSX.utils.book_append_sheet(wb, wsOutras, 'OUTRAS DISPENSAS');
 
   // ── ANUAL 2026 sheet
   const wsAnual = XLSX.utils.aoa_to_sheet([
@@ -95,7 +105,7 @@ function exportXLSX(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
   XLSX.writeFile(wb, 'dispensa_recompensa.xlsx');
 }
 
-function exportPrint(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
+function exportPrint(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: DispensaAnual[]) {
   const cmdoRows = cmdo.map(r => `
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
@@ -106,6 +116,12 @@ function exportPrint(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
       ${r.dispensas.map(d => `<td>${d.data}</td><td>${d.dopm}</td>`).join('')}
+    </tr>`).join('');
+
+  const outrasRows = outras.map(r => `
+    <tr>
+      <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
+      <td>${r.periodo}</td><td>${r.dopm}</td><td>${r.sei}</td>
     </tr>`).join('');
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
@@ -127,6 +143,14 @@ function exportPrint(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
       </tr></thead>
       <tbody>${cmdoRows}</tbody>
     </table>
+    <h3>OUTRAS DISPENSAS</h3>
+    <table>
+      <thead><tr>
+        <th>Ord</th><th>Posto/Grad.</th><th>RG</th><th>Nome</th>
+        <th>Período</th><th>DOPM</th><th>Nº SEI</th>
+      </tr></thead>
+      <tbody>${outrasRows}</tbody>
+    </table>
     <h3>ANUAL 2026</h3>
     <table>
       <thead><tr>
@@ -145,7 +169,7 @@ function exportPrint(cmdo: DispensaCmdo[], anual: DispensaAnual[]) {
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
-type Tab      = 'cmdo' | 'anual';
+type Tab      = 'cmdo' | 'outras' | 'anual';
 type ModalMode = 'view' | 'edit' | 'create';
 
 interface CmdoForm {
@@ -171,6 +195,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const canDelete = !permissions || permissions.delete;
 
   const [cmdoData, setCmdoData]   = usePersistentState<DispensaCmdo[]>('cpe-site:dispensa-recompensa:cmdo:v1', dispensaCmdoDB);
+  const [outrasData, setOutrasData] = usePersistentState<DispensaCmdo[]>('cpe-site:dispensa-recompensa:outras:v1', outrasDispensasDB);
   const [anualData, setAnualData] = usePersistentState<DispensaAnual[]>('cpe-site:dispensa-recompensa:anual:v1', dispensaAnualDB);
 
   // Auto-corrige dados já persistidos com Ord duplicado ou fora de sequência.
@@ -183,6 +208,11 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     const normalized = normalizeOrd(anualData);
     if (JSON.stringify(normalized) !== JSON.stringify(anualData)) setAnualData(normalized);
   }, [anualData, setAnualData]);
+
+  useEffect(() => {
+    const normalized = normalizeOrd(outrasData);
+    if (JSON.stringify(normalized) !== JSON.stringify(outrasData)) setOutrasData(normalized);
+  }, [outrasData, setOutrasData]);
   const [tab, setTab]             = useState<Tab>('cmdo');
   const [search, setSearch]       = useState('');
   const [soComDispensa, setSoComDispensa] = useState(false);
@@ -203,7 +233,8 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   // ── filtered rows
   const filteredCmdo = useMemo(() => {
     const q = search.toLowerCase();
-    return cmdoData.filter(r => {
+    const data = tab === 'outras' ? outrasData : cmdoData;
+    return data.filter(r => {
       if (soComDispensa && !hasCmdo(r)) return false;
       if (!q) return true;
       return (
@@ -212,7 +243,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
         r.dopm.toLowerCase().includes(q) || r.sei.includes(q)
       );
     });
-  }, [cmdoData, search, soComDispensa]);
+  }, [cmdoData, outrasData, search, soComDispensa, tab]);
 
   const filteredAnual = useMemo(() => {
     const q = search.toLowerCase();
@@ -236,7 +267,8 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   // ── CMDO GERAL handlers ──────────────────────────────────────────────────
 
   const openCmdoCreate = () => {
-    const nextOrd = Math.max(0, ...cmdoData.map(r => r.ord)) + 1;
+    const data = tab === 'outras' ? outrasData : cmdoData;
+    const nextOrd = Math.max(0, ...data.map(r => r.ord)) + 1;
     setCmdoForm({ ord: nextOrd, posto: '', rg: '', nome: '', periodo: '', dopm: '', sei: '' });
     setCmdoErr({});
     setCmdoModal({ mode: 'create', item: null });
@@ -258,17 +290,20 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     if (!cmdoForm.nome.trim()) { setCmdoErr({ nome: 'Nome obrigatório' }); return; }
     if (cmdoModal?.mode === 'create') {
       const id = nextId();
-      setCmdoData(d => reorderToOrd([...d, { ...cmdoForm, id }], id));
+      const setData = tab === 'outras' ? setOutrasData : setCmdoData;
+      setData(d => reorderToOrd([...d, { ...cmdoForm, id }], id));
     } else if (cmdoModal?.mode === 'edit' && cmdoModal.item) {
       const id = cmdoModal.item.id;
-      setCmdoData(d => reorderToOrd(d.map(r => r.id === id ? { ...cmdoForm, id } : r), id));
+      const setData = tab === 'outras' ? setOutrasData : setCmdoData;
+      setData(d => reorderToOrd(d.map(r => r.id === id ? { ...cmdoForm, id } : r), id));
     }
     setCmdoModal(null);
   };
 
   const deleteCmdo = () => {
     if (!delCmdo) return;
-    setCmdoData(d => normalizeOrd(d.filter(r => r.id !== delCmdo.id)));
+    const setData = tab === 'outras' ? setOutrasData : setCmdoData;
+    setData(d => normalizeOrd(d.filter(r => r.id !== delCmdo.id)));
     setDelCmdo(null);
   };
 
@@ -326,6 +361,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
   // ── tab badge counts
   const cmdoComCount  = useMemo(() => cmdoData.filter(hasCmdo).length,  [cmdoData]);
+  const outrasComCount = useMemo(() => outrasData.filter(hasCmdo).length, [outrasData]);
   const anualComCount = useMemo(() => anualData.filter(hasAnual).length, [anualData]);
 
   // ── render ─────────────────────────────────────────────────────────────────
@@ -357,12 +393,12 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
           {showExport && (
             <div className="absolute right-0 top-full mt-1 rounded-xl shadow-2xl z-20 w-56 py-1.5 overflow-hidden"
               style={{ background: 'var(--adm-dropdown)', border: '1px solid var(--adm-border)' }}>
-              <button onClick={() => { exportXLSX(cmdoData, anualData); setShowExport(false); }}
+              <button onClick={() => { exportXLSX(cmdoData, outrasData, anualData); setShowExport(false); }}
                 className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
                 style={{ color: 'var(--adm-text)' }}>
                 <FileSpreadsheet size={15} className="text-emerald-400" /> XLSX (todas as abas)
               </button>
-              <button onClick={() => { exportPrint(filteredCmdo, filteredAnual); setShowExport(false); }}
+              <button onClick={() => { exportPrint(cmdoData, outrasData, filteredAnual); setShowExport(false); }}
                 className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
                 style={{ color: 'var(--adm-text)' }}>
                 <Printer size={15} style={{ color: 'var(--adm-muted)' }} /> Imprimir / PDF
@@ -372,7 +408,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
         </div>
 
         {canCreate && (
-          <button onClick={tab === 'cmdo' ? openCmdoCreate : openAnualCreate}
+          <button onClick={tab === 'anual' ? openAnualCreate : openCmdoCreate}
             className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
             <Plus size={15} /> Novo Registro
           </button>
@@ -381,10 +417,10 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
       {/* tabs */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {(['cmdo', 'anual'] as Tab[]).map(t => {
+        {(['cmdo', 'outras', 'anual'] as Tab[]).map(t => {
           const active = tab === t;
-          const label  = t === 'cmdo' ? 'CMDO GERAL' : 'ANUAL 2026';
-          const count  = t === 'cmdo' ? cmdoComCount  : anualComCount;
+          const label  = t === 'cmdo' ? 'CMDO GERAL' : t === 'outras' ? 'OUTRAS DISPENSAS' : 'ANUAL 2026';
+          const count  = t === 'cmdo' ? cmdoComCount : t === 'outras' ? outrasComCount : anualComCount;
           return (
             <button key={t} onClick={() => setTab(t)}
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors"
@@ -428,7 +464,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
       </div>
 
       {/* ── CMDO GERAL table ─────────────────────────────────────────────────── */}
-      {tab === 'cmdo' && (
+      {tab !== 'anual' && (
         <div className="flex-1 overflow-auto rounded-xl border" style={{ borderColor: 'var(--adm-border)' }}>
           <table className="w-full text-sm" style={{ minWidth: 820 }}>
             <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
@@ -586,9 +622,9 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
             <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
               <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>
-                {cmdoModal.mode === 'create' ? 'Novo Registro — CMDO GERAL'
-                  : cmdoModal.mode === 'edit' ? 'Editar — CMDO GERAL'
-                  : 'Visualizar — CMDO GERAL'}
+                {cmdoModal.mode === 'create' ? `Novo Registro — ${tab === 'outras' ? 'OUTRAS DISPENSAS' : 'CMDO GERAL'}`
+                  : cmdoModal.mode === 'edit' ? `Editar — ${tab === 'outras' ? 'OUTRAS DISPENSAS' : 'CMDO GERAL'}`
+                  : `Visualizar — ${tab === 'outras' ? 'OUTRAS DISPENSAS' : 'CMDO GERAL'}`}
               </h4>
               <button onClick={() => setCmdoModal(null)} style={{ color: 'var(--adm-muted)' }}><X size={22} /></button>
             </div>

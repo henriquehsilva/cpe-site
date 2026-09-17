@@ -31,6 +31,7 @@ const MODULES = [
   { label: 'PLANO DE CHAMADA',                    key: 'cpe-site:plano-chamada:v1' },
   { label: 'AGENDA DE AUDIÊNCIAS',                key: 'cpe-site:agenda-audiencias:v1' },
   { label: 'DISPENSA RECOMPENSA — CMDO',          key: 'cpe-site:dispensa-recompensa:cmdo:v1' },
+  { label: 'DISPENSA RECOMPENSA — OUTRAS',        key: 'cpe-site:dispensa-recompensa:outras:v1' },
   { label: 'DISPENSA RECOMPENSA — ANUAL',         key: 'cpe-site:dispensa-recompensa:anual:v1' },
   { label: 'PLANO DE FÉRIAS — SUBMODULOS',        key: 'cpe-site:plano-ferias:submodulos:v1' },
   { label: 'PLANO DE FÉRIAS — REGISTROS',         key: 'cpe-site:plano-ferias:submodulo-registros:v1' },
