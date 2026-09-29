@@ -15,7 +15,7 @@ export interface DispensaOutra {
   posto: string;
   rg: string;
   nome: string;
-  dispensas: { periodo: string; dopm: string; sei: string }[]; // até 5 registros
+  dispensas: { data: string; dopm: string }[]; // exatamente como a aba anual: até 5 registros
 }
 
 export interface DispensaAnual {
@@ -151,7 +151,7 @@ export const outrasDispensasDB: DispensaOutra[] = dispensaCmdoDB.map(r => ({
   posto: r.posto,
   rg: r.rg,
   nome: r.nome,
-  dispensas: Array.from({ length: 5 }, () => ({ periodo: '', dopm: '', sei: '' })),
+  dispensas: Array.from({ length: 5 }, () => ({ data: '', dopm: '' })),
 }));
 
 // ── ANUAL 2026 ────────────────────────────────────────────────────────────────

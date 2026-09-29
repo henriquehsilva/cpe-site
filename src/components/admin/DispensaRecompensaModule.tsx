@@ -40,22 +40,25 @@ function emptyDisp() {
 }
 
 function emptyOutrasDisp() {
-  return Array.from({ length: 5 }, () => ({ periodo: '', dopm: '', sei: '' }));
+  return Array.from({ length: 5 }, () => ({ data: '', dopm: '' }));
 }
 
 function hasCmdo(r: DispensaCmdo)  { return !!(r.periodo || r.dopm || r.sei); }
 function getOutrasDispensas(r: DispensaOutra) {
-  const legacy = r as DispensaOutra & Partial<DispensaCmdo>;
+  const legacy = r as DispensaOutra & Partial<DispensaCmdo> & {
+    dispensas?: { data?: string; periodo?: string; dopm?: string }[];
+  };
   if (Array.isArray(legacy.dispensas)) {
-    return [...legacy.dispensas, ...emptyOutrasDisp()].slice(0, 5);
+    const convertidas = legacy.dispensas.map(d => ({ data: d.data || d.periodo || '', dopm: d.dopm || '' }));
+    return [...convertidas, ...emptyOutrasDisp()].slice(0, 5);
   }
   return [
-    { periodo: legacy.periodo || '', dopm: legacy.dopm || '', sei: legacy.sei || '' },
+    { data: legacy.periodo || '', dopm: legacy.dopm || '' },
     ...emptyOutrasDisp().slice(1),
   ];
 }
 
-function hasOutras(r: DispensaOutra) { return getOutrasDispensas(r).some(d => d.periodo || d.dopm || d.sei); }
+function hasOutras(r: DispensaOutra) { return getOutrasDispensas(r).some(d => d.data || d.dopm); }
 function hasAnual(r: DispensaAnual) { return r.dispensas.some(d => d.data || d.dopm); }
 
 function pessoaKey(r: { rg: string; nome: string }) {
@@ -64,28 +67,34 @@ function pessoaKey(r: { rg: string; nome: string }) {
 
 // CMDO e Outras podem publicar um período de até cinco dias de dispensa.
 function quantidadeNoPeriodo(periodo: string) {
-  const datas = periodo.match(/\b(\d{1,2})\/(\d{1,2})\b/g);
-  if (!datas?.length) return periodo.trim() ? 1 : 0;
-  if (datas.length === 1) return 1;
-  const [inicio, fim] = datas.slice(0, 2).map(data => {
-    const [dia, mes] = data.split('/').map(Number);
-    return new Date(2026, mes - 1, dia).getTime();
-  });
+  const intervalo = periodo.match(/\b(\d{1,2})(?:\/(\d{1,2}))?\s*(?:a|à|-)\s*(\d{1,2})\/(\d{1,2})\b/i);
+  if (!intervalo) return /\b\d{1,2}\/\d{1,2}\b/.test(periodo) ? 1 : 0;
+  const [, diaInicio, mesInicioInformado, diaFim, mesFim] = intervalo;
+  const mesInicio = mesInicioInformado || mesFim;
+  const inicio = new Date(2026, Number(mesInicio) - 1, Number(diaInicio)).getTime();
+  const fim = new Date(2026, Number(mesFim) - 1, Number(diaFim)).getTime();
   const dias = Math.round(Math.abs(fim - inicio) / 86_400_000) + 1;
   return Math.min(Math.max(dias, 1), 5);
 }
 
+function foiPublicada(dopm: string) {
+  const valor = dopm.trim().toUpperCase();
+  return valor !== '' && valor !== '?' && valor !== 'CHOA';
+}
+
 function quantidadeCmdo(r: DispensaCmdo) {
-  return r.periodo ? quantidadeNoPeriodo(r.periodo) : (r.dopm || r.sei ? 1 : 0);
+  if (!foiPublicada(r.dopm)) return 0;
+  return r.periodo ? quantidadeNoPeriodo(r.periodo) : 1;
 }
 
 function quantidadeOutras(r: DispensaOutra) {
   return getOutrasDispensas(r).reduce((total, d) => total +
-    (d.periodo ? quantidadeNoPeriodo(d.periodo) : (d.dopm || d.sei ? 1 : 0)), 0);
+    (foiPublicada(d.dopm) ? (d.data ? quantidadeNoPeriodo(d.data) : 1) : 0), 0);
 }
 
 function quantidadeAnual(r: DispensaAnual) {
-  return r.dispensas.filter(d => d.data || d.dopm).length;
+  return r.dispensas.reduce((total, d) => total +
+    (foiPublicada(d.dopm) ? (d.data ? quantidadeNoPeriodo(d.data) : 1) : 0), 0);
 }
 
 function calcularTotais(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: DispensaAnual[]) {
@@ -135,15 +144,14 @@ function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: Dispen
     ['Outras Dispensas'],
     [],
     ['Ord', 'Posto/Grad.', 'RG', 'Nome',
-      'PERÍODO', 'DOPM', 'Nº SEI', 'PERÍODO', 'DOPM', 'Nº SEI',
-      'PERÍODO', 'DOPM', 'Nº SEI', 'PERÍODO', 'DOPM', 'Nº SEI',
-      'PERÍODO', 'DOPM', 'Nº SEI', 'TOTAL ANUAL (LIMITE 15)'],
+      'DATA', 'DOPM', 'DATA', 'DOPM', 'DATA', 'DOPM', 'DATA', 'DOPM', 'DATA', 'DOPM',
+      'TOTAL ANUAL (LIMITE 15)'],
     ...outras.map(r => [r.ord, r.posto, r.rg, r.nome,
-      ...getOutrasDispensas(r).flatMap(d => [d.periodo, d.dopm, d.sei]), total(r)]),
+      ...getOutrasDispensas(r).flatMap(d => [d.data, d.dopm]), total(r)]),
   ]);
   wsOutras['!cols'] = [
     { wch: 5 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
-    ...Array.from({ length: 5 }, () => [{ wch: 16 }, { wch: 10 }, { wch: 20 }]).flat(), { wch: 22 },
+    ...Array.from({ length: 5 }, () => [{ wch: 12 }, { wch: 10 }]).flat(), { wch: 22 },
   ];
   XLSX.utils.book_append_sheet(wb, wsOutras, 'OUTRAS DISPENSAS');
 
@@ -191,7 +199,7 @@ function exportPrint(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: Dispe
   const outrasRows = outras.map(r => `
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
-      ${getOutrasDispensas(r).map(d => `<td>${d.periodo}</td><td>${d.dopm}</td><td>${d.sei}</td>`).join('')}<td>${total(r)}/15</td>
+      ${getOutrasDispensas(r).map(d => `<td>${d.data}</td><td>${d.dopm}</td>`).join('')}<td>${total(r)}/15</td>
     </tr>`).join('');
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
@@ -217,7 +225,7 @@ function exportPrint(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: Dispe
     <table>
       <thead><tr>
         <th>Ord</th><th>Posto/Grad.</th><th>RG</th><th>Nome</th>
-        ${Array.from({ length: 5 }, () => '<th>Período</th><th>DOPM</th><th>Nº SEI</th>').join('')}<th>Total anual</th>
+        ${Array.from({ length: 5 }, () => '<th>Data</th><th>DOPM</th>').join('')}<th>Total anual</th>
       </tr></thead>
       <tbody>${outrasRows}</tbody>
     </table>
@@ -254,7 +262,7 @@ interface AnualForm {
 
 interface OutrasForm {
   ord: number; posto: string; rg: string; nome: string;
-  dispensas: { periodo: string; dopm: string; sei: string }[];
+  dispensas: { data: string; dopm: string }[];
 }
 
 interface Props {
@@ -285,7 +293,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   }, [anualData, setAnualData]);
 
   useEffect(() => {
-    // Converte registros antigos (um único Período/DOPM/SEI) para o novo formato de 5 espaços.
+      // Converte formatos anteriores para cinco pares de Data/DOPM, como na aba Anual.
     const normalized = normalizeOrd(outrasData.map(item => {
       return { id: item.id, ord: item.ord, posto: item.posto, rg: item.rg, nome: item.nome,
         dispensas: getOutrasDispensas(item) };
@@ -335,8 +343,8 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
       if (soComDispensa && !hasOutras(r)) return false;
       if (!q) return true;
       return r.nome.toLowerCase().includes(q) || r.posto.toLowerCase().includes(q) ||
-        r.rg.includes(q) || getOutrasDispensas(r).some(d => d.periodo.toLowerCase().includes(q) ||
-          d.dopm.toLowerCase().includes(q) || d.sei.includes(q));
+        r.rg.includes(q) || getOutrasDispensas(r).some(d => d.data.toLowerCase().includes(q) ||
+          d.dopm.toLowerCase().includes(q));
     });
   }, [outrasData, search, soComDispensa]);
 
@@ -432,7 +440,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     setDelOutras(null);
   };
 
-  const changeOutrasDisp = (i: number, field: 'periodo' | 'dopm' | 'sei', val: string) => {
+  const changeOutrasDisp = (i: number, field: 'data' | 'dopm', val: string) => {
     setOutrasForm(f => ({ ...f, dispensas: f.dispensas.map((d, idx) => idx === i ? { ...d, [field]: val } : d) }));
   };
 
@@ -692,14 +700,14 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 <th className="px-3 py-3.5 text-left">Posto/Grad.</th>
                 <th className="px-3 py-3.5 text-left">RG</th>
                 <th className="px-3 py-3.5 text-left">Nome</th>
-                <th className="px-3 py-3.5 text-left">Dispensas (Período / DOPM / SEI)</th>
+                <th className="px-3 py-3.5 text-left">Dispensas (Data / DOPM)</th>
                 <th className="px-3 py-3.5 text-center whitespace-nowrap">Total anual</th>
                 <th className="px-3 py-3.5 text-center w-28">Ações</th>
               </tr>
             </thead>
             <tbody>
               {filteredOutras.map((r, i) => {
-                const filled = getOutrasDispensas(r).filter(d => d.periodo || d.dopm || d.sei);
+                const filled = getOutrasDispensas(r).filter(d => d.data || d.dopm);
                 return (
                   <tr key={r.id} className="adm-row border-t transition-colors"
                     style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
@@ -712,7 +720,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                         <div className="flex flex-wrap gap-1">
                           {filled.map((d, idx) => (
                             <span key={idx} className="text-xs px-2 py-0.5 rounded-full font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/30 whitespace-nowrap">
-                              {[d.periodo, d.dopm, d.sei].filter(Boolean).join(' — ')}
+                              {[d.data, d.dopm].filter(Boolean).join(' — ')}
                             </span>
                           ))}
                         </div>
@@ -963,23 +971,17 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 <p className="text-sm font-semibold mb-2" style={{ color: 'var(--adm-muted)' }}>Dispensas (até 5)</p>
                 <div className="space-y-3">
                   {outrasForm.dispensas.map((d, idx) => (
-                    <div key={idx} className="grid grid-cols-1 sm:grid-cols-3 gap-2 rounded-xl border p-3" style={{ borderColor: 'var(--adm-border)' }}>
+                    <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div>
-                        <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>Período {idx + 1}</label>
-                        <input type="text" value={d.periodo} onChange={e => changeOutrasDisp(idx, 'periodo', e.target.value)}
-                          readOnly={outrasModal.mode === 'view'} placeholder="DD/MM a DD/MM" className={inputCls()}
+                        <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>Data {idx + 1}</label>
+                        <input type="text" value={d.data} onChange={e => changeOutrasDisp(idx, 'data', e.target.value)}
+                          readOnly={outrasModal.mode === 'view'} placeholder="DD/MM" className={inputCls()}
                           style={outrasModal.mode === 'view' ? roS : fs} />
                       </div>
                       <div>
                         <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>DOPM {idx + 1}</label>
                         <input type="text" value={d.dopm} onChange={e => changeOutrasDisp(idx, 'dopm', e.target.value)}
                           readOnly={outrasModal.mode === 'view'} placeholder="67/2026" className={inputCls()}
-                          style={outrasModal.mode === 'view' ? roS : fs} />
-                      </div>
-                      <div>
-                        <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>Nº SEI {idx + 1}</label>
-                        <input type="text" value={d.sei} onChange={e => changeOutrasDisp(idx, 'sei', e.target.value)}
-                          readOnly={outrasModal.mode === 'view'} placeholder="202600002000000" className={inputCls()}
                           style={outrasModal.mode === 'view' ? roS : fs} />
                       </div>
                     </div>
