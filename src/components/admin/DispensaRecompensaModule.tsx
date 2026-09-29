@@ -44,7 +44,18 @@ function emptyOutrasDisp() {
 }
 
 function hasCmdo(r: DispensaCmdo)  { return !!(r.periodo || r.dopm || r.sei); }
-function hasOutras(r: DispensaOutra) { return r.dispensas.some(d => d.periodo || d.dopm || d.sei); }
+function getOutrasDispensas(r: DispensaOutra) {
+  const legacy = r as DispensaOutra & Partial<DispensaCmdo>;
+  if (Array.isArray(legacy.dispensas)) {
+    return [...legacy.dispensas, ...emptyOutrasDisp()].slice(0, 5);
+  }
+  return [
+    { periodo: legacy.periodo || '', dopm: legacy.dopm || '', sei: legacy.sei || '' },
+    ...emptyOutrasDisp().slice(1),
+  ];
+}
+
+function hasOutras(r: DispensaOutra) { return getOutrasDispensas(r).some(d => d.periodo || d.dopm || d.sei); }
 function hasAnual(r: DispensaAnual) { return r.dispensas.some(d => d.data || d.dopm); }
 
 function pessoaKey(r: { rg: string; nome: string }) {
@@ -69,7 +80,7 @@ function quantidadeCmdo(r: DispensaCmdo) {
 }
 
 function quantidadeOutras(r: DispensaOutra) {
-  return r.dispensas.reduce((total, d) => total +
+  return getOutrasDispensas(r).reduce((total, d) => total +
     (d.periodo ? quantidadeNoPeriodo(d.periodo) : (d.dopm || d.sei ? 1 : 0)), 0);
 }
 
@@ -128,7 +139,7 @@ function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: Dispen
       'PERÍODO', 'DOPM', 'Nº SEI', 'PERÍODO', 'DOPM', 'Nº SEI',
       'PERÍODO', 'DOPM', 'Nº SEI', 'TOTAL ANUAL (LIMITE 15)'],
     ...outras.map(r => [r.ord, r.posto, r.rg, r.nome,
-      ...r.dispensas.flatMap(d => [d.periodo, d.dopm, d.sei]), total(r)]),
+      ...getOutrasDispensas(r).flatMap(d => [d.periodo, d.dopm, d.sei]), total(r)]),
   ]);
   wsOutras['!cols'] = [
     { wch: 5 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
@@ -180,7 +191,7 @@ function exportPrint(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: Dispe
   const outrasRows = outras.map(r => `
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
-      ${r.dispensas.map(d => `<td>${d.periodo}</td><td>${d.dopm}</td><td>${d.sei}</td>`).join('')}<td>${total(r)}/15</td>
+      ${getOutrasDispensas(r).map(d => `<td>${d.periodo}</td><td>${d.dopm}</td><td>${d.sei}</td>`).join('')}<td>${total(r)}/15</td>
     </tr>`).join('');
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
@@ -276,13 +287,8 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   useEffect(() => {
     // Converte registros antigos (um único Período/DOPM/SEI) para o novo formato de 5 espaços.
     const normalized = normalizeOrd(outrasData.map(item => {
-      const legacy = item as DispensaOutra & Partial<DispensaCmdo>;
-      if (Array.isArray(legacy.dispensas)) {
-        return { ...item, dispensas: [...legacy.dispensas, ...emptyOutrasDisp()].slice(0, 5) };
-      }
-      const first = { periodo: legacy.periodo || '', dopm: legacy.dopm || '', sei: legacy.sei || '' };
       return { id: item.id, ord: item.ord, posto: item.posto, rg: item.rg, nome: item.nome,
-        dispensas: [first, ...emptyOutrasDisp().slice(1)] };
+        dispensas: getOutrasDispensas(item) };
     }));
     if (JSON.stringify(normalized) !== JSON.stringify(outrasData)) setOutrasData(normalized);
   }, [outrasData, setOutrasData]);
@@ -329,7 +335,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
       if (soComDispensa && !hasOutras(r)) return false;
       if (!q) return true;
       return r.nome.toLowerCase().includes(q) || r.posto.toLowerCase().includes(q) ||
-        r.rg.includes(q) || r.dispensas.some(d => d.periodo.toLowerCase().includes(q) ||
+        r.rg.includes(q) || getOutrasDispensas(r).some(d => d.periodo.toLowerCase().includes(q) ||
           d.dopm.toLowerCase().includes(q) || d.sei.includes(q));
     });
   }, [outrasData, search, soComDispensa]);
@@ -402,7 +408,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   };
 
   const openOutras = (r: DispensaOutra, mode: ModalMode) => {
-    setOutrasForm({ ...r, dispensas: r.dispensas.map(d => ({ ...d })) });
+    setOutrasForm({ ...r, dispensas: getOutrasDispensas(r).map(d => ({ ...d })) });
     setOutrasErr({});
     setOutrasModal({ mode, item: r });
   };
@@ -693,7 +699,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
             </thead>
             <tbody>
               {filteredOutras.map((r, i) => {
-                const filled = r.dispensas.filter(d => d.periodo || d.dopm || d.sei);
+                const filled = getOutrasDispensas(r).filter(d => d.periodo || d.dopm || d.sei);
                 return (
                   <tr key={r.id} className="adm-row border-t transition-colors"
                     style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
