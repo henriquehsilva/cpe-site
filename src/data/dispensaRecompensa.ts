@@ -9,6 +9,15 @@ export interface DispensaCmdo {
   sei: string;
 }
 
+export interface DispensaOutra {
+  id: string;
+  ord: number;
+  posto: string;
+  rg: string;
+  nome: string;
+  dispensas: { periodo: string; dopm: string; sei: string }[]; // até 5 registros
+}
+
 export interface DispensaAnual {
   id: string;
   ord: number;
@@ -136,12 +145,13 @@ export const dispensaCmdoDB: DispensaCmdo[] = [
 ];
 
 // Mantém a mesma relação do CMDO GERAL, com campos de dispensa independentes.
-export const outrasDispensasDB: DispensaCmdo[] = dispensaCmdoDB.map(r => ({
-  ...r,
+export const outrasDispensasDB: DispensaOutra[] = dispensaCmdoDB.map(r => ({
   id: r.id.replace('cmdo-', 'outras-'),
-  periodo: '',
-  dopm: '',
-  sei: '',
+  ord: r.ord,
+  posto: r.posto,
+  rg: r.rg,
+  nome: r.nome,
+  dispensas: Array.from({ length: 5 }, () => ({ periodo: '', dopm: '', sei: '' })),
 }));
 
 // ── ANUAL 2026 ────────────────────────────────────────────────────────────────

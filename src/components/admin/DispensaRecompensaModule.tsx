@@ -5,7 +5,7 @@ import {
   Search, Download, FileSpreadsheet, Printer, AlertCircle,
 } from 'lucide-react';
 import {
-  dispensaCmdoDB, outrasDispensasDB, dispensaAnualDB, DispensaCmdo, DispensaAnual,
+  dispensaCmdoDB, outrasDispensasDB, dispensaAnualDB, DispensaCmdo, DispensaOutra, DispensaAnual,
 } from '../../data/dispensaRecompensa';
 import { ModulePermission } from '../../types/rbac';
 import { usePersistentState } from '../../hooks/usePersistentState';
@@ -39,8 +39,55 @@ function emptyDisp() {
   return Array.from({ length: 5 }, () => ({ data: '', dopm: '' }));
 }
 
-function hasCmdo(r: DispensaCmdo)  { return !!(r.periodo || r.dopm); }
-function hasAnual(r: DispensaAnual) { return r.dispensas.some(d => d.data); }
+function emptyOutrasDisp() {
+  return Array.from({ length: 5 }, () => ({ periodo: '', dopm: '', sei: '' }));
+}
+
+function hasCmdo(r: DispensaCmdo)  { return !!(r.periodo || r.dopm || r.sei); }
+function hasOutras(r: DispensaOutra) { return r.dispensas.some(d => d.periodo || d.dopm || d.sei); }
+function hasAnual(r: DispensaAnual) { return r.dispensas.some(d => d.data || d.dopm); }
+
+function pessoaKey(r: { rg: string; nome: string }) {
+  return r.rg.trim() || r.nome.trim().toLocaleLowerCase('pt-BR');
+}
+
+// CMDO e Outras podem publicar um período de até cinco dias de dispensa.
+function quantidadeNoPeriodo(periodo: string) {
+  const datas = periodo.match(/\b(\d{1,2})\/(\d{1,2})\b/g);
+  if (!datas?.length) return periodo.trim() ? 1 : 0;
+  if (datas.length === 1) return 1;
+  const [inicio, fim] = datas.slice(0, 2).map(data => {
+    const [dia, mes] = data.split('/').map(Number);
+    return new Date(2026, mes - 1, dia).getTime();
+  });
+  const dias = Math.round(Math.abs(fim - inicio) / 86_400_000) + 1;
+  return Math.min(Math.max(dias, 1), 5);
+}
+
+function quantidadeCmdo(r: DispensaCmdo) {
+  return r.periodo ? quantidadeNoPeriodo(r.periodo) : (r.dopm || r.sei ? 1 : 0);
+}
+
+function quantidadeOutras(r: DispensaOutra) {
+  return r.dispensas.reduce((total, d) => total +
+    (d.periodo ? quantidadeNoPeriodo(d.periodo) : (d.dopm || d.sei ? 1 : 0)), 0);
+}
+
+function quantidadeAnual(r: DispensaAnual) {
+  return r.dispensas.filter(d => d.data || d.dopm).length;
+}
+
+function calcularTotais(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: DispensaAnual[]) {
+  const totais = new Map<string, number>();
+  const add = (r: { rg: string; nome: string }, quantidade: number) => {
+    const key = pessoaKey(r);
+    totais.set(key, (totais.get(key) || 0) + quantidade);
+  };
+  cmdo.forEach(r => add(r, quantidadeCmdo(r)));
+  outras.forEach(r => add(r, quantidadeOutras(r)));
+  anual.forEach(r => add(r, quantidadeAnual(r)));
+  return totais;
+}
 
 // ── XLSX export ───────────────────────────────────────────────────────────────
 
@@ -53,20 +100,22 @@ const HDR_ROWS = [
   [],
 ];
 
-function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: DispensaAnual[]) {
+function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: DispensaAnual[]) {
   const wb = XLSX.utils.book_new();
+  const totais = calcularTotais(cmdo, outras, anual);
+  const total = (r: { rg: string; nome: string }) => totais.get(pessoaKey(r)) || 0;
 
   // ── CMDO GERAL sheet
   const wsCmdo = XLSX.utils.aoa_to_sheet([
     ...HDR_ROWS,
     ['Dispensa Recompensa CMDO GERAL'],
     [],
-    ['Ord', 'Posto/Grad.', 'RG', 'Nome', 'Período', 'DOPM', 'Nº SEI DO ITEM'],
-    ...cmdo.map(r => [r.ord, r.posto, r.rg, r.nome, r.periodo, r.dopm, r.sei]),
+    ['Ord', 'Posto/Grad.', 'RG', 'Nome', 'Período', 'DOPM', 'Nº SEI DO ITEM', 'TOTAL ANUAL (LIMITE 15)'],
+    ...cmdo.map(r => [r.ord, r.posto, r.rg, r.nome, r.periodo, r.dopm, r.sei, total(r)]),
   ]);
   wsCmdo['!cols'] = [
     { wch: 5 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
-    { wch: 16 }, { wch: 10 }, { wch: 20 },
+    { wch: 16 }, { wch: 10 }, { wch: 20 }, { wch: 22 },
   ];
   XLSX.utils.book_append_sheet(wb, wsCmdo, 'CMDO GERAL');
 
@@ -74,10 +123,17 @@ function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: Dispens
     ...HDR_ROWS,
     ['Outras Dispensas'],
     [],
-    ['Ord', 'Posto/Grad.', 'RG', 'Nome', 'Período', 'DOPM', 'Nº SEI DO ITEM'],
-    ...outras.map(r => [r.ord, r.posto, r.rg, r.nome, r.periodo, r.dopm, r.sei]),
+    ['Ord', 'Posto/Grad.', 'RG', 'Nome',
+      'PERÍODO', 'DOPM', 'Nº SEI', 'PERÍODO', 'DOPM', 'Nº SEI',
+      'PERÍODO', 'DOPM', 'Nº SEI', 'PERÍODO', 'DOPM', 'Nº SEI',
+      'PERÍODO', 'DOPM', 'Nº SEI', 'TOTAL ANUAL (LIMITE 15)'],
+    ...outras.map(r => [r.ord, r.posto, r.rg, r.nome,
+      ...r.dispensas.flatMap(d => [d.periodo, d.dopm, d.sei]), total(r)]),
   ]);
-  wsOutras['!cols'] = wsCmdo['!cols'];
+  wsOutras['!cols'] = [
+    { wch: 5 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
+    ...Array.from({ length: 5 }, () => [{ wch: 16 }, { wch: 10 }, { wch: 20 }]).flat(), { wch: 22 },
+  ];
   XLSX.utils.book_append_sheet(wb, wsOutras, 'OUTRAS DISPENSAS');
 
   // ── ANUAL 2026 sheet
@@ -88,40 +144,43 @@ function exportXLSX(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: Dispens
     [
       'Ord', 'Posto/Grad.', 'RG', 'Nome',
       'DATA', 'DOPM', 'DATA', 'DOPM', 'DATA', 'DOPM', 'DATA', 'DOPM', 'DATA', 'DOPM',
+      'TOTAL ANUAL (LIMITE 15)',
     ],
     ...anual.map(r => [
       r.ord, r.posto, r.rg, r.nome,
-      ...r.dispensas.flatMap(d => [d.data, d.dopm]),
+      ...r.dispensas.flatMap(d => [d.data, d.dopm]), total(r),
     ]),
   ]);
   wsAnual['!cols'] = [
     { wch: 5 }, { wch: 12 }, { wch: 8 }, { wch: 36 },
     { wch: 8 }, { wch: 10 }, { wch: 8 }, { wch: 10 },
     { wch: 8 }, { wch: 10 }, { wch: 8 }, { wch: 10 },
-    { wch: 8 }, { wch: 10 },
+    { wch: 8 }, { wch: 10 }, { wch: 22 },
   ];
   XLSX.utils.book_append_sheet(wb, wsAnual, 'ANUAL 2026');
 
   XLSX.writeFile(wb, 'dispensa_recompensa.xlsx');
 }
 
-function exportPrint(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: DispensaAnual[]) {
+function exportPrint(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: DispensaAnual[]) {
+  const totais = calcularTotais(cmdo, outras, anual);
+  const total = (r: { rg: string; nome: string }) => totais.get(pessoaKey(r)) || 0;
   const cmdoRows = cmdo.map(r => `
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
-      <td>${r.periodo}</td><td>${r.dopm}</td><td>${r.sei}</td>
+      <td>${r.periodo}</td><td>${r.dopm}</td><td>${r.sei}</td><td>${total(r)}/15</td>
     </tr>`).join('');
 
   const anualRows = anual.map(r => `
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
-      ${r.dispensas.map(d => `<td>${d.data}</td><td>${d.dopm}</td>`).join('')}
+      ${r.dispensas.map(d => `<td>${d.data}</td><td>${d.dopm}</td>`).join('')}<td>${total(r)}/15</td>
     </tr>`).join('');
 
   const outrasRows = outras.map(r => `
     <tr>
       <td>${r.ord}</td><td>${r.posto}</td><td>${r.rg}</td><td>${r.nome}</td>
-      <td>${r.periodo}</td><td>${r.dopm}</td><td>${r.sei}</td>
+      ${r.dispensas.map(d => `<td>${d.periodo}</td><td>${d.dopm}</td><td>${d.sei}</td>`).join('')}<td>${total(r)}/15</td>
     </tr>`).join('');
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
@@ -139,7 +198,7 @@ function exportPrint(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: Dispen
     <table>
       <thead><tr>
         <th>Ord</th><th>Posto/Grad.</th><th>RG</th><th>Nome</th>
-        <th>Período</th><th>DOPM</th><th>Nº SEI</th>
+        <th>Período</th><th>DOPM</th><th>Nº SEI</th><th>Total anual</th>
       </tr></thead>
       <tbody>${cmdoRows}</tbody>
     </table>
@@ -147,7 +206,7 @@ function exportPrint(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: Dispen
     <table>
       <thead><tr>
         <th>Ord</th><th>Posto/Grad.</th><th>RG</th><th>Nome</th>
-        <th>Período</th><th>DOPM</th><th>Nº SEI</th>
+        ${Array.from({ length: 5 }, () => '<th>Período</th><th>DOPM</th><th>Nº SEI</th>').join('')}<th>Total anual</th>
       </tr></thead>
       <tbody>${outrasRows}</tbody>
     </table>
@@ -157,7 +216,7 @@ function exportPrint(cmdo: DispensaCmdo[], outras: DispensaCmdo[], anual: Dispen
         <th>Ord</th><th>Posto/Grad.</th><th>RG</th><th>Nome</th>
         <th>Data</th><th>DOPM</th><th>Data</th><th>DOPM</th>
         <th>Data</th><th>DOPM</th><th>Data</th><th>DOPM</th>
-        <th>Data</th><th>DOPM</th>
+        <th>Data</th><th>DOPM</th><th>Total anual</th>
       </tr></thead>
       <tbody>${anualRows}</tbody>
     </table>
@@ -182,6 +241,11 @@ interface AnualForm {
   dispensas: { data: string; dopm: string }[];
 }
 
+interface OutrasForm {
+  ord: number; posto: string; rg: string; nome: string;
+  dispensas: { periodo: string; dopm: string; sei: string }[];
+}
+
 interface Props {
   onBack: () => void;
   permissions?: ModulePermission;
@@ -195,7 +259,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const canDelete = !permissions || permissions.delete;
 
   const [cmdoData, setCmdoData]   = usePersistentState<DispensaCmdo[]>('cpe-site:dispensa-recompensa:cmdo:v1', dispensaCmdoDB);
-  const [outrasData, setOutrasData] = usePersistentState<DispensaCmdo[]>('cpe-site:dispensa-recompensa:outras:v1', outrasDispensasDB);
+  const [outrasData, setOutrasData] = usePersistentState<DispensaOutra[]>('cpe-site:dispensa-recompensa:outras:v1', outrasDispensasDB);
   const [anualData, setAnualData] = usePersistentState<DispensaAnual[]>('cpe-site:dispensa-recompensa:anual:v1', dispensaAnualDB);
 
   // Auto-corrige dados já persistidos com Ord duplicado ou fora de sequência.
@@ -210,7 +274,16 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   }, [anualData, setAnualData]);
 
   useEffect(() => {
-    const normalized = normalizeOrd(outrasData);
+    // Converte registros antigos (um único Período/DOPM/SEI) para o novo formato de 5 espaços.
+    const normalized = normalizeOrd(outrasData.map(item => {
+      const legacy = item as DispensaOutra & Partial<DispensaCmdo>;
+      if (Array.isArray(legacy.dispensas)) {
+        return { ...item, dispensas: [...legacy.dispensas, ...emptyOutrasDisp()].slice(0, 5) };
+      }
+      const first = { periodo: legacy.periodo || '', dopm: legacy.dopm || '', sei: legacy.sei || '' };
+      return { id: item.id, ord: item.ord, posto: item.posto, rg: item.rg, nome: item.nome,
+        dispensas: [first, ...emptyOutrasDisp().slice(1)] };
+    }));
     if (JSON.stringify(normalized) !== JSON.stringify(outrasData)) setOutrasData(normalized);
   }, [outrasData, setOutrasData]);
   const [tab, setTab]             = useState<Tab>('cmdo');
@@ -224,6 +297,12 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   const [cmdoErr,  setCmdoErr]      = useState<{ nome?: string }>({});
   const [delCmdo,  setDelCmdo]      = useState<DispensaCmdo | null>(null);
 
+  // ── OUTRAS DISPENSAS modal state
+  const [outrasModal, setOutrasModal] = useState<{ mode: ModalMode; item: DispensaOutra | null } | null>(null);
+  const [outrasForm, setOutrasForm] = useState<OutrasForm>({ ord: 0, posto: '', rg: '', nome: '', dispensas: emptyOutrasDisp() });
+  const [outrasErr, setOutrasErr] = useState<{ nome?: string }>({});
+  const [delOutras, setDelOutras] = useState<DispensaOutra | null>(null);
+
   // ── ANUAL modal state
   const [anualModal, setAnualModal] = useState<{ mode: ModalMode; item: DispensaAnual | null } | null>(null);
   const [anualForm, setAnualForm]   = useState<AnualForm>({ ord: 0, posto: '', rg: '', nome: '', dispensas: emptyDisp() });
@@ -233,8 +312,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   // ── filtered rows
   const filteredCmdo = useMemo(() => {
     const q = search.toLowerCase();
-    const data = tab === 'outras' ? outrasData : cmdoData;
-    return data.filter(r => {
+    return cmdoData.filter(r => {
       if (soComDispensa && !hasCmdo(r)) return false;
       if (!q) return true;
       return (
@@ -243,7 +321,18 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
         r.dopm.toLowerCase().includes(q) || r.sei.includes(q)
       );
     });
-  }, [cmdoData, outrasData, search, soComDispensa, tab]);
+  }, [cmdoData, search, soComDispensa]);
+
+  const filteredOutras = useMemo(() => {
+    const q = search.toLowerCase();
+    return outrasData.filter(r => {
+      if (soComDispensa && !hasOutras(r)) return false;
+      if (!q) return true;
+      return r.nome.toLowerCase().includes(q) || r.posto.toLowerCase().includes(q) ||
+        r.rg.includes(q) || r.dispensas.some(d => d.periodo.toLowerCase().includes(q) ||
+          d.dopm.toLowerCase().includes(q) || d.sei.includes(q));
+    });
+  }, [outrasData, search, soComDispensa]);
 
   const filteredAnual = useMemo(() => {
     const q = search.toLowerCase();
@@ -267,8 +356,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
   // ── CMDO GERAL handlers ──────────────────────────────────────────────────
 
   const openCmdoCreate = () => {
-    const data = tab === 'outras' ? outrasData : cmdoData;
-    const nextOrd = Math.max(0, ...data.map(r => r.ord)) + 1;
+    const nextOrd = Math.max(0, ...cmdoData.map(r => r.ord)) + 1;
     setCmdoForm({ ord: nextOrd, posto: '', rg: '', nome: '', periodo: '', dopm: '', sei: '' });
     setCmdoErr({});
     setCmdoModal({ mode: 'create', item: null });
@@ -290,21 +378,56 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
     if (!cmdoForm.nome.trim()) { setCmdoErr({ nome: 'Nome obrigatório' }); return; }
     if (cmdoModal?.mode === 'create') {
       const id = nextId();
-      const setData = tab === 'outras' ? setOutrasData : setCmdoData;
-      setData(d => reorderToOrd([...d, { ...cmdoForm, id }], id));
+      setCmdoData(d => reorderToOrd([...d, { ...cmdoForm, id }], id));
     } else if (cmdoModal?.mode === 'edit' && cmdoModal.item) {
       const id = cmdoModal.item.id;
-      const setData = tab === 'outras' ? setOutrasData : setCmdoData;
-      setData(d => reorderToOrd(d.map(r => r.id === id ? { ...cmdoForm, id } : r), id));
+      setCmdoData(d => reorderToOrd(d.map(r => r.id === id ? { ...cmdoForm, id } : r), id));
     }
     setCmdoModal(null);
   };
 
   const deleteCmdo = () => {
     if (!delCmdo) return;
-    const setData = tab === 'outras' ? setOutrasData : setCmdoData;
-    setData(d => normalizeOrd(d.filter(r => r.id !== delCmdo.id)));
+    setCmdoData(d => normalizeOrd(d.filter(r => r.id !== delCmdo.id)));
     setDelCmdo(null);
+  };
+
+  // ── OUTRAS DISPENSAS handlers ───────────────────────────────────────────
+
+  const openOutrasCreate = () => {
+    const nextOrd = Math.max(0, ...outrasData.map(r => r.ord)) + 1;
+    setOutrasForm({ ord: nextOrd, posto: '', rg: '', nome: '', dispensas: emptyOutrasDisp() });
+    setOutrasErr({});
+    setOutrasModal({ mode: 'create', item: null });
+  };
+
+  const openOutras = (r: DispensaOutra, mode: ModalMode) => {
+    setOutrasForm({ ...r, dispensas: r.dispensas.map(d => ({ ...d })) });
+    setOutrasErr({});
+    setOutrasModal({ mode, item: r });
+  };
+
+  const saveOutras = () => {
+    if (!outrasForm.nome.trim()) { setOutrasErr({ nome: 'Nome obrigatório' }); return; }
+    const cleaned = { ...outrasForm, dispensas: outrasForm.dispensas.map(d => ({ ...d })) };
+    if (outrasModal?.mode === 'create') {
+      const id = nextId();
+      setOutrasData(d => reorderToOrd([...d, { ...cleaned, id }], id));
+    } else if (outrasModal?.mode === 'edit' && outrasModal.item) {
+      const id = outrasModal.item.id;
+      setOutrasData(d => reorderToOrd(d.map(r => r.id === id ? { ...cleaned, id } : r), id));
+    }
+    setOutrasModal(null);
+  };
+
+  const deleteOutras = () => {
+    if (!delOutras) return;
+    setOutrasData(d => normalizeOrd(d.filter(r => r.id !== delOutras.id)));
+    setDelOutras(null);
+  };
+
+  const changeOutrasDisp = (i: number, field: 'periodo' | 'dopm' | 'sei', val: string) => {
+    setOutrasForm(f => ({ ...f, dispensas: f.dispensas.map((d, idx) => idx === i ? { ...d, [field]: val } : d) }));
   };
 
   const changeCmdo = <K extends keyof CmdoForm>(k: K, v: CmdoForm[K]) => {
@@ -361,8 +484,20 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
 
   // ── tab badge counts
   const cmdoComCount  = useMemo(() => cmdoData.filter(hasCmdo).length,  [cmdoData]);
-  const outrasComCount = useMemo(() => outrasData.filter(hasCmdo).length, [outrasData]);
+  const outrasComCount = useMemo(() => outrasData.filter(hasOutras).length, [outrasData]);
   const anualComCount = useMemo(() => anualData.filter(hasAnual).length, [anualData]);
+
+  const totaisPorPessoa = useMemo(
+    () => calcularTotais(cmdoData, outrasData, anualData),
+    [cmdoData, outrasData, anualData],
+  );
+
+  const totalBadge = (r: { rg: string; nome: string }) => {
+    const total = totaisPorPessoa.get(pessoaKey(r)) || 0;
+    const color = total >= 15 ? '#ef4444' : total >= 12 ? '#f59e0b' : 'var(--adm-accent)';
+    return <span className="inline-flex rounded-full border px-2 py-0.5 text-xs font-bold tabular-nums"
+      style={{ color, borderColor: color, background: `color-mix(in srgb, ${color} 12%, transparent)` }}>{total}/15</span>;
+  };
 
   // ── render ─────────────────────────────────────────────────────────────────
 
@@ -398,7 +533,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 style={{ color: 'var(--adm-text)' }}>
                 <FileSpreadsheet size={15} className="text-emerald-400" /> XLSX (todas as abas)
               </button>
-              <button onClick={() => { exportPrint(cmdoData, outrasData, filteredAnual); setShowExport(false); }}
+              <button onClick={() => { exportPrint(cmdoData, outrasData, anualData); setShowExport(false); }}
                 className="adm-drop-item flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors"
                 style={{ color: 'var(--adm-text)' }}>
                 <Printer size={15} style={{ color: 'var(--adm-muted)' }} /> Imprimir / PDF
@@ -408,7 +543,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
         </div>
 
         {canCreate && (
-          <button onClick={tab === 'anual' ? openAnualCreate : openCmdoCreate}
+          <button onClick={tab === 'anual' ? openAnualCreate : tab === 'outras' ? openOutrasCreate : openCmdoCreate}
             className="flex items-center gap-2 bg-cpe-red hover:bg-cpe-red/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
             <Plus size={15} /> Novo Registro
           </button>
@@ -464,7 +599,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
       </div>
 
       {/* ── CMDO GERAL table ─────────────────────────────────────────────────── */}
-      {tab !== 'anual' && (
+      {tab === 'cmdo' && (
         <div className="flex-1 overflow-auto rounded-xl border" style={{ borderColor: 'var(--adm-border)' }}>
           <table className="w-full text-sm" style={{ minWidth: 820 }}>
             <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
@@ -476,6 +611,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 <th className="px-3 py-3.5 text-left">Período</th>
                 <th className="px-3 py-3.5 text-left">DOPM</th>
                 <th className="px-3 py-3.5 text-left">Nº SEI</th>
+                <th className="px-3 py-3.5 text-center whitespace-nowrap">Total anual</th>
                 <th className="px-3 py-3.5 text-center w-28">Ações</th>
               </tr>
             </thead>
@@ -505,6 +641,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                   <td className="px-3 py-3 tabular-nums text-xs" style={{ color: 'var(--adm-muted)' }}>
                     {r.sei || <span style={{ color: 'var(--adm-subtle)' }}>—</span>}
                   </td>
+                  <td className="px-3 py-3 text-center">{totalBadge(r)}</td>
                   <td className="px-3 py-3">
                     <div className="flex items-center justify-center gap-0.5">
                       <button onClick={() => openCmdoView(r)} title="Visualizar"
@@ -529,10 +666,68 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
               ))}
               {filteredCmdo.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-4 py-20 text-center text-base" style={{ color: 'var(--adm-subtle)' }}>
+                  <td colSpan={9} className="px-4 py-20 text-center text-base" style={{ color: 'var(--adm-subtle)' }}>
                     Nenhum registro encontrado.
                   </td>
                 </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* ── OUTRAS DISPENSAS table ─────────────────────────────────────────── */}
+      {tab === 'outras' && (
+        <div className="flex-1 overflow-auto rounded-xl border" style={{ borderColor: 'var(--adm-border)' }}>
+          <table className="w-full text-sm" style={{ minWidth: 760 }}>
+            <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
+              <tr className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
+                <th className="px-3 py-3.5 text-left w-10">Ord</th>
+                <th className="px-3 py-3.5 text-left">Posto/Grad.</th>
+                <th className="px-3 py-3.5 text-left">RG</th>
+                <th className="px-3 py-3.5 text-left">Nome</th>
+                <th className="px-3 py-3.5 text-left">Dispensas (Período / DOPM / SEI)</th>
+                <th className="px-3 py-3.5 text-center whitespace-nowrap">Total anual</th>
+                <th className="px-3 py-3.5 text-center w-28">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredOutras.map((r, i) => {
+                const filled = r.dispensas.filter(d => d.periodo || d.dopm || d.sei);
+                return (
+                  <tr key={r.id} className="adm-row border-t transition-colors"
+                    style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
+                    <td className="px-3 py-3 tabular-nums text-xs" style={{ color: 'var(--adm-subtle)' }}>{r.ord}</td>
+                    <td className="px-3 py-3 whitespace-nowrap text-xs font-medium" style={{ color: 'var(--adm-muted)' }}>{r.posto}</td>
+                    <td className="px-3 py-3 tabular-nums text-xs" style={{ color: 'var(--adm-muted)' }}>{r.rg}</td>
+                    <td className="px-3 py-3 font-semibold" style={{ color: 'var(--adm-text)' }}>{r.nome}</td>
+                    <td className="px-3 py-3">
+                      {filled.length ? (
+                        <div className="flex flex-wrap gap-1">
+                          {filled.map((d, idx) => (
+                            <span key={idx} className="text-xs px-2 py-0.5 rounded-full font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/30 whitespace-nowrap">
+                              {[d.periodo, d.dopm, d.sei].filter(Boolean).join(' — ')}
+                            </span>
+                          ))}
+                        </div>
+                      ) : <span className="text-xs" style={{ color: 'var(--adm-subtle)' }}>—</span>}
+                    </td>
+                    <td className="px-3 py-3 text-center">{totalBadge(r)}</td>
+                    <td className="px-3 py-3">
+                      <div className="flex items-center justify-center gap-0.5">
+                        <button onClick={() => openOutras(r, 'view')} title="Visualizar"
+                          className="p-1.5 rounded-lg hover:bg-blue-400/10 text-blue-400 opacity-70 hover:opacity-100 transition-colors"><Eye size={15} /></button>
+                        {canEdit && <button onClick={() => openOutras(r, 'edit')} title="Editar"
+                          className="p-1.5 rounded-lg hover:bg-amber-400/10 text-amber-400 opacity-70 hover:opacity-100 transition-colors"><Pencil size={15} /></button>}
+                        {canDelete && <button onClick={() => setDelOutras(r)} title="Excluir"
+                          className="p-1.5 rounded-lg hover:bg-cpe-red/10 text-cpe-red opacity-70 hover:opacity-100 transition-colors"><Trash2 size={15} /></button>}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+              {filteredOutras.length === 0 && (
+                <tr><td colSpan={7} className="px-4 py-20 text-center text-base" style={{ color: 'var(--adm-subtle)' }}>Nenhum registro encontrado.</td></tr>
               )}
             </tbody>
           </table>
@@ -550,6 +745,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 <th className="px-3 py-3.5 text-left">RG</th>
                 <th className="px-3 py-3.5 text-left">Nome</th>
                 <th className="px-3 py-3.5 text-left">Dispensas (Data / DOPM)</th>
+                <th className="px-3 py-3.5 text-center whitespace-nowrap">Total anual</th>
                 <th className="px-3 py-3.5 text-center w-28">Ações</th>
               </tr>
             </thead>
@@ -579,6 +775,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                         <span className="text-xs" style={{ color: 'var(--adm-subtle)' }}>—</span>
                       )}
                     </td>
+                    <td className="px-3 py-3 text-center">{totalBadge(r)}</td>
                     <td className="px-3 py-3">
                       <div className="flex items-center justify-center gap-0.5">
                         <button onClick={() => openAnualView(r)} title="Visualizar"
@@ -604,7 +801,7 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
               })}
               {filteredAnual.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-20 text-center text-base" style={{ color: 'var(--adm-subtle)' }}>
+                  <td colSpan={7} className="px-4 py-20 text-center text-base" style={{ color: 'var(--adm-subtle)' }}>
                     Nenhum registro encontrado.
                   </td>
                 </tr>
@@ -700,6 +897,96 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                   Cancelar
                 </button>
                 <button onClick={saveCmdo}
+                  className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                  <Save size={16} /> Salvar
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── OUTRAS DISPENSAS modal ─────────────────────────────────────────── */}
+      {outrasModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl rounded-2xl shadow-2xl border"
+            style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--adm-border)' }}>
+              <h4 className="font-bold text-xl" style={{ color: 'var(--adm-text)' }}>
+                {outrasModal.mode === 'create' ? 'Novo Registro — OUTRAS DISPENSAS'
+                  : outrasModal.mode === 'edit' ? 'Editar — OUTRAS DISPENSAS'
+                  : 'Visualizar — OUTRAS DISPENSAS'}
+              </h4>
+              <button onClick={() => setOutrasModal(null)} style={{ color: 'var(--adm-muted)' }}><X size={22} /></button>
+            </div>
+
+            <div className="px-6 py-5 max-h-[70vh] overflow-y-auto space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Ord</label>
+                  <input type="number" value={outrasForm.ord}
+                    onChange={e => setOutrasForm(f => ({ ...f, ord: +e.target.value }))}
+                    readOnly={outrasModal.mode === 'view'} className={inputCls()}
+                    style={outrasModal.mode === 'view' ? roS : fs} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Posto/Grad.</label>
+                  <input type="text" value={outrasForm.posto}
+                    onChange={e => setOutrasForm(f => ({ ...f, posto: e.target.value }))}
+                    readOnly={outrasModal.mode === 'view'} placeholder="CB PM" className={inputCls()}
+                    style={outrasModal.mode === 'view' ? roS : fs} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>RG</label>
+                  <input type="text" value={outrasForm.rg}
+                    onChange={e => setOutrasForm(f => ({ ...f, rg: e.target.value }))}
+                    readOnly={outrasModal.mode === 'view'} className={inputCls()}
+                    style={outrasModal.mode === 'view' ? roS : fs} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--adm-muted)' }}>Nome</label>
+                  <input type="text" value={outrasForm.nome}
+                    onChange={e => { setOutrasForm(f => ({ ...f, nome: e.target.value })); setOutrasErr({}); }}
+                    readOnly={outrasModal.mode === 'view'} className={inputCls(outrasErr.nome)}
+                    style={outrasModal.mode === 'view' ? roS : { ...fs, ...(outrasErr.nome ? { borderColor: '#ef4444' } : {}) }} />
+                  {outrasErr.nome && <p className="text-sm mt-1 text-red-400 flex items-center gap-1"><AlertCircle size={13} /> {outrasErr.nome}</p>}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold mb-2" style={{ color: 'var(--adm-muted)' }}>Dispensas (até 5)</p>
+                <div className="space-y-3">
+                  {outrasForm.dispensas.map((d, idx) => (
+                    <div key={idx} className="grid grid-cols-1 sm:grid-cols-3 gap-2 rounded-xl border p-3" style={{ borderColor: 'var(--adm-border)' }}>
+                      <div>
+                        <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>Período {idx + 1}</label>
+                        <input type="text" value={d.periodo} onChange={e => changeOutrasDisp(idx, 'periodo', e.target.value)}
+                          readOnly={outrasModal.mode === 'view'} placeholder="DD/MM a DD/MM" className={inputCls()}
+                          style={outrasModal.mode === 'view' ? roS : fs} />
+                      </div>
+                      <div>
+                        <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>DOPM {idx + 1}</label>
+                        <input type="text" value={d.dopm} onChange={e => changeOutrasDisp(idx, 'dopm', e.target.value)}
+                          readOnly={outrasModal.mode === 'view'} placeholder="67/2026" className={inputCls()}
+                          style={outrasModal.mode === 'view' ? roS : fs} />
+                      </div>
+                      <div>
+                        <label className="block text-xs mb-1" style={{ color: 'var(--adm-subtle)' }}>Nº SEI {idx + 1}</label>
+                        <input type="text" value={d.sei} onChange={e => changeOutrasDisp(idx, 'sei', e.target.value)}
+                          readOnly={outrasModal.mode === 'view'} placeholder="202600002000000" className={inputCls()}
+                          style={outrasModal.mode === 'view' ? roS : fs} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {outrasModal.mode !== 'view' && (
+              <div className="flex justify-end gap-3 px-6 pb-5">
+                <button onClick={() => setOutrasModal(null)} className="px-5 py-2.5 text-base rounded-lg border transition-colors"
+                  style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+                <button onClick={saveOutras}
                   className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
                   <Save size={16} /> Salvar
                 </button>
@@ -820,6 +1107,27 @@ export default function DispensaRecompensaModule({ onBack, permissions }: Props)
                 Cancelar
               </button>
               <button onClick={deleteCmdo}
+                className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
+                <Trash2 size={16} /> Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── delete confirm — OUTRAS DISPENSAS ──────────────────────────────── */}
+      {delOutras && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
+            style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+            <h4 className="font-bold text-xl mb-2" style={{ color: 'var(--adm-text)' }}>Confirmar exclusão</h4>
+            <p className="text-base mb-6" style={{ color: 'var(--adm-muted)' }}>
+              Excluir registro de <span className="font-semibold" style={{ color: 'var(--adm-text)' }}>{delOutras.nome}</span>?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setDelOutras(null)} className="px-5 py-2.5 text-base rounded-lg border transition-colors"
+                style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)', background: 'transparent' }}>Cancelar</button>
+              <button onClick={deleteOutras}
                 className="flex items-center gap-2 px-5 py-2.5 text-base font-semibold text-white bg-cpe-red hover:bg-cpe-red/80 rounded-lg transition-colors">
                 <Trash2 size={16} /> Excluir
               </button>
