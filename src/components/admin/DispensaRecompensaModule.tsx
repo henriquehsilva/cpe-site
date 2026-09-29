@@ -65,8 +65,10 @@ function pessoaKey(r: { rg: string; nome: string }) {
   return r.rg.trim() || r.nome.trim().toLocaleLowerCase('pt-BR');
 }
 
-// CMDO e Outras podem publicar um período de até cinco dias de dispensa.
+// Calcula dias de datas isoladas, intervalos (inclusive "09 a 13/01") ou textos como "8 dias".
 function quantidadeNoPeriodo(periodo: string) {
+  const quantidadeInformada = periodo.match(/\b(\d{1,3})\s*dias?\b/i);
+  if (quantidadeInformada) return Number(quantidadeInformada[1]);
   const intervalo = periodo.match(/\b(\d{1,2})(?:\/(\d{1,2}))?\s*(?:a|à|-)\s*(\d{1,2})\/(\d{1,2})\b/i);
   if (!intervalo) return /\b\d{1,2}\/\d{1,2}\b/.test(periodo) ? 1 : 0;
   const [, diaInicio, mesInicioInformado, diaFim, mesFim] = intervalo;
@@ -74,11 +76,11 @@ function quantidadeNoPeriodo(periodo: string) {
   const inicio = new Date(2026, Number(mesInicio) - 1, Number(diaInicio)).getTime();
   const fim = new Date(2026, Number(mesFim) - 1, Number(diaFim)).getTime();
   const dias = Math.round(Math.abs(fim - inicio) / 86_400_000) + 1;
-  return Math.min(Math.max(dias, 1), 5);
+  return Math.max(dias, 1);
 }
 
 function quantidadeCmdo(r: DispensaCmdo) {
-  return r.periodo ? quantidadeNoPeriodo(r.periodo) : (r.dopm || r.sei ? 1 : 0);
+  return hasCmdo(r) ? 5 : 0;
 }
 
 function quantidadeOutras(r: DispensaOutra) {
