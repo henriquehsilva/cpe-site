@@ -77,24 +77,18 @@ function quantidadeNoPeriodo(periodo: string) {
   return Math.min(Math.max(dias, 1), 5);
 }
 
-function foiPublicada(dopm: string) {
-  const valor = dopm.trim().toUpperCase();
-  return valor !== '' && valor !== '?' && valor !== 'CHOA';
-}
-
 function quantidadeCmdo(r: DispensaCmdo) {
-  if (!foiPublicada(r.dopm)) return 0;
-  return r.periodo ? quantidadeNoPeriodo(r.periodo) : 1;
+  return r.periodo ? quantidadeNoPeriodo(r.periodo) : (r.dopm || r.sei ? 1 : 0);
 }
 
 function quantidadeOutras(r: DispensaOutra) {
   return getOutrasDispensas(r).reduce((total, d) => total +
-    (foiPublicada(d.dopm) ? (d.data ? quantidadeNoPeriodo(d.data) : 1) : 0), 0);
+    (d.data ? quantidadeNoPeriodo(d.data) : (d.dopm ? 1 : 0)), 0);
 }
 
 function quantidadeAnual(r: DispensaAnual) {
   return r.dispensas.reduce((total, d) => total +
-    (foiPublicada(d.dopm) ? (d.data ? quantidadeNoPeriodo(d.data) : 1) : 0), 0);
+    (d.data ? quantidadeNoPeriodo(d.data) : (d.dopm ? 1 : 0)), 0);
 }
 
 function calcularTotais(cmdo: DispensaCmdo[], outras: DispensaOutra[], anual: DispensaAnual[]) {
