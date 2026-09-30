@@ -580,6 +580,8 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   // ── render: detail / edit ─────────────────────────────────────────────────
   const m  = editMode && draft ? draft : selected!;
   const idx = sorted.findIndex(s => s.id === m.id);
+  const cpe20Index = m.linhas.findIndex(row => row.label === 'CPE 20');
+  const separatorLimit = cpe20Index === -1 ? m.linhas.length : cpe20Index;
 
   return (
     <div className="flex flex-col h-full">
@@ -718,7 +720,8 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           <tbody>
             {m.linhas.map((row, i) => {
               const isHeader = row.label === 'CPE CMD' || row.label === 'CPE 90' || row.label === 'CPE 20';
-              const showTeamSeparator = i < m.linhas.length - 1 && ((i + 1) % 4 === 0 || row.label === 'Dia a Reserva');
+              const showTeamSeparator = i < separatorLimit
+                && ((i + 1) % 4 === 0 || row.label === 'Dia a Reserva');
 
               return (
                 <Fragment key={i}>
