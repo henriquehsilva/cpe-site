@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, Plus, Pencil, Trash2, X, Save, Download,
@@ -580,8 +580,6 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   // ── render: detail / edit ─────────────────────────────────────────────────
   const m  = editMode && draft ? draft : selected!;
   const idx = sorted.findIndex(s => s.id === m.id);
-  const cpe20Index = m.linhas.findIndex(row => row.label === 'CPE 20');
-  const separatorLimit = cpe20Index === -1 ? m.linhas.length : cpe20Index;
 
   return (
     <div className="flex flex-col h-full">
@@ -720,15 +718,19 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           <tbody>
             {m.linhas.map((row, i) => {
               const isHeader = row.label === 'CPE CMD' || row.label === 'CPE 90' || row.label === 'CPE 20';
-              const showTeamSeparator = i < separatorLimit
-                && ((i + 1) % 4 === 0 || row.label === 'Dia a Reserva');
+              const isDiaReserva = /^dia\s*(?:a|\/)\s*reserva$/i.test(row.label.trim());
+              const isWhiteTeamRow = (i + 1) % 5 === 0;
+              const teamCellStyle = {
+                ...dataCellStyle,
+                background: isWhiteTeamRow ? '#fff' : dataCellStyle.background,
+                borderBottom: isDiaReserva ? '3px solid #fff' : dataCellStyle.borderBottom,
+              };
 
               return (
-                <Fragment key={i}>
-                <tr className="adm-row transition-colors">
+                <tr key={i} className="adm-row transition-colors">
 
                   {/* label */}
-                  <td className="px-3 py-2 font-semibold" style={{ ...dataCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
+                  <td className="px-3 py-2 font-semibold" style={{ ...teamCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
                     {editMode
                       ? <input value={row.label} onChange={e => setDraftRow(i, 'label', e.target.value)} className={cls} style={fss} />
                       : row.label}
@@ -736,7 +738,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
                   {/* pelotões */}
                   {(['pelA', 'pelB', 'pelC', 'pelD'] as const).map(col => (
-                    <td key={col} className="px-3 py-2" style={{ ...dataCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
+                    <td key={col} className="px-3 py-2" style={{ ...teamCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
                       {editMode
                         ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={cls} style={fss} />
                         : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === col
@@ -794,15 +796,6 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                     </td>
                   )}
                 </tr>
-                {showTeamSeparator && (
-                  <tr aria-hidden="true">
-                    <td colSpan={5} className="h-3 bg-white p-0"></td>
-                    <td className="w-3 bg-white p-0"></td>
-                    <td colSpan={2} className="h-3 p-0" style={{ background: '#e5e7eb', borderBottom: '1px solid #fff' }}></td>
-                    {editMode && <td className="h-3 p-0"></td>}
-                  </tr>
-                )}
-                </Fragment>
               );
             })}
 
