@@ -718,12 +718,14 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           <tbody>
             {m.linhas.map((row, i) => {
               const isHeader = row.label === 'CPE CMD' || row.label === 'CPE 90' || row.label === 'CPE 20';
+              const isWhiteTeamRow = (i + 1) % 5 === 0 || m.linhas[i - 1]?.label === 'Dia a Reserva';
+              const teamCellStyle = { ...dataCellStyle, background: isWhiteTeamRow ? '#fff' : dataCellStyle.background };
 
               return (
                 <tr key={i} className="adm-row transition-colors">
 
                   {/* label */}
-                  <td className="px-3 py-2 font-semibold" style={{ ...dataCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
+                  <td className="px-3 py-2 font-semibold" style={{ ...teamCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
                     {editMode
                       ? <input value={row.label} onChange={e => setDraftRow(i, 'label', e.target.value)} className={cls} style={fss} />
                       : row.label}
@@ -731,7 +733,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
                   {/* pelotões */}
                   {(['pelA', 'pelB', 'pelC', 'pelD'] as const).map(col => (
-                    <td key={col} className="px-3 py-2" style={{ ...dataCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
+                    <td key={col} className="px-3 py-2" style={{ ...teamCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
                       {editMode
                         ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={cls} style={fss} />
                         : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === col
