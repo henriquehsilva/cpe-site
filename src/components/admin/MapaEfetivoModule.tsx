@@ -385,6 +385,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const fs  = { background: 'var(--adm-input)', color: 'var(--adm-text)',  border: '1px solid var(--adm-border)' };
   const fss = { background: 'var(--adm-input)', color: 'var(--adm-text)',  border: '1px solid var(--adm-border)', fontSize: 12 };
   const cls = 'adm-input rounded px-2 py-1 text-sm border w-full';
+  const dataCellStyle = { background: '#e5e7eb', borderRight: '1px solid #fff', borderBottom: '1px solid #fff' };
 
   const emptyBox = (
     <span className="inline-block w-24 h-[18px] rounded border border-dashed align-middle"
@@ -700,7 +701,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
       {/* main table */}
       <div className="overflow-auto rounded-xl border mb-4 flex-1" style={{ borderColor: 'var(--adm-border)' }}>
-        <table className="w-full text-xs" style={{ minWidth: 900 }}>
+        <table className="w-full text-xs" style={{ minWidth: 760 }}>
           <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
             <tr className="font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
               <th className="px-3 py-2.5 text-left w-32">Viatura</th>
@@ -708,25 +709,21 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
               <th className="px-3 py-2.5 text-left">Pelotão B</th>
               <th className="px-3 py-2.5 text-left">Pelotão C</th>
               <th className="px-3 py-2.5 text-left">Pelotão D</th>
+              <th aria-hidden="true" className="w-3 bg-white p-0"></th>
               <th className="px-3 py-2.5 text-left">Admin — Nome</th>
               <th className="px-3 py-2.5 text-left w-28">Função</th>
-              <th className="px-3 py-2.5 text-left">S. E. R. — Nome</th>
-              <th className="px-3 py-2.5 text-left w-24">Status</th>
               {editMode && <th className="px-3 py-2.5 text-center w-10"></th>}
             </tr>
           </thead>
           <tbody>
             {m.linhas.map((row, i) => {
               const isHeader = row.label === 'CPE CMD' || row.label === 'CPE 90' || row.label === 'CPE 20';
-              const isReserva = row.label === 'Dia a Reserva';
-              const bg = isHeader ? 'var(--adm-input)' : isReserva ? 'color-mix(in srgb, var(--adm-accent) 8%, transparent)' : i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent';
 
               return (
-                <tr key={i} className="adm-row border-t transition-colors"
-                  style={{ borderColor: 'var(--adm-border)', background: bg }}>
+                <tr key={i} className="adm-row transition-colors">
 
                   {/* label */}
-                  <td className="px-3 py-2 font-semibold" style={{ color: isHeader ? 'var(--adm-accent)' : 'var(--adm-muted)', fontSize: 11 }}>
+                  <td className="px-3 py-2 font-semibold" style={{ ...dataCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
                     {editMode
                       ? <input value={row.label} onChange={e => setDraftRow(i, 'label', e.target.value)} className={cls} style={fss} />
                       : row.label}
@@ -734,7 +731,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
                   {/* pelotões */}
                   {(['pelA', 'pelB', 'pelC', 'pelD'] as const).map(col => (
-                    <td key={col} className="px-3 py-2" style={{ color: row[col] === 'S. E. R.' ? 'var(--adm-subtle)' : 'var(--adm-text)' }}>
+                    <td key={col} className="px-3 py-2" style={{ ...dataCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
                       {editMode
                         ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={cls} style={fss} />
                         : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === col
@@ -749,8 +746,11 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                     </td>
                   ))}
 
+                  {/* separador entre pelotões e administração */}
+                  <td aria-hidden="true" className="w-3 bg-white p-0"></td>
+
                   {/* admin nome */}
-                  <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>
+                  <td className="px-3 py-2" style={{ ...dataCellStyle, color: '#1f2937' }}>
                     {editMode
                       ? <input value={row.adminNome ?? ''} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={cls} style={fss} />
                       : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminNome'
@@ -765,7 +765,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   </td>
 
                   {/* admin funcao */}
-                  <td className="px-3 py-2 italic" style={{ color: 'var(--adm-muted)', fontSize: 11 }}>
+                  <td className="px-3 py-2 italic" style={{ ...dataCellStyle, color: '#4b5563', fontSize: 11 }}>
                     {editMode
                       ? <input value={row.adminFuncao ?? ''} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={cls} style={fss} />
                       : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminFuncao'
@@ -776,36 +776,6 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                         : <span onClick={canEdit ? () => startInline(i, 'adminFuncao', row.adminFuncao ?? '') : undefined}
                             className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
                             {row.adminFuncao || emptyBox}
-                          </span>}
-                  </td>
-
-                  {/* ser nome */}
-                  <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>
-                    {editMode
-                      ? <input value={row.serNome ?? ''} onChange={e => setDraftRow(i, 'serNome', e.target.value)} className={cls} style={fss} />
-                      : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'serNome'
-                        ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
-                            onBlur={commitInline}
-                            onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
-                            className={cls} style={fss} />
-                        : <span onClick={canEdit ? () => startInline(i, 'serNome', row.serNome ?? '') : undefined}
-                            className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
-                            {row.serNome || emptyBox}
-                          </span>}
-                  </td>
-
-                  {/* ser status */}
-                  <td className="px-3 py-2 italic" style={{ color: 'var(--adm-muted)', fontSize: 11 }}>
-                    {editMode
-                      ? <input value={row.serStatus ?? ''} onChange={e => setDraftRow(i, 'serStatus', e.target.value)} className={cls} style={fss} />
-                      : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'serStatus'
-                        ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
-                            onBlur={commitInline}
-                            onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
-                            className={cls} style={fss} />
-                        : <span onClick={canEdit ? () => startInline(i, 'serStatus', row.serStatus ?? '') : undefined}
-                            className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
-                            {row.serStatus || emptyBox}
                           </span>}
                   </td>
 
@@ -824,7 +794,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
             {/* empty state */}
             {m.linhas.length === 0 && (
-              <tr><td colSpan={10} className="px-4 py-12 text-center" style={{ color: 'var(--adm-subtle)' }}>Nenhuma linha.</td></tr>
+              <tr><td colSpan={editMode ? 9 : 8} className="px-4 py-12 text-center" style={{ color: 'var(--adm-subtle)' }}>Nenhuma linha.</td></tr>
             )}
           </tbody>
         </table>
