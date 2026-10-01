@@ -702,17 +702,17 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
       {/* main table */}
       <div className="overflow-auto rounded-xl border mb-4 flex-1" style={{ borderColor: 'var(--adm-border)' }}>
-        <table className="w-full text-xs text-center" style={{ minWidth: 760 }}>
+        <table className="w-full text-xs" style={{ minWidth: 760 }}>
           <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
             <tr className="font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
-              <th className="px-3 py-2.5 text-center w-32">Viatura</th>
-              <th className="px-3 py-2.5 text-center">Pelotão A</th>
-              <th className="px-3 py-2.5 text-center">Pelotão B</th>
-              <th className="px-3 py-2.5 text-center">Pelotão C</th>
-              <th className="px-3 py-2.5 text-center">Pelotão D</th>
+              <th className="px-3 py-2.5 text-left w-32">Viatura</th>
+              <th className="px-3 py-2.5 text-left">Pelotão A</th>
+              <th className="px-3 py-2.5 text-left">Pelotão B</th>
+              <th className="px-3 py-2.5 text-left">Pelotão C</th>
+              <th className="px-3 py-2.5 text-left">Pelotão D</th>
               <th aria-hidden="true" className="w-3 bg-white p-0"></th>
-              <th className="px-3 py-2.5 text-center">Admin — Nome</th>
-              <th className="px-3 py-2.5 text-center w-28">Função</th>
+              <th className="px-3 py-2.5 text-left">Admin — Nome</th>
+              <th className="px-3 py-2.5 text-left w-28">Função</th>
               {editMode && <th className="px-3 py-2.5 text-center w-10"></th>}
             </tr>
           </thead>
@@ -731,7 +731,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                 <tr key={i} className="adm-row transition-colors">
 
                   {/* label */}
-                  <td className="px-3 py-2 font-semibold" style={{ ...teamCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
+                  <td className="px-3 py-2 text-center font-semibold" style={{ ...teamCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
                     {editMode
                       ? <input value={row.label} onChange={e => setDraftRow(i, 'label', e.target.value)} className={tableInputCls} style={fss} />
                       : row.label}
@@ -739,7 +739,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
                   {/* pelotões */}
                   {(['pelA', 'pelB', 'pelC', 'pelD'] as const).map(col => (
-                    <td key={col} className="px-3 py-2" style={{ ...teamCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
+                    <td key={col} className="px-3 py-2 text-center" style={{ ...teamCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
                       {editMode
                         ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={tableInputCls} style={fss} />
                         : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === col
@@ -758,7 +758,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   <td aria-hidden="true" className="w-3 bg-white p-0"></td>
 
                   {/* admin nome */}
-                  <td className="px-3 py-2" style={{ ...dataCellStyle, color: '#1f2937' }}>
+                  <td className="px-3 py-2 text-center" style={{ ...dataCellStyle, color: '#1f2937' }}>
                     {editMode
                       ? <input value={row.adminNome ?? ''} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={tableInputCls} style={fss} />
                       : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminNome'
@@ -773,7 +773,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   </td>
 
                   {/* admin funcao */}
-                  <td className="px-3 py-2 italic" style={{ ...dataCellStyle, color: '#4b5563', fontSize: 11 }}>
+                  <td className="px-3 py-2 text-center italic" style={{ ...dataCellStyle, color: '#4b5563', fontSize: 11 }}>
                     {editMode
                       ? <input value={row.adminFuncao ?? ''} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={tableInputCls} style={fss} />
                       : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminFuncao'
