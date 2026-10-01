@@ -385,6 +385,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const fs  = { background: 'var(--adm-input)', color: 'var(--adm-text)',  border: '1px solid var(--adm-border)' };
   const fss = { background: 'var(--adm-input)', color: 'var(--adm-text)',  border: '1px solid var(--adm-border)', fontSize: 12 };
   const cls = 'adm-input rounded px-2 py-1 text-sm border w-full';
+  const tableInputCls = `${cls} text-center`;
   const dataCellStyle = { background: '#e5e7eb', borderRight: '1px solid #fff', borderBottom: '1px solid #fff' };
 
   const emptyBox = (
@@ -701,17 +702,17 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
 
       {/* main table */}
       <div className="overflow-auto rounded-xl border mb-4 flex-1" style={{ borderColor: 'var(--adm-border)' }}>
-        <table className="w-full text-xs" style={{ minWidth: 760 }}>
+        <table className="w-full text-xs text-center" style={{ minWidth: 760 }}>
           <thead className="sticky top-0 z-10" style={{ background: 'var(--adm-tbl-head)' }}>
             <tr className="font-semibold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
-              <th className="px-3 py-2.5 text-left w-32">Viatura</th>
-              <th className="px-3 py-2.5 text-left">Pelotão A</th>
-              <th className="px-3 py-2.5 text-left">Pelotão B</th>
-              <th className="px-3 py-2.5 text-left">Pelotão C</th>
-              <th className="px-3 py-2.5 text-left">Pelotão D</th>
+              <th className="px-3 py-2.5 text-center w-32">Viatura</th>
+              <th className="px-3 py-2.5 text-center">Pelotão A</th>
+              <th className="px-3 py-2.5 text-center">Pelotão B</th>
+              <th className="px-3 py-2.5 text-center">Pelotão C</th>
+              <th className="px-3 py-2.5 text-center">Pelotão D</th>
               <th aria-hidden="true" className="w-3 bg-white p-0"></th>
-              <th className="px-3 py-2.5 text-left">Admin — Nome</th>
-              <th className="px-3 py-2.5 text-left w-28">Função</th>
+              <th className="px-3 py-2.5 text-center">Admin — Nome</th>
+              <th className="px-3 py-2.5 text-center w-28">Função</th>
               {editMode && <th className="px-3 py-2.5 text-center w-10"></th>}
             </tr>
           </thead>
@@ -732,7 +733,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   {/* label */}
                   <td className="px-3 py-2 font-semibold" style={{ ...teamCellStyle, color: isHeader ? '#991b1b' : '#4b5563', fontSize: 11 }}>
                     {editMode
-                      ? <input value={row.label} onChange={e => setDraftRow(i, 'label', e.target.value)} className={cls} style={fss} />
+                      ? <input value={row.label} onChange={e => setDraftRow(i, 'label', e.target.value)} className={tableInputCls} style={fss} />
                       : row.label}
                   </td>
 
@@ -740,12 +741,12 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   {(['pelA', 'pelB', 'pelC', 'pelD'] as const).map(col => (
                     <td key={col} className="px-3 py-2" style={{ ...teamCellStyle, color: row[col] === 'S. E. R.' ? '#6b7280' : '#1f2937' }}>
                       {editMode
-                        ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={cls} style={fss} />
+                        ? <input value={row[col]} onChange={e => setDraftRow(i, col, e.target.value)} className={tableInputCls} style={fss} />
                         : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === col
                           ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
                               onBlur={commitInline}
                               onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
-                              className={cls} style={fss} />
+                              className={tableInputCls} style={fss} />
                           : <span onClick={canEdit ? () => startInline(i, col, row[col]) : undefined}
                               className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
                               {row[col] || emptyBox}
@@ -759,12 +760,12 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   {/* admin nome */}
                   <td className="px-3 py-2" style={{ ...dataCellStyle, color: '#1f2937' }}>
                     {editMode
-                      ? <input value={row.adminNome ?? ''} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={cls} style={fss} />
+                      ? <input value={row.adminNome ?? ''} onChange={e => setDraftRow(i, 'adminNome', e.target.value)} className={tableInputCls} style={fss} />
                       : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminNome'
                         ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
                             onBlur={commitInline}
                             onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
-                            className={cls} style={fss} />
+                            className={tableInputCls} style={fss} />
                         : <span onClick={canEdit ? () => startInline(i, 'adminNome', row.adminNome ?? '') : undefined}
                             className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
                             {row.adminNome || emptyBox}
@@ -774,12 +775,12 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   {/* admin funcao */}
                   <td className="px-3 py-2 italic" style={{ ...dataCellStyle, color: '#4b5563', fontSize: 11 }}>
                     {editMode
-                      ? <input value={row.adminFuncao ?? ''} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={cls} style={fss} />
+                      ? <input value={row.adminFuncao ?? ''} onChange={e => setDraftRow(i, 'adminFuncao', e.target.value)} className={tableInputCls} style={fss} />
                       : canEdit && inlineCell?.rowIdx === i && inlineCell?.col === 'adminFuncao'
                         ? <input autoFocus value={inlineVal} onChange={e => setInlineVal(e.target.value)}
                             onBlur={commitInline}
                             onKeyDown={e => { if (e.key === 'Enter') commitInline(); if (e.key === 'Escape') cancelInline(); }}
-                            className={cls} style={fss} />
+                            className={tableInputCls} style={fss} />
                         : <span onClick={canEdit ? () => startInline(i, 'adminFuncao', row.adminFuncao ?? '') : undefined}
                             className={canEdit ? 'cursor-pointer rounded px-1 -mx-1 hover:bg-white/5 transition-colors block' : 'block'}>
                             {row.adminFuncao || emptyBox}
