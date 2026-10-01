@@ -720,11 +720,10 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
             {m.linhas.map((row, i) => {
               const isHeader = row.label === 'CPE CMD' || row.label === 'CPE 90' || row.label === 'CPE 20';
               const isDiaReserva = /^dia\s*(?:a|\/)\s*reserva$/i.test(row.label.trim());
-              const isWhiteTeamRow = (i + 1) % 5 === 0;
+              const isTeamSeparator = i < m.linhas.length - 1 && ((i + 1) % 4 === 0 || isDiaReserva);
               const teamCellStyle = {
                 ...dataCellStyle,
-                background: isWhiteTeamRow ? '#fff' : dataCellStyle.background,
-                borderBottom: isDiaReserva ? '3px solid #fff' : dataCellStyle.borderBottom,
+                borderBottom: isTeamSeparator ? '6px solid #fff' : dataCellStyle.borderBottom,
               };
 
               return (
