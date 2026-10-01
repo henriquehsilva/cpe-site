@@ -843,7 +843,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           </div>
           <table className="w-full text-xs">
             <thead>
-              <tr style={{ background: 'var(--adm-tbl-head)', color: 'var(--adm-muted)' }}>
+              <tr style={{ background: '#d1d5db', color: '#4b5563' }}>
                 <th className="px-3 py-2 text-left font-semibold uppercase tracking-wide w-20">Tipo</th>
                 <th className="px-3 py-2 text-left font-semibold uppercase tracking-wide">Nome</th>
                 <th className="px-3 py-2 text-left font-semibold uppercase tracking-wide">Retorno</th>
@@ -851,14 +851,13 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
               </tr>
             </thead>
             <tbody>
-              {m.afastamentos.map((a, i) => (
-                <tr key={a.id} className="adm-row border-t transition-colors"
-                  style={{ borderColor: 'var(--adm-border)', background: i % 2 === 0 ? 'var(--adm-row-even)' : 'transparent' }}>
-                  <td className="px-3 py-2 font-semibold" style={{ color: 'var(--adm-accent)' }}>{a.tipo}</td>
-                  <td className="px-3 py-2" style={{ color: 'var(--adm-text)' }}>{a.nome}</td>
-                  <td className="px-3 py-2" style={{ color: 'var(--adm-muted)' }}>{a.retorno}</td>
+              {m.afastamentos.map(a => (
+                <tr key={a.id} className="adm-row transition-colors">
+                  <td className="px-3 py-2 font-semibold" style={{ ...dataCellStyle, color: '#991b1b' }}>{a.tipo}</td>
+                  <td className="px-3 py-2" style={{ ...dataCellStyle, color: '#1f2937' }}>{a.nome}</td>
+                  <td className="px-3 py-2" style={{ ...dataCellStyle, color: '#4b5563' }}>{a.retorno}</td>
                   {editMode && (
-                    <td className="px-2 py-2 text-center">
+                    <td className="px-2 py-2 text-center" style={dataCellStyle}>
                       <div className="flex items-center justify-center gap-1">
                         <button onClick={() => openAfEdit(a)} title="Editar"
                           className="p-1 rounded hover:bg-amber-400/10 text-amber-400 opacity-70 hover:opacity-100 transition-colors">
@@ -874,7 +873,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                 </tr>
               ))}
               {m.afastamentos.length === 0 && (
-                <tr><td colSpan={4} className="px-3 py-6 text-center" style={{ color: 'var(--adm-subtle)' }}>Sem afastamentos.</td></tr>
+                <tr><td colSpan={4} className="px-3 py-6 text-center" style={{ background: '#e5e7eb', color: '#6b7280' }}>Sem afastamentos.</td></tr>
               )}
             </tbody>
           </table>
@@ -885,9 +884,9 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           <div className="px-4 py-3" style={{ background: 'var(--adm-tbl-head)', borderBottom: '1px solid var(--adm-border)' }}>
             <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>Efetivo em Serviço</span>
           </div>
-          <div className="p-4 space-y-3">
-            <div className="rounded-lg border p-3" style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-row-even)' }}>
-              <div className="mb-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
+          <div className="p-4 space-y-3" style={{ background: '#e5e7eb' }}>
+            <div className="rounded-lg border p-3" style={{ borderColor: '#fff', background: '#e5e7eb' }}>
+              <div className="mb-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: '#4b5563' }}>
                 Efetivo operacional
               </div>
               <div className="grid grid-cols-2 gap-x-5 gap-y-2">
@@ -903,7 +902,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   ] as [string, keyof MapaContagem][]
                 ).map(([lbl, key]) => (
                   <div key={key} className="flex items-center justify-between gap-2">
-                    <span className="text-xs" style={{ color: 'var(--adm-muted)' }}>{lbl}</span>
+                    <span className="text-xs" style={{ color: '#4b5563' }}>{lbl}</span>
                     {editMode ? (
                       <input type="number" min={0}
                         value={(draft!.contagens as Record<string, number>)[key]}
@@ -911,7 +910,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                         className="adm-input rounded px-2 py-1 text-xs border w-16 text-right"
                         style={fss} />
                     ) : (
-                      <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>
+                      <span className="text-xs font-bold" style={{ color: '#1f2937' }}>
                         {(m.contagens as Record<string, number>)[key]}
                       </span>
                     )}
@@ -919,14 +918,14 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                 ))}
               </div>
               <div className="mt-3 border-t pt-2 flex items-center justify-between"
-                style={{ borderColor: 'var(--adm-border)' }}>
-                <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>TOTAL OPERACIONAL</span>
+                style={{ borderColor: '#fff' }}>
+                <span className="text-xs font-bold" style={{ color: '#1f2937' }}>TOTAL OPERACIONAL</span>
                 <span className="text-sm font-black" style={{ color: 'var(--adm-accent)' }}>{operacionalTotal}</span>
               </div>
             </div>
 
-            <div className="rounded-lg border p-3" style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-row-even)' }}>
-              <div className="mb-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
+            <div className="rounded-lg border p-3" style={{ borderColor: '#fff', background: '#e5e7eb' }}>
+              <div className="mb-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: '#4b5563' }}>
                 Afastamentos
               </div>
               <div className="grid grid-cols-2 gap-x-5 gap-y-2">
@@ -940,7 +939,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   ] as [string, keyof MapaContagem][]
                 ).map(([lbl, key]) => (
                   <div key={key} className="flex items-center justify-between gap-2">
-                    <span className="text-xs" style={{ color: 'var(--adm-muted)' }}>{lbl}</span>
+                    <span className="text-xs" style={{ color: '#4b5563' }}>{lbl}</span>
                     {editMode ? (
                       <input type="number" min={0}
                         value={(draft!.contagens as Record<string, number>)[key]}
@@ -948,7 +947,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                         className="adm-input rounded px-2 py-1 text-xs border w-16 text-right"
                         style={fss} />
                     ) : (
-                      <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>
+                      <span className="text-xs font-bold" style={{ color: '#1f2937' }}>
                         {(m.contagens as Record<string, number>)[key]}
                       </span>
                     )}
@@ -956,15 +955,15 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                 ))}
               </div>
               <div className="mt-3 border-t pt-2 flex items-center justify-between"
-                style={{ borderColor: 'var(--adm-border)' }}>
-                <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>TOTAL DE AFASTAMENTOS</span>
+                style={{ borderColor: '#fff' }}>
+                <span className="text-xs font-bold" style={{ color: '#1f2937' }}>TOTAL DE AFASTAMENTOS</span>
                 <span className="text-sm font-black" style={{ color: 'var(--adm-accent)' }}>{afastamentosTotal}</span>
               </div>
             </div>
 
             <div className="rounded-lg border px-3 py-2.5 flex items-center justify-between"
-              style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-tbl-head)' }}>
-              <span className="text-sm font-bold" style={{ color: 'var(--adm-text)' }}>TOTAL</span>
+              style={{ borderColor: '#fff', background: '#d1d5db' }}>
+              <span className="text-sm font-bold" style={{ color: '#1f2937' }}>TOTAL</span>
               {editMode ? (
                 <input type="number" min={0} value={draft!.contagens.total}
                   onChange={e => setDraftCount('total', +e.target.value)}
