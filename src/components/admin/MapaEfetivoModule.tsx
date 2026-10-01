@@ -582,6 +582,10 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   const m  = editMode && draft ? draft : selected!;
   const idx = sorted.findIndex(s => s.id === m.id);
   const cpe20Index = m.linhas.findIndex(row => row.label === 'CPE 20');
+  const operacionalTotal = m.contagens.pelA + m.contagens.pelB + m.contagens.pelC
+    + m.contagens.pelD + m.contagens.diagonal + m.contagens.diaReserva + m.contagens.administracao;
+  const afastamentosTotal = m.contagens.lesp + m.contagens.ferias + m.contagens.curso
+    + m.contagens.jcs + m.contagens.outros;
 
   return (
     <div className="flex flex-col h-full">
@@ -914,6 +918,11 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                   </div>
                 ))}
               </div>
+              <div className="mt-3 border-t pt-2 flex items-center justify-between"
+                style={{ borderColor: 'var(--adm-border)' }}>
+                <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>TOTAL OPERACIONAL</span>
+                <span className="text-sm font-black" style={{ color: 'var(--adm-accent)' }}>{operacionalTotal}</span>
+              </div>
             </div>
 
             <div className="rounded-lg border p-3" style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-row-even)' }}>
@@ -945,6 +954,11 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
                     )}
                   </div>
                 ))}
+              </div>
+              <div className="mt-3 border-t pt-2 flex items-center justify-between"
+                style={{ borderColor: 'var(--adm-border)' }}>
+                <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>TOTAL DE AFASTAMENTOS</span>
+                <span className="text-sm font-black" style={{ color: 'var(--adm-accent)' }}>{afastamentosTotal}</span>
               </div>
             </div>
 
