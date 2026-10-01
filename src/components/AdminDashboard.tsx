@@ -10,6 +10,7 @@ import { downloadBackup } from '../utils/backupUtils';
 import EfetivoModule from './admin/EfetivoModule';
 import MapaEfetivoModule from './admin/MapaEfetivoModule';
 import AgendaAudienciasModule from './admin/AgendaAudienciasModule';
+import AgendaModule from './admin/AgendaModule';
 import DispensaRecompensaModule from './admin/DispensaRecompensaModule';
 import PlanoFeriasModule from './admin/PlanoFeriasModule';
 import EntradaSaidaFeriasModule from './admin/EntradaSaidaFeriasModule';
@@ -34,6 +35,7 @@ const ALL_MODULES = [
   { id: 'efetivo',            label: 'Efetivo',             icon: Users },
   { id: 'plano-ferias',       label: 'Plano de Férias',     icon: CalendarDays },  { id: 'entrada-saida-ferias', label: 'Entrada / Saída de Férias', icon: ArrowRightLeft },  { id: 'aniversariantes',    label: 'Aniversariantes',     icon: Cake },
   { id: 'plano-chamada',      label: 'Plano de Chamada',    icon: PhoneCall },
+  { id: 'agenda',             label: 'Agenda',              icon: CalendarDays },
   { id: 'agenda-audiencias',  label: 'Agenda Audiências',   icon: Scale },
   { id: 'medalhas',           label: 'Medalhas',            icon: Award },
   { id: 'dispenca-recompensa',label: 'Dispensa Recompensa', icon: Gift },
@@ -275,6 +277,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <AniversariantesModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('aniversariantes')} />
         ) : activeModule === 'plano-chamada' ? (
           <PlanoChamadaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('plano-chamada')} />
+        ) : activeModule === 'agenda' ? (
+          <AgendaModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('agenda')} />
         ) : activeModule === 'fotos' ? (
           <FotosModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('fotos')} />
         ) : activeModule === 'mapa-efetivo' ? (

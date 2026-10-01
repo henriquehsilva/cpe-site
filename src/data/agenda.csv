@@ -1,0 +1,1933 @@
+﻿Tipo de elemento;Assunto;Hora do início;Término;Situação;Local;Prioridade;Categoria;Anexos;Status;Duração;Data de Criação;Data de modificação;Concluído(a);Lembrete;Frequência;Identificadores;Compromissos;Participantes;Notas;
+;Cb Vilela;02/06/2025;02/06/2025;;;;;;;24:00;10/11/2025 08:24;10/11/2025 08:24;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Coelho;06/06/2025;06/06/2025;;;;;;;24:00;10/11/2025 08:24;10/11/2025 08:24;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Urbano;08/06/2025;08/06/2025;;;;;;;24:00;10/11/2025 08:25;10/11/2025 08:25;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Arantes;08/06/2025;08/06/2025;;;;;;;24:00;10/11/2025 08:25;10/11/2025 08:25;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Reis;08/06/2025;08/06/2025;;;;;;;24:00;10/11/2025 08:25;10/11/2025 08:25;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Ramos Junior;09/06/2025;09/06/2025;;;;;;;24:00;10/11/2025 08:27;10/11/2025 08:28;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Wandrer;09/06/2025;09/06/2025;;;;;;;24:00;10/11/2025 08:28;10/11/2025 08:28;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Gleydson;12/06/2025;12/06/2025;;;;;;;24:00;10/11/2025 08:28;10/11/2025 08:29;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Jean;13/06/2025;13/06/2025;;;;;;;24:00;10/11/2025 08:29;10/11/2025 08:29;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Wemerson;19/06/2025;19/06/2025;;;;;;;24:00;10/11/2025 08:30;10/11/2025 08:30;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Ceravolo;19/06/2025;19/06/2025;;;;;;;24:00;10/11/2025 08:30;10/11/2025 08:30;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Filho;21/06/2025;21/06/2025;;;;;;;24:00;10/11/2025 08:31;10/11/2025 08:31;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb T Santos;21/06/2025;21/06/2025;;;;;;;24:00;10/11/2025 08:31;10/11/2025 08:31;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Freire;28/06/2025;28/06/2025;;;;;;;24:00;10/11/2025 08:32;10/11/2025 08:32;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Arantes;28/06/2025;28/06/2025;;;;;;;24:00;10/11/2025 08:32;10/11/2025 08:32;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Ten Azevedo;28/06/2025;28/06/2025;;;;;;;24:00;10/11/2025 08:33;10/11/2025 08:33;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;ST Nivaldo;29/06/2025;29/06/2025;;;;;;;24:00;10/11/2025 08:34;10/11/2025 08:34;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Bruno;29/06/2025;29/06/2025;;;;;;;24:00;10/11/2025 08:34;10/11/2025 08:34;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Pereira;02/07/2025;02/07/2025;;;;;;;24:00;10/11/2025 08:36;10/11/2025 08:38;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Thassio;06/07/2025;06/07/2025;;;;;;;24:00;10/11/2025 08:40;10/11/2025 08:40;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Queiroz;07/07/2025;07/07/2025;;;;;;;24:00;10/11/2025 08:41;10/11/2025 08:42;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Albernaz;08/07/2025;08/07/2025;;;;;;;24:00;10/11/2025 08:42;10/11/2025 08:42;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;ST Evanildo;09/07/2025;09/07/2025;;;;;;;24:00;10/11/2025 08:43;10/11/2025 08:43;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Lucas;10/07/2025;10/07/2025;;;;;;;24:00;10/11/2025 08:43;10/11/2025 08:44;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb J Ferreira;12/07/2025;12/07/2025;;;;;;;24:00;10/11/2025 08:44;10/11/2025 08:44;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt W lima;18/07/2025;18/07/2025;;;;;;;24:00;10/11/2025 08:45;10/11/2025 08:46;;;0;;Compromissos 1;;"Dispensa de Cmd - DOEPM nº 
+Missões COIPM";
+;Sgt De Freitas;19/07/2025;19/07/2025;;;;;;;24:00;10/11/2025 08:46;10/11/2025 08:46;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Jean;23/07/2025;23/07/2025;;;;;;;24:00;10/11/2025 08:47;10/11/2025 08:47;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Aguinaldo;25/07/2025;25/07/2025;;;;;;;24:00;10/11/2025 08:47;10/11/2025 08:47;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Araujo;27/07/2025;27/07/2025;;;;;;;24:00;10/11/2025 08:48;10/11/2025 08:48;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Malheiros;27/07/2025;27/07/2025;;;;;;;24:00;10/11/2025 08:48;10/11/2025 08:48;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Milazzo;30/07/2025;30/07/2025;;;;;;;24:00;10/11/2025 08:49;10/11/2025 08:49;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Gustavo;02/08/2025;02/08/2025;;;;;;;24:00;10/11/2025 08:51;10/11/2025 08:51;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Lucas;03/08/2025;03/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:58;09/09/2025 15:58;;;0;;Compromissos 1;;"Férias - 03/08 a 01/09
+30 dias";
+;Sgt Urbano;03/08/2025;03/08/2025;;;;;;;24:00;10/11/2025 08:51;10/11/2025 08:52;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Ceravolo;06/08/2025;06/08/2025;;;;;;;24:00;10/11/2025 08:52;10/11/2025 08:53;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Sergio;10/08/2025;10/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:51;09/09/2025 15:51;;;0;;Compromissos 1;;"Férias 10/08 a 08/09
+30 dias";
+;Sgt Rocha;11/08/2025;11/08/2025;;;;;;;24:00;10/11/2025 08:55;10/11/2025 08:55;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Mateus;13/08/2025;13/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:59;09/09/2025 16:00;;;0;;Compromissos 1;;"Férias - 13/08 a 11/09
+30 dias";
+;Sgt Thassio;13/08/2025;13/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:00;09/09/2025 16:00;;;0;;Compromissos 1;;"Férias - 13/08 a 11/09
+30 dias";
+;Sgt De Freitas;16/08/2025;16/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:52;09/09/2025 15:52;;;0;;Compromissos 1;;"Férias - 16/08 a 30/08
+15 dias";
+;Sgt Ramos Junior;16/08/2025;16/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:01;09/09/2025 16:01;;;0;;Compromissos 1;;"Férias - 16/08 a 14/09
+30 dias";
+;Cb Filho;16/08/2025;16/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:53;09/09/2025 16:01;;;0;;Compromissos 1;;"Férias - 16/08 a 30/08
+15 dias";
+;Cb Bruno;16/08/2025;16/08/2025;;;;;;;24:00;10/11/2025 08:56;10/11/2025 08:56;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Donario;17/08/2025;17/08/2025;;;;;;;24:00;10/11/2025 08:56;10/11/2025 08:56;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Wandrer;20/08/2025;20/08/2025;;;;;;;24:00;10/11/2025 08:57;10/11/2025 08:57;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Cliff;23/08/2025;23/08/2025;;;;;;;24:00;10/11/2025 08:57;10/11/2025 08:58;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Gleydson;23/08/2025;23/08/2025;;;;;;;24:00;10/11/2025 08:58;10/11/2025 08:58;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;ST Luis Carlos;30/08/2025;30/08/2025;;;;;;;24:00;10/11/2025 08:59;10/11/2025 08:59;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Filho - Retorno;31/08/2025;31/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:01;09/09/2025 16:02;;;0;;Compromissos 1;;"Férias - 16/08 a 30/08
+15 dias";
+;Sgt De Freitas - Retorno;31/08/2025;31/08/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:53;09/09/2025 15:53;;;0;;Compromissos 1;;"Férias - 16/08 a 30/08
+15 dias";
+;Cb Arantes;31/08/2025;31/08/2025;;;;;;;24:00;10/11/2025 09:00;10/11/2025 09:00;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Lucas - Retorno;02/09/2025;02/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:58;09/09/2025 15:59;;;0;;Compromissos 1;;"Férias - 03/08 a 01/09
+30 dias";
+;Desfile 07 de Setembro;07/09/2025;07/09/2025;;;;Ordens de Serviço;;;24:00;09/09/2025 15:03;09/09/2025 15:03;;;0;;Compromissos 1;;"SEI 202500002107926
+
+07h15min";
+;Sgt Victor;09/09/2025;09/09/2025;;;;;;;24:00;09/09/2025 15:05;10/11/2025 09:04;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Ribeiro;09/09/2025;09/09/2025;;;;;;;24:00;09/09/2025 15:47;10/11/2025 09:04;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Sergio - Retorno;11/09/2025;11/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:52;10/09/2025 17:17;;;0;;Compromissos 1;;"Férias 10/08 a 08/09
+30 dias";
+;Operação Território Seguro;11/09/2025;11/09/2025;;;;Ordens de Serviço;;;24:00;11/09/2025 09:14;11/09/2025 09:15;;;0;;Compromissos 1;;"SEI 202500002117360
+O.S. 165
+
+11 a 13/09
+16h às 00h
+02 Equipes para cada BPM";
+;Cb Reis;12/09/2025;12/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 11:36;09/09/2025 15:43;;;0;;Compromissos 1;;"Férias - 12/09 a 11/10
+30 dias";
+;Operação Território Seguro;12/09/2025;12/09/2025;;;;Ordens de Serviço;;;24:00;11/09/2025 09:15;11/09/2025 09:15;;;0;;Compromissos 1;;"SEI 202500002117360
+O.S. 165
+
+11 a 13/09
+16h às 00h
+02 Equipes para cada BPM";
+;Sgt Thassio - Retorno;12/09/2025;12/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:00;09/09/2025 16:00;;;0;;Compromissos 1;;"Férias - 13/08 a 11/09
+30 dias";
+;Canto da Primavera Pirenopolis;12/09/2025;12/09/2025;;;;Ordens de Serviço;;;24:00;09/09/2025 15:00;09/09/2025 15:02;;;0;;Compromissos 1;;"SEI 202500002099170
+O.S. 163
+
+12 a 14/09
+20h às 04h
+01 Equipe";
+;Canto da Primavera Pirenopolis REM 37º;13/09/2025;13/09/2025;;;;Ordens de Serviço;;;24:00;09/09/2025 15:02;17/09/2025 14:36;;;0;;Compromissos 1;;"SEI 202500002099170
+O.S. 163
+
+12 a 14/09
+20h às 04h
+01 Equipe";
+;Operação Território Seguro;13/09/2025;13/09/2025;;;;Ordens de Serviço;;;24:00;11/09/2025 09:15;11/09/2025 09:15;;;0;;Compromissos 1;;"SEI 202500002117360
+O.S. 165
+
+11 a 13/09
+16h às 00h
+02 Equipes para cada BPM";
+;Canto da Primavera Pirenopolis REM 37º;14/09/2025;14/09/2025;;;;Ordens de Serviço;;;24:00;09/09/2025 15:02;17/09/2025 14:36;;;0;;Compromissos 1;;"SEI 202500002099170
+O.S. 163
+
+12 a 14/09
+20h às 04h
+01 Equipe";
+;Cb J Ferreira;14/09/2025;14/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:05;09/09/2025 15:06;;;0;;Compromissos 1;;"Férias - 14/09 a 13/10
+30 dias";
+;Cb Mateus - Retorno;14/09/2025;14/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:00;10/09/2025 10:42;;;0;;Compromissos 1;;"Férias - 13/08 a 11/09
+30 dias";
+;Cb Evandro;15/09/2025;15/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:41;09/09/2025 15:42;;;0;;Compromissos 1;;"Férias - 15/09 a 14/10
+30 dias";
+;Cb Douglas;15/09/2025;15/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:44;09/09/2025 15:45;;;0;;Compromissos 1;;"Férias - 15/09 a 14/10
+30 dias";
+;Sgt Barreto SER;16/09/2025;16/09/2025;;;;Alterações Escala;;;24:00;12/09/2025 09:46;12/09/2025 09:46;;;0;;Compromissos 1;;;
+;Cb Jean;17/09/2025;17/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:39;09/09/2025 15:40;;;0;;Compromissos 1;;"Férias - 17/09 a 01/10
+15 dias";
+;Sgt Ramos Junior - Retorno;17/09/2025;17/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:55;11/09/2025 11:52;;;0;;Compromissos 1;;"Férias - 16/08 a 14/09
+30 dias";
+;Operação Força Total 19ª Ed;18/09/2025;18/09/2025;;;;Ordens de Serviço;;;24:00;11/09/2025 11:13;11/09/2025 11:15;;;0;;Compromissos 1;;"SEI 202500002113551
+O.S. 166
+
+18 e 19/09
+24h
+Todas as Equipes
+Preencher Planilha Produtividade";
+;Equipe Sgt Urbano Instrução;18/09/2025;18/09/2025;;;;Alterações Escala;;;24:00;12/09/2025 11:56;12/09/2025 11:56;;;0;;Compromissos 1;;"Urbano
+Freire
+Milazzo
+Arantes";
+;Operação Força Total 19ª Ed;19/09/2025;19/09/2025;;;;Ordens de Serviço;;;24:00;11/09/2025 11:15;11/09/2025 11:15;;;0;;Compromissos 1;;"SEI 202500002113551
+O.S. 166
+
+18 e 19/09
+24h
+Todas as Equipes
+Preencher Planilha Produtividade";
+;Equipe Sgt URBANO;19/09/2025;19/09/2025;;;;Alterações Escala;;;24:00;12/09/2025 11:46;16/09/2025 11:04;;;0;;Compromissos 1;;"Entrega de armas em Gyn
+
+URBANO
+ARANTES 
+MILAZZO 
+VILELA";
+;Sgt Freire;20/09/2025;20/09/2025;;;;;;;24:00;09/09/2025 15:06;10/11/2025 09:11;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Circuito Cavalhadas Silvânia REM 47ª;20/09/2025;20/09/2025;;;;Ordens de Serviço;;;24:00;15/09/2025 15:14;18/09/2025 07:49;;;0;;Compromissos 1;;"SEI 202500002112814
+O. S. 167
+
+20 e 21/09
+13h às 01h
+01 Equipe
+
+Sgt Gleydson
+Cb Albernaz
+Sgt Barbosa
+Cb Queiróz";
+;Circuito Cavalhadas Silvânia REM 47ª;21/09/2025;21/09/2025;;;;Ordens de Serviço;;;24:00;17/09/2025 14:36;18/09/2025 07:49;;;0;;Compromissos 1;;"SEI 202500002112814
+O. S. 167
+
+20 e 21/09
+13h às 01h
+01 Equipe
+
+Sgt Thássio
+Cb Glauber
+Cb Albernaz
+Cb Neves";
+;ST Wilker - Retorno;26/09/2025;26/09/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:02;18/09/2025 09:09;;;0;;Compromissos 1;;LESP - 24/06 a 22/09;
+;Sgt J Junior;27/09/2025;27/09/2025;;;;;;;24:00;11/09/2025 10:17;10/11/2025 09:12;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Dos Santos;27/09/2025;27/09/2025;;;;;;;24:00;24/09/2025 16:12;10/11/2025 09:12;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Aula Bootcamp Unievangélica;29/09/2025;29/09/2025;;;;Ordens de Serviço;;;24:00;10/09/2025 15:13;26/09/2025 11:35;;;0;;Compromissos 1;;"SEI 202500002117282
+O.S. 169
+
+20h
+Sgt Ramos Junior (Ord)
+Cb Bruno (Ord)
+
+Sgt Peixoto
+Sgt Diogo
+Cb Danilo
+Cb Otto
+
+
+S.E.R. Das 12h às 00h";
+;Cb Araujo;29/09/2025;29/09/2025;;;;;;;24:00;23/09/2025 09:36;10/11/2025 09:12;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Malheiros;29/09/2025;29/09/2025;;;;;;;24:00;10/11/2025 09:12;10/11/2025 09:13;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;ST Wilker;30/09/2025;30/09/2025;;;;Dispensa;;;24:00;10/09/2025 15:15;10/09/2025 15:15;;;0;;Compromissos 1;;"Dispensa CMD Geral - 30/09 a 14/10
+DOEPM ";
+;Cb Vilela;30/09/2025;30/09/2025;;;;Alterações Escala;;;24:00;19/09/2025 09:01;25/09/2025 14:46;;;0;;Compromissos 1;;EAC;
+;Sgt Barbosa - Retorno;01/10/2025;01/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:04;09/09/2025 16:04;;;0;;Compromissos 1;;LESP - 01/07 a 30/09;
+;Sgt Valadao - Retorno;01/10/2025;01/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 16:03;09/09/2025 16:04;;;0;;Compromissos 1;;LESP - 01/07 a 30/09;
+;Sgt J Junior;01/10/2025;01/10/2025;;;;;;;24:00;11/09/2025 10:17;10/11/2025 09:16;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Desfile Ouro Verde;01/10/2025;01/10/2025;;;;Ordens de Serviço;;;24:00;15/09/2025 09:41;18/09/2025 10:00;;;0;;Compromissos 1;;"SEI 202500002117804
+O.S. 168
+
+08h
+01 Equipe";
+;Operação Virtude;01/10/2025;01/10/2025;;;;Ordens de Serviço;;;24:00;30/09/2025 08:02;30/09/2025 08:04;;;0;;Compromissos 1;;"SEI 202500016033663
+O.S. 170
+
+01 a 31/10
+Todas as equipes
+
+Relatórios nas parciais:
+1ª Parcial – 09/10/25 até as 12h00;
+2ª Parcial – 16/10/25 até as 12h00;
+3ª Parcial – 23/10/25 até as 12h00;
+4ª Parcial – 30/10/25 até as 12h00;
+5ª Consolidação dos dados  –  31/10/25 até as 12h00";
+;Cb Wellis;02/10/2025;02/10/2025;;;;Férias / LESP;;;24:00;17/09/2025 09:42;02/10/2025 16:54;;;0;;Compromissos 1;;"Férias - 02 a 16/10
+15 dias";
+;Operação Impacto;02/10/2025;02/10/2025;;;;Ordens de Serviço;;;24:00;02/10/2025 16:00;02/10/2025 16:01;;;0;;Compromissos 1;;"SEI 202500002125608
+O.S. 171
+
+02 a 04/10
+16h às 00h
+02 equipes 04º e 02 equipes 28º";
+;Operação Impacto;03/10/2025;03/10/2025;;;;Ordens de Serviço;;;24:00;02/10/2025 16:01;02/10/2025 16:01;;;0;;Compromissos 1;;"SEI 202500002125608
+O.S. 171
+
+02 a 04/10
+16h às 00h
+02 equipes 04º e 02 equipes 28º";
+;Sgt De Freitas;03/10/2025;03/10/2025;;;;;;;24:00;16/09/2025 12:17;10/11/2025 09:17;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Operação Impacto;04/10/2025;04/10/2025;;;;Ordens de Serviço;;;24:00;02/10/2025 16:01;02/10/2025 16:01;;;0;;Compromissos 1;;"SEI 202500002125608
+O.S. 171
+
+02 a 04/10
+16h às 00h
+02 equipes 04º e 02 equipes 28º";
+;Sgt Peixoto;04/10/2025;04/10/2025;;;;;;;24:00;01/10/2025 16:14;10/11/2025 09:18;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Diogo;04/10/2025;04/10/2025;;;;;;;24:00;02/10/2025 15:33;10/11/2025 09:18;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Operação Virtude - Parcial;09/10/2025;09/10/2025;;;;Ordens de Serviço;;;24:00;30/09/2025 08:04;30/09/2025 08:04;;;0;;Compromissos 1;;"SEI 202500016033663
+O.S. 170
+
+01 a 31/10
+Todas as equipes
+
+Relatórios nas parciais:
+1ª Parcial – 09/10/25 até as 12h00;
+2ª Parcial – 16/10/25 até as 12h00;
+3ª Parcial – 23/10/25 até as 12h00;
+4ª Parcial – 30/10/25 até as 12h00;
+5ª Consolidação dos dados  –  31/10/25 até as 12h00";
+;Sgt Urbano;10/10/2025;10/10/2025;;;;Alterações Escala;;;24:00;08/10/2025 15:02;08/10/2025 15:02;;;0;;Compromissos 1;;Atestado;
+;Dia das Crianças E.M. Prof Nadyr;10/10/2025;10/10/2025;;;;Ordens de Serviço;;;24:00;09/10/2025 11:13;09/10/2025 11:14;;;0;;Compromissos 1;;"SEI 202500002131963
+O.S. 172
+
+02 turnos
+01 Equipe";
+;Sgt Rocha;10/10/2025;10/10/2025;;;;;;;24:00;10/11/2025 09:21;10/11/2025 09:21;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Ramos Junior;11/10/2025;11/10/2025;;;;;;;24:00;29/09/2025 16:22;10/11/2025 09:22;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Moreira;11/10/2025;11/10/2025;;;;;;;24:00;08/10/2025 10:57;10/11/2025 09:22;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Dia das Crianças e Anápolis+Mulher;11/10/2025;11/10/2025;;;;Importante;;;24:00;09/10/2025 10:46;09/10/2025 11:14;;;0;;Compromissos 1;;"SEI 202500002131932
+";
+;Cb Araujo;11/10/2025;11/10/2025;;;;Dispensa;;;24:00;10/10/2025 08:23;10/11/2025 09:22;;;0;;Compromissos 1;;Dispensa Paternidade - 29/09 a 10/0;
+;O.S. Dia das Crianças;12/10/2025;12/10/2025;;;;Ordens de Serviço;;;24:00;08/09/2025 17:22;17/09/2025 14:52;;;0;;Compromissos 1;;"SEI 202500002117782
+O.S. 164
+
+09h
+01 Equipe";
+;Cb Otto;12/10/2025;12/10/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:45;02/10/2025 16:50;;;0;;Compromissos 1;;"Férias - 12/10 a 18/10
+07 dias";
+;Sgt Dos Santos;13/10/2025;13/10/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:40;02/10/2025 16:43;;;0;;Compromissos 1;;"Férias - 13/10 a 11/11
+30 dias";
+;Ten Danisclay;13/10/2025;13/10/2025;;;;;;;24:00;07/10/2025 09:20;10/11/2025 09:24;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Sergio;13/10/2025;13/10/2025;;;;Alterações Escala;;;24:00;08/10/2025 15:01;08/10/2025 15:02;;;0;;Compromissos 1;;Atestado;
+;Cb Reis - Retorno;14/10/2025;14/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:44;10/10/2025 15:02;;;0;;Compromissos 1;;"Férias - 12/09 a 11/10
+30 dias";
+;CB Wandrer;15/10/2025;15/10/2025;;;;;;;24:00;17/09/2025 14:37;10/11/2025 09:28;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Abadiânia Segura;15/10/2025;15/10/2025;;;;Ordens de Serviço;;;24:00;17/10/2025 15:34;17/10/2025 15:35;;;0;;Compromissos 1;;"SEI 202500002134238
+O.S. 176
+
+14h às 18h
+02 Equipes";
+;Cb J Ferreira - Retorno;16/10/2025;16/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:41;17/10/2025 08:07;;;0;;Compromissos 1;;"Férias - 14/09 a 13/10
+30 dias";
+;Operação Força Total 20ª Ed;16/10/2025;16/10/2025;;;;Ordens de Serviço;;;24:00;09/10/2025 15:12;09/10/2025 15:13;;;0;;Compromissos 1;;"SEI 202500002126317
+O.S. 173
+
+16 e 17/10
+24h
+Todas as Equipes
+Preencher Planilha Produtividade";
+;Operação Virtude - Parcial;16/10/2025;16/10/2025;;;;Ordens de Serviço;;;24:00;30/09/2025 08:04;30/09/2025 08:04;;;0;;Compromissos 1;;"SEI 202500016033663
+O.S. 170
+
+01 a 31/10
+Todas as equipes
+
+Relatórios nas parciais:
+1ª Parcial – 09/10/25 até as 12h00;
+2ª Parcial – 16/10/25 até as 12h00;
+3ª Parcial – 23/10/25 até as 12h00;
+4ª Parcial – 30/10/25 até as 12h00;
+5ª Consolidação dos dados  –  31/10/25 até as 12h00";
+;ST Wilker;16/10/2025;16/10/2025;;;;Dispensa;;;24:00;10/09/2025 15:16;10/09/2025 15:16;;;0;;Compromissos 1;;"Dispensa CRPM - 16 a 18/10
+DOEPM ";
+;Cb Douglas - Retorno;17/10/2025;17/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:46;17/10/2025 08:06;;;0;;Compromissos 1;;"Férias - 15/09 a 14/10
+30 dias";
+;Cb Evandro - Retorno;17/10/2025;17/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:42;17/10/2025 08:06;;;0;;Compromissos 1;;"Férias - 15/09 a 14/10
+30 dias";
+;Cb Jean - Retorno;17/10/2025;17/10/2025;;;;Férias / LESP;;;24:00;09/09/2025 15:41;30/09/2025 15:20;;;0;;Compromissos 1;;"Férias - 17/09 a 01/10
+15 dias";
+;Operação Força Total 20ª Ed;17/10/2025;17/10/2025;;;;Ordens de Serviço;;;24:00;09/10/2025 15:13;09/10/2025 15:13;;;0;;Compromissos 1;;"SEI 202500002126317
+O.S. 173
+
+16 e 17/10
+24h
+Todas as Equipes
+Preencher Planilha Produtividade";
+;Cb Gouveia;17/10/2025;17/10/2025;;;;;;;24:00;17/10/2025 08:17;10/11/2025 09:29;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Escolta para Prefeitura;17/10/2025;17/10/2025;;;;Ordens de Serviço;;;24:00;17/10/2025 15:35;17/10/2025 15:36;;;0;;Compromissos 1;;"SEI 202500002134109
+O.S. 177
+
+17h
+01 Equipe";
+;Cb Wellis - Retorno;18/10/2025;18/10/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:54;17/10/2025 08:06;;;0;;Compromissos 1;;"Férias - 02 a 16/10
+15 dias";
+;ST Thales;18/10/2025;18/10/2025;;;;;;;24:00;09/09/2025 15:08;10/11/2025 09:29;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Wellis;18/10/2025;18/10/2025;;;;;;;24:00;17/10/2025 08:12;10/11/2025 09:29;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Aniversario Abadiania REM 37º;18/10/2025;18/10/2025;;;;Ordens de Serviço;;;24:00;17/10/2025 15:32;17/10/2025 15:34;;;0;;Compromissos 1;;"SEI 202500002122073
+O.S. 178 e Escala
+
+18 e 19/10/2025
+20h às 06h
+01 Equipe
+Remunerada 37º BPM";
+;Marcha para Jesus 2025;18/10/2025;18/10/2025;;;;Ordens de Serviço;;;24:00;17/10/2025 15:36;17/10/2025 15:37;;;0;;Compromissos 1;;"SEI 202500002133321
+O.S. 175
+
+16h
+01 Equipe";
+;Aniversario Abadiania REM 37º;19/10/2025;19/10/2025;;;;Ordens de Serviço;;;24:00;17/10/2025 15:34;17/10/2025 15:34;;;0;;Compromissos 1;;"SEI 202500002122073
+O.S. 178 e Escala
+
+18 e 19/10/2025
+20h às 06h
+01 Equipe
+Remunerada 37º BPM";
+;Cb Bruno;19/10/2025;19/10/2025;;;;;;;24:00;25/09/2025 09:54;10/11/2025 09:30;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Cb Wandrer;19/10/2025;19/10/2025;;;;Férias / LESP;;;24:00;17/09/2025 14:37;02/10/2025 16:58;;;0;;Compromissos 1;;"Ferias - 19/10 a 02/11
+15 dias";
+;Cb Queiroz;19/10/2025;19/10/2025;;;;;;;24:00;17/10/2025 08:18;10/11/2025 09:30;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Sgt Ramos Junior;19/10/2025;19/10/2025;;;;Alterações Escala;;;24:00;17/10/2025 08:18;17/10/2025 08:18;;;0;;Compromissos 1;;;
+;Cb Otto - Retorno;20/10/2025;20/10/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:50;17/10/2025 08:09;;;0;;Compromissos 1;;"Férias - 12/10 a 18/10
+07 dias";
+;Cb Otto;20/10/2025;20/10/2025;;;;;;;24:00;17/10/2025 15:21;10/11/2025 09:31;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Operação Virtude - Parcial;23/10/2025;23/10/2025;;;;Ordens de Serviço;;;24:00;30/09/2025 08:04;30/09/2025 08:04;;;0;;Compromissos 1;;"SEI 202500016033663
+O.S. 170
+
+01 a 31/10
+Todas as equipes
+
+Relatórios nas parciais:
+1ª Parcial – 09/10/25 até as 12h00;
+2ª Parcial – 16/10/25 até as 12h00;
+3ª Parcial – 23/10/25 até as 12h00;
+4ª Parcial – 30/10/25 até as 12h00;
+5ª Consolidação dos dados  –  31/10/25 até as 12h00";
+;Cb Glauber;23/10/2025;23/10/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:51;02/10/2025 16:52;;;0;;Compromissos 1;;"Férias - 23/10 a 06/11
+15 dias";
+;Reunião Vestibular de Medicina;23/10/2025;23/10/2025;;;;Ordens de Serviço;;;24:00;22/10/2025 10:36;22/10/2025 10:37;;;0;;Compromissos 1;;"SEI 202500002137125
+
+15h
+Sala B1 501";
+;Sgt Frederico;24/10/2025;24/10/2025;;;;Férias / LESP;;;24:00;03/10/2025 16:36;03/10/2025 16:38;;;0;;Compromissos 1;;"Férias - 24/10 a 02/11
+10 dias";
+;Sgt Valadão;24/10/2025;24/10/2025;;;;;;;24:00;21/10/2025 08:10;10/11/2025 09:35;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;ST Couto;25/10/2025;25/10/2025;;;;Férias / LESP;;;24:00;03/10/2025 16:29;03/10/2025 16:30;;;0;;Compromissos 1;;"Férias - 25/10 a 23/11
+30 dias";
+;Sgt Elias;25/10/2025;25/10/2025;;;;;;;24:00;17/10/2025 10:07;10/11/2025 09:36;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Torneio Futebol Pirenopolis;25/10/2025;25/10/2025;;;;Ordens de Serviço;;;24:00;22/10/2025 10:38;22/10/2025 16:57;;;0;;Compromissos 1;;"SEI 202500002137141
+O.S. 180
+
+25 e 26/10
+16h às 22h
+01 Equipe";
+;Torneio Futebol Pirenopolis;26/10/2025;26/10/2025;;;;Ordens de Serviço;;;24:00;22/10/2025 16:57;22/10/2025 16:57;;;0;;Compromissos 1;;"SEI 202500002137141
+O.S. 180
+
+25 e 26/10
+16h às 22h
+01 Equipe";
+;Vestibular de Medicina Unievangelica;26/10/2025;26/10/2025;;;;Ordens de Serviço;;;24:00;22/10/2025 10:37;22/10/2025 10:38;;;0;;Compromissos 1;;"SEI 202500002137125
+O.S. 
+
+12h às 19h
+01 Equipe";
+;Sgt Thassio;26/10/2025;26/10/2025;;;;;;;24:00;22/10/2025 14:27;10/11/2025 09:36;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Desobstrução Córrego em Neropolis;29/10/2025;29/10/2025;;;;Ordens de Serviço;;;24:00;12/11/2025 09:07;12/11/2025 09:11;;;0;;Compromissos 1;;"SEI 202500002138251
+O.S. 182 
+
+29 a 31/10
+08h às 18h
+01 Equipe";
+;Cb Arantes;30/10/2025;30/10/2025;;;;;;;24:00;29/09/2025 16:23;10/11/2025 09:37;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;Desobstrução Córrego em Neropolis;30/10/2025;30/10/2025;;;;Ordens de Serviço;;;24:00;12/11/2025 09:09;12/11/2025 09:11;;;0;;Compromissos 1;;"SEI 202500002138251
+O.S. 182 
+
+29 a 31/10
+08h às 18h
+01 Equipe";
+;Operação Virtude - Parcial;30/10/2025;30/10/2025;;;;Ordens de Serviço;;;24:00;30/09/2025 08:04;30/09/2025 08:04;;;0;;Compromissos 1;;"SEI 202500016033663
+O.S. 170
+
+01 a 31/10
+Todas as equipes
+
+Relatórios nas parciais:
+1ª Parcial – 09/10/25 até as 12h00;
+2ª Parcial – 16/10/25 até as 12h00;
+3ª Parcial – 23/10/25 até as 12h00;
+4ª Parcial – 30/10/25 até as 12h00;
+5ª Consolidação dos dados  –  31/10/25 até as 12h00";
+;Desobstrução Córrego em Neropolis;31/10/2025;31/10/2025;;;;Ordens de Serviço;;;24:00;12/11/2025 09:09;12/11/2025 09:11;;;0;;Compromissos 1;;"SEI 202500002138251
+O.S. 182 
+
+29 a 31/10
+08h às 18h
+01 Equipe";
+;Operação Virtude - Parcial;31/10/2025;31/10/2025;;;;Ordens de Serviço;;;24:00;30/09/2025 08:04;30/09/2025 08:04;;;0;;Compromissos 1;;"SEI 202500016033663
+O.S. 170
+
+01 a 31/10
+Todas as equipes
+
+Relatórios nas parciais:
+1ª Parcial – 09/10/25 até as 12h00;
+2ª Parcial – 16/10/25 até as 12h00;
+3ª Parcial – 23/10/25 até as 12h00;
+4ª Parcial – 30/10/25 até as 12h00;
+5ª Consolidação dos dados  –  31/10/25 até as 12h00";
+;Cb T Santos;31/10/2025;31/10/2025;;;;;;;24:00;20/10/2025 16:19;10/11/2025 09:38;;;0;;Compromissos 1;;Dispensa de Cmd - DOEPM nº ;
+;ST Gleydson;31/10/2025;31/10/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:38;06/11/2025 10:39;;;0;;Compromissos 1;;"Férias - 31/10 a 29/11
+30 dias";
+;Cb Danilo;01/11/2025;01/11/2025;;;;;;;24:00;22/09/2025 15:40;22/09/2025 15:40;;;0;;Compromissos 1;;Dispensa CRPM;
+;Cb Arantes;03/11/2025;03/11/2025;;;;Férias / LESP;;;24:00;29/09/2025 16:24;06/11/2025 10:57;;;0;;Compromissos 1;;"Férias - 03/11 a 17/11
+15 dias";
+;Cb Wandrer - Retorno;04/11/2025;04/11/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:58;30/10/2025 17:31;;;0;;Compromissos 1;;"Ferias - 19/10 a 02/11
+15 dias";
+;Sd Benjamim;04/11/2025;04/11/2025;;;;Férias / LESP;;;24:00;06/10/2025 09:21;06/11/2025 11:00;;;0;;Compromissos 1;;"Férias - 04/11 a 03/12
+30 dias";
+;Sgt Frederico - Retorno;05/11/2025;05/11/2025;;;;Férias / LESP;;;24:00;03/10/2025 16:38;30/10/2025 17:31;;;0;;Compromissos 1;;"Férias - 24/10 a 02/11
+10 dias";
+;Fórum Policiamento Especializado;07/11/2025;07/11/2025;;;;Ordens de Serviço;;;24:00;12/11/2025 09:09;12/11/2025 09:10;;;0;;Compromissos 1;;"SEI 202500002141943
+O.S. 185
+
+08h
+Auditório do Tribunal de Contas do Estado
+01 Equipe";
+;Cb Glauber - Retorno;08/11/2025;08/11/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:52;06/11/2025 09:24;;;0;;Compromissos 1;;"Férias - 23/10 a 06/11
+15 dias";
+;Cb Wandrer;08/11/2025;08/11/2025;;;;;;;24:00;20/01/2026 17:09;20/01/2026 17:09;;;0;;Compromissos 1;;;
+;Sgt George;09/11/2025;09/11/2025;;;;;;;24:00;05/11/2025 10:08;05/11/2025 10:08;;;0;;Compromissos 1;;;
+;Cb Donario;09/11/2025;09/11/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:46;06/11/2025 10:47;;;0;;Compromissos 1;;"Férias - 09/11 a 08/12
+30 dias";
+;ST Thales;11/11/2025;11/11/2025;;;;;;;24:00;10/11/2025 16:32;10/11/2025 16:32;;;0;;Compromissos 1;;;
+;Apoio 4º BPM;12/11/2025;12/11/2025;;;;Ordens de Serviço;;;24:00;12/11/2025 09:12;12/11/2025 09:14;;;0;;Compromissos 1;;"SEI 202500002145404 
+O.S. 187
+
+06h às 11h
+01 Equipe";
+;Cb Vilela;13/11/2025;13/11/2025;;;;;;;24:00;07/11/2025 11:16;07/11/2025 11:16;;;0;;Compromissos 1;;;
+;Sgt Aguinaldo;14/11/2025;14/11/2025;;;;;;;24:00;30/10/2025 11:52;30/10/2025 11:52;;;0;;Compromissos 1;;;
+;Sgt Dos Santos - Retorno;14/11/2025;14/11/2025;;;;Férias / LESP;;;24:00;02/10/2025 16:43;10/11/2025 10:22;;;0;;Compromissos 1;;"Férias - 13/10 a 11/11
+30 dias";
+;Sgt Ceravolo;14/11/2025;14/11/2025;;;;;;;24:00;11/11/2025 10:23;11/11/2025 10:23;;;0;;Compromissos 1;;;
+;Sgt Felipe;15/11/2025;15/11/2025;;;;Férias / LESP;;;24:00;28/10/2025 07:20;06/11/2025 10:42;;;0;;Compromissos 1;;"Férias - 15/11 a 14/12
+30 dias";
+;Cb T Santos;16/11/2025;16/11/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:48;06/11/2025 10:52;;;0;;Compromissos 1;;"Férias - 16/11 a 30/11
+15 dias";
+;Cb Coelho;17/11/2025;17/11/2025;;;;;;;24:00;14/11/2025 09:56;14/11/2025 09:56;;;0;;Compromissos 1;;Dispensa;
+;Sgt Aguinaldo;18/11/2025;18/11/2025;;;;;;;24:00;30/10/2025 11:52;30/10/2025 11:52;;;0;;Compromissos 1;;;
+;Sgt Brandao;18/11/2025;18/11/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:43;06/11/2025 10:43;;;0;;Compromissos 1;;"Férias - 18/11 a 17/12
+30 dias";
+;Cb Arantes - Retorno;19/11/2025;19/11/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:57;17/11/2025 10:29;;;0;;Compromissos 1;;"Férias - 03/11 a 17/11
+15 dias";
+;Sgt Urbano;19/11/2025;19/11/2025;;;;;;;24:00;02/10/2025 17:01;02/10/2025 17:01;;;0;;Compromissos 1;;Dispensa;
+;Cb Evandro;22/11/2025;22/11/2025;;;;;;;24:00;03/11/2025 10:14;03/11/2025 10:14;;;0;;Compromissos 1;;Dispensa;
+;Sgt Urbano;23/11/2025;23/11/2025;;;;;;;24:00;02/10/2025 17:01;02/10/2025 17:01;;;0;;Compromissos 1;;Dispensa;
+;Cb Wellis ATESTADO;23/11/2025;23/11/2025;;;;Importante;;;24:00;06/11/2025 10:47;19/11/2025 09:54;;;0;;Compromissos 1;;"Férias - 23/11 a 07/12
+15 dias";
+;Sd Vinícius;23/11/2025;23/11/2025;;;;;;;24:00;18/11/2025 11:04;18/11/2025 11:04;;;0;;Compromissos 1;;Aniversario;
+;Sgt Albernaz;25/11/2025;25/11/2025;;;;;;;24:00;24/11/2025 11:39;24/11/2025 11:39;;;0;;Compromissos 1;;;
+;ST Couto - Retorno;26/11/2025;26/11/2025;;;;Férias / LESP;;;24:00;03/10/2025 16:30;19/11/2025 11:26;;;0;;Compromissos 1;;"Férias - 25/10 a 23/11
+30 dias";
+;ST Couto;26/11/2025;26/11/2025;;;;;;;24:00;25/11/2025 09:19;25/11/2025 09:20;;;0;;Compromissos 1;;Dispensa;
+;Sgt Urbano;27/11/2025;27/11/2025;;;;;;;24:00;02/10/2025 17:01;02/10/2025 17:01;;;0;;Compromissos 1;;Dispensa;
+;Cb Arantes;27/11/2025;27/11/2025;;;;;;;24:00;18/11/2025 08:54;18/11/2025 08:55;;;0;;Compromissos 1;;;
+;ST Roni;27/11/2025;27/11/2025;;;;;;;24:00;25/11/2025 09:19;25/11/2025 09:19;;;0;;Compromissos 1;;;
+;ST Emilio;27/11/2025;27/11/2025;;;;;;;24:00;25/11/2025 17:11;25/11/2025 17:12;;;0;;Compromissos 1;;;
+;Operação Força Total 21ª Ed;27/11/2025;27/11/2025;;;;Ordens de Serviço;;;24:00;28/11/2025 11:18;28/11/2025 11:19;;;0;;Compromissos 1;;"SEI 202500002139090
+O.S. 188
+
+27 e 28/11
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 01/12";
+;Operação Força Total 21ª Ed;28/11/2025;28/11/2025;;;;Ordens de Serviço;;;24:00;28/11/2025 11:20;28/11/2025 11:20;;;0;;Compromissos 1;;"SEI 202500002139090
+O.S. 188
+
+27 e 28/11
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 01/12";
+;Cb Glauber;28/11/2025;28/11/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:44;06/11/2025 10:45;;;0;;Compromissos 1;;"Férias - 28/11 a 12/12
+15 dias
+";
+;Palestra E.M. Goialândia;28/11/2025;28/11/2025;;;;Ordens de Serviço;;;24:00;28/11/2025 11:20;28/11/2025 11:21;;;0;;Compromissos 1;;"SEI 202500002151992
+O.S. 189
+
+Turno Matutino
+01 Equipe
+Sgt Cliff vai atender";
+;Cb Otto;29/11/2025;29/11/2025;;;;;;;24:00;05/11/2025 10:08;05/11/2025 10:08;;;0;;Compromissos 1;;;
+;Cb Jonatas;29/11/2025;29/11/2025;;;;;;;24:00;24/11/2025 11:03;24/11/2025 11:03;;;0;;Compromissos 1;;;
+;Prova CHOA;30/11/2025;30/11/2025;;;;Alterações Escala;;;24:00;02/10/2025 17:01;02/10/2025 17:01;;;0;;Compromissos 1;;;
+;Sgt Carvalho;30/11/2025;30/11/2025;;;;;;;24:00;14/11/2025 09:40;28/11/2025 10:24;;;0;;Compromissos 1;;;
+;ST Luis Carlos;30/11/2025;30/11/2025;;;;;;;24:00;14/11/2025 09:46;25/11/2025 17:49;;;0;;Compromissos 1;;;
+;Sgt Aguinaldo;30/11/2025;30/11/2025;;;;;;;24:00;14/11/2025 09:46;25/11/2025 17:49;;;0;;Compromissos 1;;;
+;ST Couto;30/11/2025;30/11/2025;;;;;;;24:00;25/11/2025 17:49;25/11/2025 17:49;;;0;;Compromissos 1;;;
+;Sgt Dos Santos;30/11/2025;30/11/2025;;;;;;;24:00;28/11/2025 10:24;28/11/2025 10:24;;;0;;Compromissos 1;;;
+;Operação Força Total RELATORIO;01/12/2025;01/12/2025;;;;Ordens de Serviço;;;24:00;28/11/2025 11:20;28/11/2025 11:20;;;0;;Compromissos 1;;"SEI 202500002139090
+O.S. 188
+
+27 e 28/11
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 01/12";
+;Cb T Santos - Retorno;02/12/2025;02/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:52;28/11/2025 10:53;;;0;;Compromissos 1;;"Férias - 16/11 a 30/11
+15 dias";
+;ST Gleydson - Retorno;02/12/2025;02/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:40;25/11/2025 17:49;;;0;;Compromissos 1;;"Férias - 31/10 a 29/11
+30 dias";
+;Corridão CEPMG;03/12/2025;03/12/2025;;;;Ordens de Serviço;;;24:00;11/11/2025 09:16;12/11/2025 09:12;;;0;;Compromissos 1;;"SEI 202500002140871
+O.S. 186
+
+07h
+Saída no Colégio Couto e chegada no CEPMG
+Voluntários";
+;Sgt Tabata;03/12/2025;03/12/2025;;;;;;;24:00;02/12/2025 14:57;02/12/2025 14:57;;;0;;Compromissos 1;;;
+;Reforço 4º BPM Confraternização;04/12/2025;04/12/2025;;;;Ordens de Serviço;;;24:00;02/12/2025 10:46;02/12/2025 10:48;;;0;;Compromissos 1;;"SEI 202500002151624
+O.S. 191
+
+24h";
+;Sgt Milazzo;05/12/2025;05/12/2025;;;;;;;24:00;14/11/2025 10:51;14/11/2025 10:51;;;0;;Compromissos 1;;;
+;Sd Benjamim - Retorno;06/12/2025;06/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 11:00;02/12/2025 08:40;;;0;;Compromissos 1;;"Férias - 04/11 a 03/12
+30 dias";
+;Sgt De Freitas;06/12/2025;06/12/2025;;;;Férias / LESP;;;24:00;02/12/2025 16:40;02/12/2025 16:40;;;0;;Compromissos 1;;"Férias - 06/12 a 04/01
+30 dias";
+;ST Wilker;07/12/2025;07/12/2025;;;;;;;24:00;24/11/2025 09:49;24/11/2025 09:49;;;0;;Compromissos 1;;Dispensa;
+;Sgt Freire;07/12/2025;07/12/2025;;;;Alterações Escala;;;24:00;25/11/2025 11:44;25/11/2025 11:45;;;0;;Compromissos 1;;Cobrir dispensa ST Wilker;
+;Sgt George;07/12/2025;07/12/2025;;;;Férias / LESP;;;24:00;02/12/2025 16:39;02/12/2025 16:39;;;0;;Compromissos 1;;"Férias - 07/12 a 05/01
+30 dias";
+;Sgt Diogo;07/12/2025;07/12/2025;;;;;;;24:00;03/12/2025 09:40;03/12/2025 09:41;;;0;;Compromissos 1;;Dispensa;
+;Sgt Aguinaldo;08/12/2025;08/12/2025;;;;Férias / LESP;;;24:00;02/12/2025 16:35;02/12/2025 16:36;;;0;;Compromissos 1;;"Férias - 08/12 a 06/01
+30 dias";
+;Sgt W Lima;08/12/2025;08/12/2025;;;;;;;24:00;20/01/2026 17:49;20/01/2026 17:49;;;0;;Compromissos 1;;;
+;Reunião Campeonato Goiano;09/12/2025;09/12/2025;;;;Pessoal;;;24:00;08/12/2025 10:44;08/12/2025 10:46;;;0;;Compromissos 1;;"SEI 202500002152916
+
+09h
+BEPE
+";
+;Cb Reis;09/12/2025;09/12/2025;;;;;;;24:00;08/12/2025 11:56;08/12/2025 11:56;;;0;;Compromissos 1;;;
+;Escala CRPM;10/12/2025;10/12/2025;;;;Ordens de Serviço;;;24:00;04/12/2025 17:01;09/12/2025 11:18;;;0;;Compromissos 1;;"Dias 10 e 14/12
+
+Dia 10 S.E.R Sgt Albernaz
+Dia 14 S.E.R. Sgt Edson";
+;Reforço 28º BPM Confraternização;10/12/2025;10/12/2025;;;;Ordens de Serviço;;;24:00;08/12/2025 12:46;08/12/2025 12:47;;;0;;Compromissos 1;;"SEI 202500002156458
+O.S. 192
+
+24h";
+;Cb Donario - Retorno;11/12/2025;11/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:47;08/12/2025 11:18;;;0;;Compromissos 1;;"Férias - 09/11 a 08/12
+30 dias";
+;Sgt Tabata;11/12/2025;11/12/2025;;;;;;;24:00;19/09/2025 08:18;19/09/2025 08:18;;;0;;Compromissos 1;;"Dispensa CRPM - 11 a 13/12
+03 dias";
+;Equipe Extra;11/12/2025;11/12/2025;;;;Alterações Escala;;;24:00;27/11/2025 10:38;27/11/2025 15:08;;;0;;Compromissos 1;;"12h às 12h
+
+Sgt Sergio S.E.R. (Ord Dia 12)
+Sgt George
+Sgt Rocha S.E.R.
+Sgt Ederson S.E.R.";
+;Cb Pereira;13/12/2025;13/12/2025;;;;;;;24:00;20/01/2026 17:51;20/01/2026 17:51;;;0;;Compromissos 1;;;
+;Cb Glauber - Retorno;14/12/2025;14/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:45;11/12/2025 09:40;;;0;;Compromissos 1;;"Férias - 28/11 a 12/12
+15 dias
+";
+;Escala CRPM;14/12/2025;14/12/2025;;;;Ordens de Serviço;;;24:00;04/12/2025 17:01;09/12/2025 11:18;;;0;;Compromissos 1;;"Dias 10 e 14/12
+
+Dia 10 S.E.R Sgt Albernaz
+Dia 14 S.E.R. Sgt Edson";
+;Cb Araujo;14/12/2025;14/12/2025;;;;;;;24:00;20/01/2026 17:51;20/01/2026 17:51;;;0;;Compromissos 1;;;
+;Sgt Tabata;15/12/2025;15/12/2025;;;;;;;24:00;19/09/2025 08:18;19/09/2025 08:19;;;0;;Compromissos 1;;"Dispensa Curso Negociador - 15 a 19/12
+05 dias";
+;Sgt Diogo;15/12/2025;15/12/2025;;;;Férias / LESP;;;24:00;02/12/2025 16:37;02/12/2025 16:37;;;0;;Compromissos 1;;"Férias - 15/12 a 03/01
+20 dias";
+;Sgt Peixoto;15/12/2025;15/12/2025;;;;Férias / LESP;;;24:00;02/12/2025 16:38;02/12/2025 16:38;;;0;;Compromissos 1;;"Férias - 15/12 a 13/01
+30 dias";
+;Sgt Felipe - Retorno;17/12/2025;17/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:42;15/12/2025 09:27;;;0;;Compromissos 1;;"Férias - 15/11 a 14/12
+30 dias";
+;ST Emilio;17/12/2025;17/12/2025;;;;Férias / LESP;;;24:00;12/11/2025 09:30;02/12/2025 16:34;;;0;;Compromissos 1;;"Férias - 17/12 a 15/01
+30 dias";
+;Sgt Freire;17/12/2025;17/12/2025;;;;;;;24:00;15/12/2025 09:57;15/12/2025 09:57;;;0;;Compromissos 1;;;
+;Operação Força Total 22ª Ed;18/12/2025;18/12/2025;;;;Ordens de Serviço;;;24:00;19/12/2025 08:36;19/12/2025 08:37;;;0;;Compromissos 1;;"SEI 202500002154924
+O.S. 195
+
+18 e 19/12
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 22/12";
+;Operação Força Total 22ª Ed;19/12/2025;19/12/2025;;;;Ordens de Serviço;;;24:00;19/12/2025 08:37;19/12/2025 08:37;;;0;;Compromissos 1;;"SEI 202500002154924
+O.S. 195
+
+18 e 19/12
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 22/12";
+;Natal para todos em Vianópolis REM 47ª;19/12/2025;19/12/2025;;;;Ordens de Serviço;;;24:00;09/12/2025 11:06;09/12/2025 11:07;;;0;;Compromissos 1;;"SEI 202500002145647
+O.S. 193
+
+19 e 20/12
+18h às 06h
+01 Equipe
+Remunerado pela 47ª CIPM";
+;Palestra EXHO;19/12/2025;19/12/2025;;;;Ordens de Serviço;;;24:00;09/12/2025 11:10;16/12/2025 10:04;;;0;;Compromissos 1;;"SEI 202500002157611
+O.S. 194
+
+09h
+Coco Bambu
+01 Equipe
+
+Sgt Frederico
+Cb Donário
+Cb Vilela";
+;Natal para todos em Vianópolis REM 47ª;20/12/2025;20/12/2025;;;;Ordens de Serviço;;;24:00;09/12/2025 11:07;09/12/2025 11:07;;;0;;Compromissos 1;;"SEI 202500002145647
+O.S. 193
+
+19 e 20/12
+18h às 06h
+01 Equipe
+Remunerado pela 47ª CIPM";
+;Sgt W Lima;20/12/2025;20/12/2025;;;;Alterações Escala;;;24:00;16/12/2025 10:37;16/12/2025 10:37;;;0;;Compromissos 1;;Troca de pelotão;
+;Sgt Brandao - Retorno;20/12/2025;20/12/2025;;;;Férias / LESP;;;24:00;06/11/2025 10:44;16/12/2025 09:38;;;0;;Compromissos 1;;"Férias - 18/11 a 17/12
+30 dias";
+;Cb Arantes;21/12/2025;21/12/2025;;;;;;;24:00;15/12/2025 10:10;15/12/2025 10:11;;;0;;Compromissos 1;;"Dispensa
+Compensação de horas (Carga da UPM)";
+;Operação Força Total 22ª RELATORIO;22/12/2025;22/12/2025;;;;Ordens de Serviço;;;24:00;19/12/2025 08:37;19/12/2025 08:38;;;0;;Compromissos 1;;"SEI 202500002154924
+O.S. 195
+
+18 e 19/12
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 22/12";
+;Sgt Santiago;22/12/2025;22/12/2025;;;;;;;24:00;15/12/2025 09:18;15/12/2025 09:19;;;0;;Compromissos 1;;Dispensa;
+;Sgt W Lima;22/12/2025;22/12/2025;;;;Alterações Escala;;;24:00;16/12/2025 10:37;16/12/2025 10:37;;;0;;Compromissos 1;;Troca de pelotão;
+;Reforço de Final de ano Piri REM37BPM;24/12/2025;24/12/2025;;;;Ordens de Serviço;;;24:00;10/12/2025 09:27;30/12/2025 09:00;;;0;;Compromissos 1;;"SEI 202500002148686
+O.S. 197
+
+24/12 e 31/12
+16h às 08h
+Pirenópolis
+Corumbá 
+Abadiânia
+01 Equipe
+Remunerado pelo 37º BPM";
+;Sd Benjamim;24/12/2025;24/12/2025;;;;Alterações Escala;;;24:00;15/12/2025 11:56;15/12/2025 11:56;;;0;;Compromissos 1;;Completar Equipe;
+;Sgt Santiago;26/12/2025;26/12/2025;;;;;;;24:00;15/12/2025 09:19;15/12/2025 09:19;;;0;;Compromissos 1;;Dispensa;
+;Final de Ano em Leopoldo REM47ª;30/12/2025;30/12/2025;;;;Ordens de Serviço;;;24:00;04/12/2025 17:07;30/12/2025 09:00;;;0;;Compromissos 1;;"SEI 202500002149350
+O.S. 196
+
+30 e 31/12
+18h às 06h
+01 Equipe
+Remunerado pela 47ª CIPM
+
+
+ST Wilker
+Sgt Albernaz
+Sgt Valadao
+Cb Danilo";
+;Cb T Santos;30/12/2025;30/12/2025;;;;;;;24:00;18/12/2025 08:59;18/12/2025 09:00;;;0;;Compromissos 1;;;
+;Cb Wandrer;30/12/2025;30/12/2025;;;;;;;24:00;29/12/2025 11:59;29/12/2025 11:59;;;0;;Compromissos 1;;;
+;Final de Ano em Leopoldo REM47ª;31/12/2025;31/12/2025;;;;Ordens de Serviço;;;24:00;10/12/2025 09:29;30/12/2025 09:01;;;0;;Compromissos 1;;"SEI 202500002149350
+O.S. 196
+
+30 e 31/12
+18h às 06h
+01 Equipe
+Remunerado pela 47ª CIPM
+
+ATENDIDA POR SV ORDINÁRIO";
+;Reforço de Final de ano Piri REM37BPM;31/12/2025;31/12/2025;;;;Ordens de Serviço;;;24:00;10/12/2025 09:29;30/12/2025 09:00;;;0;;Compromissos 1;;"SEI 202500002148686
+O.S. 197
+
+24/12 e 31/12
+16h às 08h
+Pirenópolis
+Corumbá 
+Abadiânia
+01 Equipe
+Remunerado pelo 37º BPM
+
+ATENDIDA POR SV ORDINÁRIO";
+;Reforço Final de Ano Terezopolis;31/12/2025;31/12/2025;;;;Ordens de Serviço;;;24:00;30/12/2025 08:50;30/12/2025 08:52;;;0;;Compromissos 1;;"SEI 202500002149388
+O.S. 198
+
+Fazer contato com CPU para verificar necessidades";
+;Sgt Gustavo - Retorno;01/01/2026;01/01/2026;;;;Férias / LESP;;;24:00;19/12/2025 16:15;19/12/2025 16:16;;;0;;Compromissos 1;;LESP - 01/10 a 31/12;
+;Sgt Thassio;02/01/2026;02/01/2026;;;;;;;24:00;19/12/2025 16:30;19/12/2025 16:31;;;0;;Compromissos 1;;Dispensa;
+;ST Nivaldo - Retorno;03/01/2026;03/01/2026;;;;Férias / LESP;;;24:00;19/12/2025 16:14;19/12/2025 16:16;;;0;;Compromissos 1;;LESP - 01/10 a 31/12;
+;Sgt Diogo - Retorno;04/01/2026;04/01/2026;;;;Férias / LESP;;;24:00;02/12/2025 16:37;02/12/2025 16:38;;;0;;Compromissos 1;;"Férias - 15/12 a 03/01
+20 dias";
+;Sgt Coelho;04/01/2026;04/01/2026;;;;Férias / LESP;;;24:00;03/12/2025 10:10;03/12/2025 10:11;;;0;;Compromissos 1;;"Férias - 04/01 a 23/01
+20 dias";
+;Cb Donario;04/01/2026;04/01/2026;;;;;;;24:00;15/12/2025 09:10;15/12/2025 09:11;;;0;;Compromissos 1;;Dispensa Aniversario;
+;Sgt De Freitas - Retorno;05/01/2026;05/01/2026;;;;Férias / LESP;;;24:00;02/12/2025 16:41;02/12/2025 16:41;;;0;;Compromissos 1;;"Férias - 06/12 a 04/01
+30 dias";
+;Cb Gouveia;05/01/2026;05/01/2026;;;;;;;24:00;30/12/2025 08:53;30/12/2025 08:53;;;0;;Compromissos 1;;;
+;Sgt Brandao;05/01/2026;05/01/2026;;;;;;;24:00;04/02/2026 17:08;04/02/2026 17:09;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 05/01 a 09/01;
+;Sgt George - Retorno;06/01/2026;06/01/2026;;;;Férias / LESP;;;24:00;02/12/2025 16:39;02/12/2025 16:40;;;0;;Compromissos 1;;"Férias - 07/12 a 05/01
+30 dias";
+;Sgt Milazzo;06/01/2026;06/01/2026;;;;;;;24:00;29/12/2025 09:25;29/12/2025 09:26;;;0;;Compromissos 1;;Dispensa;
+;Sgt Freire;06/01/2026;06/01/2026;;;;;;;24:00;04/02/2026 17:09;04/02/2026 17:10;;;0;;Compromissos 1;;;
+;Sgt Aguinaldo - Retorno;07/01/2026;07/01/2026;;;;Férias / LESP;;;24:00;02/12/2025 16:36;02/12/2025 16:36;;;0;;Compromissos 1;;"Férias - 08/12 a 06/01
+30 dias";
+;Sgt Barreto;07/01/2026;07/01/2026;;;;Férias / LESP;;;24:00;30/12/2025 09:32;30/12/2025 09:32;;;0;;Compromissos 1;;"Férias - 07/01 a 05/02
+30 dias";
+;ST Thales;07/01/2026;07/01/2026;;;;;;;24:00;04/02/2026 17:10;04/02/2026 17:11;;;0;;Compromissos 1;;;
+;Cb Nathan;08/01/2026;08/01/2026;;;;Férias / LESP;;;24:00;30/12/2025 09:34;30/12/2025 09:34;;;0;;Compromissos 1;;"Férias - 08/01 a 06/02
+30 dias";
+;Sgt Freire;08/01/2026;08/01/2026;;;;;;;24:00;21/01/2026 09:20;21/01/2026 09:21;;;0;;Compromissos 1;;Licença Paternidade - 08/01 a 27/01;
+;Sgt Gustavo;09/01/2026;09/01/2026;;;;;;;24:00;04/02/2026 17:12;04/02/2026 17:13;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 09 a 13/01;
+;Sd Vinicius;10/01/2026;10/01/2026;;;;;;;24:00;04/02/2026 17:14;04/02/2026 17:14;;;0;;Compromissos 1;;;
+;Sgt Peixoto - Retorno;14/01/2026;14/01/2026;;;;Férias / LESP;;;24:00;02/12/2025 16:39;02/12/2025 16:39;;;0;;Compromissos 1;;"Férias - 15/12 a 13/01
+30 dias";
+;Plantonista CRPM;15/01/2026;15/01/2026;;;;Importante;;;24:00;29/12/2025 10:40;29/12/2025 10:42;;;0;;Compromissos 1;;"SEI 202500002156096
+
+Pegar voluntário e fazer escala";
+;ST Emilio;16/01/2026;16/01/2026;;;;;;;24:00;21/01/2026 09:25;21/01/2026 09:25;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 16/01 a 20/01;
+;ST Emilio - Retorno;16/01/2026;16/01/2026;;;;Férias / LESP;;;24:00;02/12/2025 16:34;02/12/2025 16:34;;;0;;Compromissos 1;;"Férias - 17/12 a 15/01
+30 dias";
+;ST Wilker;16/01/2026;16/01/2026;;;;Férias / LESP;;;24:00;30/12/2025 10:06;08/01/2026 08:51;;;0;;Compromissos 1;;"Férias - 16/01 a 14/02
+30 dias";
+;Sgt Gabriel;17/01/2026;17/01/2026;;;;;;;24:00;21/01/2026 09:58;21/01/2026 09:59;;;0;;Compromissos 1;;Dispensa de Comando (CAPM) - 17/01 a 26/01;
+;Cb Vilela;19/01/2026;19/01/2026;;;;;;;24:00;19/01/2026 10:46;21/01/2026 09:20;;;0;;Compromissos 1;;Licença Paternidade - 19/01 a 07/02;
+;Sgt Diogo ferias de 20/01 à 30/01;20/01/2026;20/01/2026;;;;Férias / LESP;;;24:00;14/01/2026 16:32;20/01/2026 08:35;;;0;;Compromissos 1;;;
+;Sgt Frederico;20/01/2026;20/01/2026;;;;;;;24:00;04/02/2026 17:39;04/02/2026 17:39;;;0;;Compromissos 1;;;
+;Futebol Anapolina X Catalano;21/01/2026;21/01/2026;;;;Ordens de Serviço;;;24:00;20/01/2026 08:38;20/01/2026 08:40;;;0;;Compromissos 1;;"SEI 202600002001890
+O.S. 010
+
+15h30min
+Gramado
+01 Equipe";
+;Sgt Edson;21/01/2026;21/01/2026;;;;;;;24:00;04/02/2026 17:40;04/02/2026 17:40;;;0;;Compromissos 1;;;
+;Sgt Cliff;22/01/2026;22/01/2026;;;;;;;24:00;21/01/2026 09:42;21/01/2026 09:42;;;0;;Compromissos 1;;;
+;Passagem de Comando 4º e 28º BPM;22/01/2026;22/01/2026;;;;Ordens de Serviço;;;24:00;21/01/2026 09:49;21/01/2026 10:03;;;0;;Compromissos 1;;"SEI 202600002008085
+O.S. 011
+
+08h30min
+Auditório do Colégio Couto
+03 Equipes";
+;Sgt W Lima;22/01/2026;22/01/2026;;;;;;;24:00;21/01/2026 10:44;23/01/2026 15:11;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 22 a 26/01;
+;Sgt Victor;23/01/2026;23/01/2026;;;;;;;24:00;30/12/2025 10:05;30/12/2025 10:05;;;0;;Compromissos 1;;;
+;Sgt De Freitas;23/01/2026;23/01/2026;;;;;;;24:00;20/01/2026 17:05;20/01/2026 17:06;;;0;;Compromissos 1;;Dispensa Aniversario;
+;Sgt Coelho;24/01/2026;24/01/2026;;;;;;;24:00;21/01/2026 09:23;21/01/2026 09:23;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 24/01 a 28/01;
+;Sgt Coelho - Retorno;24/01/2026;24/01/2026;;;;Férias / LESP;;;24:00;03/12/2025 10:11;03/12/2025 10:11;;;0;;Compromissos 1;;"Férias - 04/01 a 23/01
+20 dias";
+;FUTEBOL Anapolina X Goias;24/01/2026;24/01/2026;;;;Ordens de Serviço;;;24:00;21/01/2026 11:02;23/01/2026 17:13;;;0;;Compromissos 1;;"SEI 202600002007416
+O.S. 014
+
+16h
+02 equipes";
+;Futebol Anapolis X Catalano;25/01/2026;25/01/2026;;;;Ordens de Serviço;;;24:00;21/01/2026 11:01;22/01/2026 16:19;;;0;;Compromissos 1;;"SEI 202600002001890
+O.S. 013
+
+14h
+Trio de Arbitragem / Gramado
+01 Equipe
+
+";
+;Sgt Dos Santos;25/01/2026;25/01/2026;;;;;;;24:00;22/01/2026 15:48;04/02/2026 17:46;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 25 a 29/01;
+;Sgt Freire;26/01/2026;26/01/2026;;;;Férias / LESP;;;24:00;20/01/2026 07:31;20/01/2026 07:32;;;0;;Compromissos 1;;Licença Paternidade + Dispensa Cmd Geral + Férias;
+;ST Roni;26/01/2026;26/01/2026;;;;;;;24:00;22/01/2026 16:09;26/01/2026 15:07;;;0;;Compromissos 1;;;
+;Plantonista CRPM;27/01/2026;27/01/2026;;;;Importante;;;24:00;29/12/2025 10:42;29/12/2025 10:42;;;0;;Compromissos 1;;"SEI 202500002156096
+
+Pegar voluntário e fazer escala";
+;Sgt Freire;28/01/2026;28/01/2026;;;;;;;24:00;21/01/2026 09:17;21/01/2026 09:18;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 28/01 a 01/02;
+;Futebol Neropolis;28/01/2026;28/01/2026;;;;Ordens de Serviço;;;24:00;21/01/2026 11:02;26/01/2026 15:21;;;0;;Compromissos 1;;"SEI 202600002008285
+O.S. 015
+
+14h30min
+01 Equipe";
+;Operação Força Total 23ª Ed;29/01/2026;29/01/2026;;;;Ordens de Serviço;;;24:00;22/01/2026 16:20;22/01/2026 16:22;;;0;;Compromissos 1;;"SEI 202600002004484
+O.S. 012
+
+29 e 30/01
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 02/02";
+;Futebol NEROPOLIS;29/01/2026;29/01/2026;;;;;;;24:00;23/01/2026 17:08;23/01/2026 17:08;;;0;;Compromissos 1;;;
+;Formatura Unievangelica;29/01/2026;29/01/2026;;;;;;;24:00;27/01/2026 16:17;27/01/2026 16:17;;;0;;Compromissos 1;;;
+;Operação Força Total 23ª Ed;30/01/2026;30/01/2026;;;;Ordens de Serviço;;;24:00;22/01/2026 16:22;22/01/2026 16:22;;;0;;Compromissos 1;;"SEI 202600002004484
+O.S. 012
+
+29 e 30/01
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 02/02";
+;Plantonista CRPM;31/01/2026;31/01/2026;;;;Importante;;;24:00;29/12/2025 10:42;29/12/2025 10:42;;;0;;Compromissos 1;;"SEI 202500002156096
+
+Pegar voluntário e fazer escala";
+;Sgt Ribeiro;31/01/2026;31/01/2026;;;;;;;24:00;21/01/2026 16:40;29/01/2026 09:19;;;0;;Compromissos 1;;;
+;Cb Bruno;31/01/2026;31/01/2026;;;;;;;24:00;22/01/2026 14:33;29/01/2026 09:19;;;0;;Compromissos 1;;;
+;ST Nivaldo;31/01/2026;31/01/2026;;;;Alterações Escala;;;24:00;26/01/2026 14:45;26/01/2026 14:46;;;0;;Compromissos 1;;Troca de pelotão - Vai para dia 01/02;
+;Cb T Santos;31/01/2026;31/01/2026;;;;;;;24:00;27/01/2026 14:44;29/01/2026 09:19;;;0;;Compromissos 1;;;
+;Cb Otto;01/02/2026;01/02/2026;;;;;;;24:00;20/01/2026 08:58;20/01/2026 08:59;;;0;;Compromissos 1;;Dispensa;
+;Cb J Ferreira;01/02/2026;01/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:29;04/02/2026 11:29;;;0;;Compromissos 1;;"Férias - 01/02 a 20/12
+20 dias";
+;Sgt Freire;02/02/2026;02/02/2026;;;;;;;24:00;21/01/2026 09:18;21/01/2026 09:19;;;0;;Compromissos 1;;Dispensa de Comando (CAPM) - 02/02 a 06/02;
+;Operação ;04/02/2026;04/02/2026;;;;Importante;;;24:00;03/02/2026 10:58;03/02/2026 11:00;;;0;;Compromissos 1;;"Dia 04 para 05 (Quarta p/Quinta)
+01h às 07h - 06h S.E.R.
+
+Cap Bueno
+Cb Otto
+Sgt Frederico
+Cb Araújo
+
+Ten Andrade
+Cb Danilo
+Sgt Peixoto
+Cb Donário";
+;Sgt Barreto;06/02/2026;06/02/2026;;;;;;;24:00;21/01/2026 09:22;21/01/2026 09:23;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 06/02 a 10/02;
+;Sgt Barreto - Retorno;06/02/2026;06/02/2026;;;;Férias / LESP;;;24:00;30/12/2025 09:32;30/12/2025 09:33;;;0;;Compromissos 1;;"Férias - 07/01 a 05/02
+30 dias";
+;Sgt Ceravolo;06/02/2026;06/02/2026;;;;;;;24:00;04/02/2026 09:47;04/02/2026 09:47;;;0;;Compromissos 1;;;
+;Cb Nathan;07/02/2026;07/02/2026;;;;;;;24:00;21/01/2026 09:23;21/01/2026 09:24;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 07/02 a 11/02;
+;Cb Nathan - Retorno;07/02/2026;07/02/2026;;;;Férias / LESP;;;24:00;30/12/2025 09:34;30/12/2025 09:34;;;0;;Compromissos 1;;"Férias - 08/01 a 06/02
+30 dias";
+;Sgt W Lima;07/02/2026;07/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:28;04/02/2026 11:28;;;0;;Compromissos 1;;Férias - 07/02 a 08/03;
+;Sgt Urbano;07/02/2026;07/02/2026;;;;;;;24:00;03/02/2026 08:56;03/02/2026 08:56;;;0;;Compromissos 1;;;
+;Sgt Cliff;07/02/2026;07/02/2026;;;;;;;24:00;04/02/2026 09:44;04/02/2026 09:44;;;0;;Compromissos 1;;Dispensa Aniversario;
+;Sgt Freire;07/02/2026;07/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:27;04/02/2026 11:27;;;0;;Compromissos 1;;Férias - 07/02 a 08/03;
+;Plantonista CRPM;08/02/2026;08/02/2026;;;;;;;24:00;29/12/2025 10:42;04/02/2026 10:25;;;0;;Compromissos 1;;"SEI 202500002156096
+
+Pegar voluntário e fazer escala
+
+Sgt Albernaz
+
+QTA";
+;Futebol;08/02/2026;08/02/2026;;;;;;;24:00;04/02/2026 11:17;04/02/2026 11:17;;;0;;Compromissos 1;;;
+;Cb Vilela;08/02/2026;08/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:30;04/02/2026 11:31;;;0;;Compromissos 1;;"Férias - 08/02 a 17/03
+10 dias";
+;ST Roni;11/02/2026;11/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:25;04/02/2026 11:26;;;0;;Compromissos 1;;Férias - 11/02 a 12/03;
+;Futebol Anapolina X Jataiense;11/02/2026;11/02/2026;;;;Ordens de Serviço;;;24:00;10/02/2026 17:01;10/02/2026 17:02;;;0;;Compromissos 1;;"SEI 202600002001890
+O.S. 021
+
+16h30min
+01 Equipe
+Gramado / Arbitragem";
+;Lançamento Operação Carnaval Pirenopolis;12/02/2026;12/02/2026;;;;Ordens de Serviço;;;24:00;10/02/2026 17:39;12/02/2026 09:59;;;0;;Compromissos 1;;"SEI 202600002015150
+O.S. 022
+
+16h
+02 Equipes
+Pirenopolis";
+;Futebol Anapolis X Vila Nova;12/02/2026;12/02/2026;;;;Ordens de Serviço;;;24:00;12/02/2026 10:07;12/02/2026 10:08;;;0;;Compromissos 1;;"SEI 202600002018301
+O.S. 025
+
+18h
+02 Equipes
+Imediações";
+;Palestra E.M. Maria Elizabeth;13/02/2026;13/02/2026;;;;Ordens de Serviço;;;24:00;10/02/2026 16:55;12/02/2026 09:58;;;0;;Compromissos 1;;"SEI 202600002019141
+O.S. 023
+
+13h30min
+01 Equipe
+Palestra cidadania e disciplina";
+;Futebol em Neropolis;14/02/2026;14/02/2026;;;;Ordens de Serviço;;;24:00;12/02/2026 10:00;12/02/2026 10:04;;;0;;Compromissos 1;;"SEI 202600002018341
+O.S. 024
+
+14h
+01 Equipe";
+;Operação Carnaval Pirenopolis;14/02/2026;14/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:37;13/02/2026 13:37;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14 e 15
+18h às 06h
+01 Equipe";
+;Operação Carnaval Silvania;14/02/2026;14/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:38;13/02/2026 13:38;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14, 15 e 16
+Dias 14 e 16 - Das 18h às 06h
+Dia 15/06 - Das 16h às 04h
+01 Equipe";
+;Operação Carnaval Neropolis;14/02/2026;14/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:34;13/02/2026 13:38;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14, 15 e 16
+Das 19h às 05h
+01 Equipe";
+;Operação Carnaval Neropolis;15/02/2026;15/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:38;13/02/2026 13:38;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14, 15 e 16
+Das 19h às 05h
+01 Equipe";
+;Operação Carnaval Pirenopolis;15/02/2026;15/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:37;13/02/2026 13:37;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14 e 15
+18h às 06h
+01 Equipe";
+;Operação Carnaval Silvania;15/02/2026;15/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:37;13/02/2026 13:37;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14, 15 e 16
+Dias 14 e 16 - Das 18h às 06h
+Dia 15/06 - Das 16h às 04h
+01 Equipe";
+;ST Wilker - Retorno;15/02/2026;15/02/2026;;;;Férias / LESP;;;24:00;30/12/2025 10:07;04/02/2026 11:24;;;0;;Compromissos 1;;"Férias - 16/01 a 14/02
+30 dias";
+;Ten Araujo;15/02/2026;15/02/2026;;;;;;;24:00;29/01/2026 10:12;29/01/2026 10:12;;;0;;Compromissos 1;;;
+;ST Wilker;15/02/2026;15/02/2026;;;;;;;24:00;04/02/2026 11:24;04/02/2026 11:25;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 15/02 a 19/02;
+;Cb Wandrer;16/02/2026;16/02/2026;;;;;;;24:00;04/02/2026 09:43;04/02/2026 09:43;;;0;;Compromissos 1;;;
+;Operação Carnaval Neropolis;16/02/2026;16/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:39;13/02/2026 13:39;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14, 15 e 16
+Das 19h às 05h
+01 Equipe";
+;Operação Carnaval Silvania;16/02/2026;16/02/2026;;;;Ordens de Serviço;;;24:00;13/02/2026 13:37;13/02/2026 13:37;;;0;;Compromissos 1;;"SEI 202600002004587
+O.S 027
+
+Dias 14, 15 e 16
+Dias 14 e 16 - Das 18h às 06h
+Dia 15/06 - Das 16h às 04h
+01 Equipe";
+;Escolta Torcida do Anápolis;16/02/2026;16/02/2026;;;;Ordens de Serviço;;;24:00;19/02/2026 15:38;19/02/2026 15:39;;;0;;Compromissos 1;;"SEI 202600002002461
+O.S. 028
+
+15h
+02 Equipes
+CT para PRF/PRF para CT";
+;Plantonista CRPM;20/02/2026;20/02/2026;;;;;;;24:00;29/12/2025 10:43;04/02/2026 10:25;;;0;;Compromissos 1;;"SEI 202500002156096
+
+Pegar voluntário e fazer escala
+
+Sgt Albernaz
+
+QTA";
+;Sd Benjamim;20/02/2026;20/02/2026;;;;;;;24:00;04/02/2026 11:20;04/02/2026 11:20;;;0;;Compromissos 1;;;
+;Sgt Ramos Jr;20/02/2026;20/02/2026;;;;;;;24:00;12/02/2026 15:37;12/02/2026 15:37;;;0;;Compromissos 1;;;
+;Cb J Ferreira - Retorno;21/02/2026;21/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:29;04/02/2026 11:30;;;0;;Compromissos 1;;"Férias - 01/02 a 20/12
+20 dias";
+;Cb Vilela - Retorno;21/02/2026;21/02/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:31;11/02/2026 11:11;;;0;;Compromissos 1;;"Férias - 08/02 a 17/03
+10 dias";
+;ST Nivaldo;21/02/2026;21/02/2026;;;;;;;24:00;21/01/2026 09:21;04/02/2026 17:39;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 21/02 a 25/02;
+;Cb Otto;21/02/2026;21/02/2026;;;;;;;24:00;05/02/2026 11:25;05/02/2026 11:25;;;0;;Compromissos 1;;;
+;Futebol;21/02/2026;21/02/2026;;;;Ordens de Serviço;;;24:00;18/02/2026 16:42;18/02/2026 16:42;;;0;;Compromissos 1;;;
+;Início EAS;23/02/2026;23/02/2026;;;;Alterações Escala;;;24:00;04/02/2026 11:30;18/02/2026 15:06;;;0;;Compromissos 1;;"23/02 a 06/03
+
+Cb Malheiros
+Cb J Ferreira";
+;Futebol Anapolis X Cianorte;25/02/2026;25/02/2026;;;;Ordens de Serviço;;;24:00;24/02/2026 09:51;24/02/2026 09:52;;;0;;Compromissos 1;;"SEI 202600002023724
+O.S. 031
+
+16h30min
+01 Equipe";
+;Cb Araujo;28/02/2026;28/02/2026;;;;;;;24:00;23/02/2026 10:40;23/02/2026 10:40;;;0;;Compromissos 1;;;
+;Sgt De Freitas;28/02/2026;28/02/2026;;;;;;;24:00;23/02/2026 15:02;23/02/2026 15:02;;;0;;Compromissos 1;;;
+;Sgt Brandao cobrir Dispensa Sgt Santiago;28/02/2026;28/02/2026;;;;;;;24:00;23/02/2026 15:02;23/02/2026 15:02;;;0;;Compromissos 1;;;
+;Sgt Tabata e Sgt Peixoto;01/03/2026;01/03/2026;;;;;;;24:00;23/02/2026 15:01;23/02/2026 15:01;;;0;;Compromissos 1;;;
+;Início CAS;02/03/2026;02/03/2026;;;;Alterações Escala;;;24:00;29/01/2026 17:34;04/02/2026 14:51;;;0;;Compromissos 1;;"02/03 a 08/05
+
+Sgt Santiago
+Sgt Peixoto
+Sgt Tabata
+Sgt De Freitas";
+;Sgt Lucas;07/03/2026;07/03/2026;;;;;;;24:00;02/03/2026 17:19;02/03/2026 17:19;;;0;;Compromissos 1;;;
+;Sgt Morais;09/03/2026;09/03/2026;;;;Férias / LESP;;;24:00;09/02/2026 14:44;05/03/2026 16:04;;;0;;Compromissos 1;;"Férias - 09 a 23/03
+15 dias";
+;Sgt W Lima - Retorno;09/03/2026;09/03/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:28;04/02/2026 11:28;;;0;;Compromissos 1;;Férias - 07/02 a 08/03;
+;Cb Jonatas;09/03/2026;09/03/2026;;;;Férias / LESP;;;24:00;27/02/2026 15:23;03/03/2026 07:55;;;0;;Compromissos 1;;Férias - 09/03 a 07/04;
+;Sgt W Lima;09/03/2026;09/03/2026;;;;;;;24:00;05/03/2026 10:57;05/03/2026 11:24;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 09 a 13/03;
+;Sgt Freire - Retorno;11/03/2026;11/03/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:28;05/03/2026 16:01;;;0;;Compromissos 1;;Férias - 07/02 a 08/03;
+;Sgt Gustavo;14/03/2026;14/03/2026;;;;Férias / LESP;;;24:00;26/02/2026 10:24;03/03/2026 07:54;;;0;;Compromissos 1;;Férias - 14/03 a 12/04;
+;Sgt Ceravolo;14/03/2026;14/03/2026;;;;;;;24:00;06/03/2026 11:11;06/03/2026 11:11;;;0;;Compromissos 1;;;
+;ST Roni - Retorno;15/03/2026;15/03/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:26;10/03/2026 09:26;;;0;;Compromissos 1;;Férias - 11/02 a 12/03;
+;ST Roni;15/03/2026;15/03/2026;;;;;;;24:00;04/02/2026 11:26;10/03/2026 09:26;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 13 a 17/03;
+;Início EAC;16/03/2026;16/03/2026;;;;Alterações Escala;;;24:00;24/02/2026 09:50;24/02/2026 09:50;;;0;;Compromissos 1;;"16 a 27/03
+
+Cb Wandrer";
+;Sgt Albernaz;19/03/2026;19/03/2026;;;;;;;24:00;04/03/2026 11:35;19/03/2026 09:33;;;0;;Compromissos 1;;"Paternidade??
+";
+;Sgt Ramos Junior;20/03/2026;20/03/2026;;;;;;;24:00;13/03/2026 09:12;13/03/2026 09:13;;;0;;Compromissos 1;;;
+;Sgt Ribeiro;20/03/2026;20/03/2026;;;;;;;24:00;19/03/2026 12:11;19/03/2026 12:11;;;0;;Compromissos 1;;Dispensa do comando.;
+;St Nivaldo;21/03/2026;21/03/2026;;;;;;;24:00;19/03/2026 12:11;19/03/2026 12:12;;;0;;Compromissos 1;;Dispensa do comando.;
+;Sgt J Junior;22/03/2026;22/03/2026;;;;;;;24:00;12/03/2026 11:44;12/03/2026 11:44;;;0;;Compromissos 1;;Dispensa do comando geral;
+;Sgt Sérgio;22/03/2026;22/03/2026;;;;;;;24:00;19/03/2026 12:12;19/03/2026 12:12;;;0;;Compromissos 1;;Dispensa do comando.;
+;Sgt Ederson;23/03/2026;23/03/2026;;;;;;;24:00;19/03/2026 12:16;19/03/2026 12:17;;;0;;Compromissos 1;;"Dispensa do comando.
+";
+;Sgt Morais;24/03/2026;24/03/2026;;;;Férias / LESP;;;24:00;09/02/2026 14:45;05/03/2026 16:04;;;0;;Compromissos 1;;"Férias - 10 a 24/03
+15 dias";
+;Sgt Morais;24/03/2026;24/03/2026;;;;;;;24:00;09/02/2026 14:45;05/03/2026 16:04;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 25 a 29/03;
+;Operação Força Total 25ª Ed;26/03/2026;26/03/2026;;;;Ordens de Serviço;;;24:00;26/03/2026 15:06;26/03/2026 15:07;;;0;;Compromissos 1;;"SEI 202600002031198
+O.S. 039
+
+26 e 27/03
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 30/03";
+;Sgt Edson;26/03/2026;26/03/2026;;;;;;;24:00;19/03/2026 09:15;19/03/2026 09:17;;;0;;Compromissos 1;;Dispensa 24 horas.;
+;Sgt J Junior;26/03/2026;26/03/2026;;;;;;;24:00;12/03/2026 11:44;12/03/2026 11:45;;;0;;Compromissos 1;;Dispensa do Comando Geral;
+;Ten Danisclay;26/03/2026;26/03/2026;;;;;;;24:00;19/03/2026 09:16;19/03/2026 09:17;;;0;;Compromissos 1;;Dispensa 24 h.;
+;Visita Presidencial;26/03/2026;26/03/2026;;;;Ordens de Serviço;;;24:00;26/03/2026 14:57;26/03/2026 15:06;;;0;;Compromissos 1;;"SEI 202600002038628
+O.S. 038
+
+
+06h20min
+Base Aérea
+02 Equipes
+";
+;Operação Força Total 25ª Ed;27/03/2026;27/03/2026;;;;Ordens de Serviço;;;24:00;26/03/2026 15:07;26/03/2026 15:07;;;0;;Compromissos 1;;"SEI 202600002031198
+O.S. 039
+
+26 e 27/03
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 30/03";
+;Sgt Milazzo;27/03/2026;27/03/2026;;;;;;;24:00;23/03/2026 15:21;23/03/2026 15:21;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sgt Valadao;29/03/2026;29/03/2026;;;;;;;24:00;03/03/2026 11:32;03/03/2026 11:32;;;0;;Compromissos 1;;;
+;Futebol Anapolis X Tocantinopolis;29/03/2026;29/03/2026;;;;Ordens de Serviço;;;24:00;27/03/2026 11:22;27/03/2026 11:23;;;0;;Compromissos 1;;"SEI 202600002037837
+O.S. 041
+
+14h
+01 Equipe";
+;Sgt Milazzo;31/03/2026;31/03/2026;;;;;;;24:00;23/03/2026 15:21;23/03/2026 15:21;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sgt W lima;31/03/2026;31/03/2026;;;;Alterações Escala;;;24:00;30/03/2026 15:11;30/03/2026 15:13;;;0;;Compromissos 1;;COPAR - Curso de Operação e Patrulhamento com Aeronaves remotamente pilotadas - 01/04 a 30/04;
+;Sgt Victor;01/04/2026;01/04/2026;;;;Férias / LESP;;;24:00;23/03/2026 10:10;30/03/2026 10:52;;;0;;Compromissos 1;;Férias - 01/04 a 30/04;
+;Corrida Azul;02/04/2026;02/04/2026;;;;Ordens de Serviço;;;24:00;23/03/2026 14:11;23/03/2026 14:11;;;0;;Compromissos 1;;"SEI 202600002035787
+O.S. 037
+
+08h às 11h
+02 Equipes";
+;Cb Otto;02/04/2026;02/04/2026;;;;;;;24:00;30/03/2026 16:27;30/03/2026 16:27;;;0;;Compromissos 1;;;
+;Sgt Elias;03/04/2026;03/04/2026;;;;;;;24:00;24/03/2026 09:24;24/03/2026 09:24;;;0;;Compromissos 1;;;
+;Cb Arantes;04/04/2026;04/04/2026;;;;;;;24:00;16/03/2026 08:32;16/03/2026 08:32;;;0;;Compromissos 1;;Dispensado pelo comando ;
+;Sgt Milazzo;04/04/2026;04/04/2026;;;;;;;24:00;23/03/2026 15:21;23/03/2026 15:22;;;0;;Compromissos 1;;Dispensa Cmt Geral - 04 a 08/04;
+;Cb T Santos;05/04/2026;05/04/2026;;;;Férias / LESP;;;24:00;04/03/2026 09:35;30/03/2026 10:54;;;0;;Compromissos 1;;Férias - 05/04 a 04/05;
+;Cb Bruno;05/04/2026;05/04/2026;;;;;;;24:00;09/03/2026 14:45;09/03/2026 14:45;;;0;;Compromissos 1;;;
+;Semana Santa em Pirenopolis;05/04/2026;05/04/2026;;;;Ordens de Serviço;;;24:00;23/03/2026 11:05;31/03/2026 15:10;;;0;;Compromissos 1;;"SEI 202600002030780
+O.S. 036
+
+Das 12h às 00h
+01 Equipe";
+;Cb Mateus - Retorno;06/04/2026;06/04/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:32;04/02/2026 11:33;;;0;;Compromissos 1;;LESP - 05/01 a 05/04;
+;Início EAS EAC;06/04/2026;06/04/2026;;;;Alterações Escala;;;24:00;09/03/2026 16:26;09/03/2026 16:27;;;0;;Compromissos 1;;"06 a 17/04
+
+Sgt Coelho
+Sgt Carvalho
+Cb Gouveia";
+;Cb Mateus;06/04/2026;06/04/2026;;;;;;;24:00;01/04/2026 16:36;01/04/2026 16:37;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 06/04 a 10/04;
+;Cb Jonatas;07/04/2026;07/04/2026;;;;;;;24:00;13/04/2026 09:58;13/04/2026 09:58;;;0;;Compromissos 1;;Licença Paternidade - 07 a 26/04;
+;Cb Jonatas;08/04/2026;08/04/2026;;;;Férias / LESP;;;24:00;03/03/2026 07:55;03/03/2026 07:55;;;0;;Compromissos 1;;Férias - 09/03 a 07/04;
+;Sgt Felipe - Retorno;08/04/2026;08/04/2026;;;;Férias / LESP;;;24:00;04/02/2026 11:32;01/04/2026 16:23;;;0;;Compromissos 1;;LESP - 05/01 a 05/04;
+;Homenagem na Camara Municipal;08/04/2026;08/04/2026;;;;Ordens de Serviço;;;24:00;07/04/2026 11:33;07/04/2026 11:35;;;0;;Compromissos 1;;"SEI 202600002019141
+O.S. 044
+
+07h
+04 Equipes";
+;Futebol: Anapolis X Porto Vitoria;08/04/2026;08/04/2026;;;;Ordens de Serviço;;;24:00;09/04/2026 10:42;09/04/2026 10:43;;;0;;Compromissos 1;;"SEI 202600002038917
+O.S. 046
+
+16h30min
+01 Equipe";
+;Cb Danilo;10/04/2026;10/04/2026;;;;;;;24:00;09/03/2026 09:37;09/03/2026 09:38;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 10 a 14/04;
+;Festa do Carro de Boi em Petrolina;11/04/2026;11/04/2026;;;;Ordens de Serviço;;;24:00;24/03/2026 17:36;24/03/2026 17:37;;;0;;Compromissos 1;;;
+;Sd Julio;11/04/2026;11/04/2026;;;;Férias / LESP;;;24:00;30/03/2026 10:56;30/03/2026 10:58;;;0;;Compromissos 1;;Férias - 11/04 a 10/05;
+;Amigos da APAE em Silvania;11/04/2026;11/04/2026;;;;Ordens de Serviço;;;24:00;07/04/2026 11:27;07/04/2026 11:29;;;0;;Compromissos 1;;"SEI 202600002025724
+O.S. 045
+
+Dia 11 - Das 19h às 07h
+Dia 12 - Das 10h ás 22h
+01 Equipe";
+;Amigos da APAE em Silvania;12/04/2026;12/04/2026;;;;Ordens de Serviço;;;24:00;07/04/2026 11:29;07/04/2026 11:29;;;0;;Compromissos 1;;"SEI 202600002025724
+O.S. 045
+
+Dia 11 - Das 19h às 07h
+Dia 12 - Das 10h ás 22h
+01 Equipe";
+;Festa do Carro de Boi em Petrolina;12/04/2026;12/04/2026;;;;Ordens de Serviço;;;24:00;27/03/2026 10:37;27/03/2026 10:37;;;0;;Compromissos 1;;;
+;Sgt Milazzo;12/04/2026;12/04/2026;;;;;;;24:00;23/03/2026 15:22;23/03/2026 15:22;;;0;;Compromissos 1;;Dispensa Comando;
+;Futebol Anapolis X internacional Limeira;12/04/2026;12/04/2026;;;;Ordens de Serviço;;;24:00;10/04/2026 17:20;10/04/2026 17:22;;;0;;Compromissos 1;;"SEI 202600002043427
+O.S. 051
+
+14h
+01 Equipe";
+;Posse Presidencia CodeGO;13/04/2026;13/04/2026;;;;Ordens de Serviço;;;24:00;10/04/2026 17:23;10/04/2026 17:23;;;0;;Compromissos 1;;"SEI 202600002045964
+O.S. 053
+
+13h
+02 Equipes";
+;Sgt Gustavo - Retorno;15/04/2026;15/04/2026;;;;Férias / LESP;;;24:00;03/03/2026 07:54;10/04/2026 09:46;;;0;;Compromissos 1;;Férias - 14/03 a 12/04;
+;Cb Moreira;17/04/2026;17/04/2026;;;;;;;24:00;24/03/2026 09:21;24/03/2026 09:21;;;0;;Compromissos 1;;;
+;Cavalgada em Abadiania/Planalmira;19/04/2026;19/04/2026;;;;Ordens de Serviço;;;24:00;01/04/2026 12:06;01/04/2026 12:07;;;0;;Compromissos 1;;"SEI 202600002040607
+O.S. 043
+
+10h
+01 Equipe";
+;ST Roni;20/04/2026;20/04/2026;;;;;;;24:00;16/04/2026 11:03;16/04/2026 11:03;;;0;;Compromissos 1;;;
+;Cb J Ferreira;22/04/2026;22/04/2026;;;;Alterações Escala;;;24:00;14/04/2026 09:39;17/04/2026 10:54;;;0;;Compromissos 1;;Atestado médico;
+;Sgt Queiroz;25/04/2026;25/04/2026;;;;;;;24:00;08/04/2026 10:55;08/04/2026 10:56;;;0;;Compromissos 1;;Dispensa de Cmd (Cmt Geral) - 25 a 29/04;
+;"""Rodeio H2 Moda Country";25/04/2026;25/04/2026;;;;Ordens de Serviço;;;24:00;23/04/2026 16:47;24/04/2026 11:18;;;0;;Compromissos 1;;"SEI 202600002046489 
+OS - 59
+
+25/04/2026 
+⏰ 22 ás 03 h";
+;Anápolis + Mulher;25/04/2026;25/04/2026;;;;Ordens de Serviço;;;24:00;24/04/2026 11:15;24/04/2026 11:18;;;0;;Compromissos 1;;"SEI 202600002027972
+O.S.
+
+08h
+02 Equipes
+Presença do Governador";
+;Cb Jonatas;27/04/2026;27/04/2026;;;;;;;24:00;13/04/2026 09:58;13/04/2026 09:58;;;0;;Compromissos 1;;Restante de férias - 27 e 28/04;
+;Operação Força Total 26ª Ed;29/04/2026;29/04/2026;;;;Ordens de Serviço;;;24:00;15/04/2026 11:01;17/04/2026 10:54;;;0;;Compromissos 1;;"SEI 202600002044466
+O.S. 055
+
+29 e 30/04
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 04/05";
+;Sgt W lima - Retorno;29/04/2026;29/04/2026;;;;Alterações Escala;;;24:00;30/03/2026 15:13;28/04/2026 09:05;;;0;;Compromissos 1;;COPAR - Curso de Operação e Patrulhamento com Aeronaves remotamente pilotadas - 01/04 a 30/04;
+;Cb Wandrer;29/04/2026;29/04/2026;;;;;;;24:00;10/04/2026 09:35;17/04/2026 10:52;;;0;;Compromissos 1;;Dispensa;
+;SGT Queiroz;29/04/2026;29/04/2026;;;;;;;24:00;22/04/2026 09:03;22/04/2026 09:03;;;0;;Compromissos 1;;Dispensa de Cmd (Cmt Geral) - 25 a 29/04;
+;Aniversário de Terezópolis;30/04/2026;30/04/2026;;;;Importante;;;24:00;23/03/2026 14:56;23/03/2026 14:56;;;0;;Compromissos 1;;;
+;Cb Jonatas;30/04/2026;30/04/2026;;;;;;;24:00;13/04/2026 09:58;28/04/2026 08:06;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 29/04 a 03/05;
+;Operação Força Total 26ª Ed;30/04/2026;30/04/2026;;;;Ordens de Serviço;;;24:00;17/04/2026 10:54;17/04/2026 10:54;;;0;;Compromissos 1;;"SEI 202600002044466
+O.S. 055
+
+29 e 30/04
+00h às 23h59min
+Todas as Equipes
+
+* RELATÓRIO DIA 04/05";
+;Sgt Frederico;30/04/2026;30/04/2026;;;;;;;24:00;17/04/2026 10:52;22/04/2026 10:54;;;0;;Compromissos 1;;Dispensa do comando;
+;Cb Evandro;01/05/2026;01/05/2026;;;;;;;24:00;28/04/2026 07:59;28/04/2026 08:00;;;0;;Compromissos 1;;;
+;Sgt Urbano;02/05/2026;02/05/2026;;;;Férias / LESP;;;24:00;14/04/2026 11:39;29/04/2026 11:03;;;0;;Compromissos 1;;"Férias - 02/05 a 31/05
+30 dias";
+;Sgt Thassio;02/05/2026;02/05/2026;;;;;;;24:00;16/04/2026 10:36;16/04/2026 10:36;;;0;;Compromissos 1;;;
+;Cb Moreira;03/05/2026;03/05/2026;;;;Férias / LESP;;;24:00;07/04/2026 11:24;29/04/2026 11:14;;;0;;Compromissos 1;;"Férias - 03/05 a 01/06
+30 dias";
+;Sd Benjamim;03/05/2026;03/05/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:36;29/04/2026 11:36;;;0;;Compromissos 1;;"Férias - 03/05 a 01/06
+30 dias";
+;Sgt Victor - Retorno;03/05/2026;03/05/2026;;;;Férias / LESP;;;24:00;30/03/2026 10:52;29/04/2026 10:58;;;0;;Compromissos 1;;Férias - 01/04 a 30/04;
+;Sgt Victor;03/05/2026;03/05/2026;;;;;;;24:00;29/04/2026 10:57;29/04/2026 10:58;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de  01 a 05/05;
+;EAC / EAS;04/05/2026;04/05/2026;;;;Alterações Escala;;;24:00;23/04/2026 11:44;23/04/2026 11:44;;;0;;Compromissos 1;;"Cb Arantes
+Cb Neves 
+Cb Evandro";
+;Ten Danisclay;05/05/2026;05/05/2026;;;;;;;24:00;27/04/2026 11:51;27/04/2026 11:51;;;0;;Compromissos 1;;;
+;Sgt Edson;05/05/2026;05/05/2026;;;;;;;24:00;27/04/2026 11:51;27/04/2026 11:51;;;0;;Compromissos 1;;;
+;Cb T Santos - Retorno;07/05/2026;07/05/2026;;;;Férias / LESP;;;24:00;30/03/2026 10:54;29/04/2026 11:01;;;0;;Compromissos 1;;Férias - 05/04 a 04/05;
+;Cb T Santos;07/05/2026;07/05/2026;;;;;;;24:00;29/04/2026 11:00;29/04/2026 11:01;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 05 a 09/05;
+;Sd Ramalho;08/05/2026;08/05/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:39;29/04/2026 11:40;;;0;;Compromissos 1;;"Férias - 08/05 a 06/06
+30 dias";
+;Preencher planilha operação 1 parcial 8/05;08/05/2026;08/05/2026;;;;Importante;;;24:00;06/05/2026 14:16;06/05/2026 14:17;;;0;;Compromissos 1;;;
+;Sgt Elias;09/05/2026;09/05/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:04;29/04/2026 11:05;;;0;;Compromissos 1;;"Férias - 09/05 a 07/06
+30 dias";
+;Sd Julio - Retorno;11/05/2026;11/05/2026;;;;Férias / LESP;;;24:00;30/03/2026 10:58;29/04/2026 11:38;;;0;;Compromissos 1;;Férias - 11/04 a 10/05;
+;Sd Julio;11/05/2026;11/05/2026;;;;;;;24:00;29/04/2026 11:01;29/04/2026 11:02;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 11 a 15/05;
+;Sd Franco;13/05/2026;13/05/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:36;29/04/2026 11:37;;;0;;Compromissos 1;;Férias - 13/05 a 11/06;
+;Preencher planilha operação 1 parcial 14/05;14/05/2026;14/05/2026;;;;Importante;;;24:00;08/05/2026 17:38;08/05/2026 17:39;;;0;;Compromissos 1;;;
+;ordem de atendimento jogo;15/05/2026;15/05/2026;;;;;;;24:00;14/05/2026 10:46;14/05/2026 10:46;;;0;;Compromissos 1;;17/05;
+;Cb Donario;16/05/2026;16/05/2026;;;;;;;24:00;12/05/2026 11:53;12/05/2026 11:53;;;0;;Compromissos 1;;Dispensa de comando;
+;Sgt Edson;17/05/2026;17/05/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:11;29/04/2026 11:12;;;0;;Compromissos 1;;"Férias - 17/05 a 15/06
+30 dias";
+;Ordem de atendimento Cavalhadas Pirinópolis ;17/05/2026;17/05/2026;;;;Ordens de Serviço;;;24:00;06/05/2026 14:14;06/05/2026 14:17;;;0;;Compromissos 1;;17/05/2026, das 14h às 02h e 24 a 26/05/2026, das 12h00 às 04h00.;
+;Preencher planilha operação 1 parcial 18/05;18/05/2026;18/05/2026;;;;Importante;;;24:00;08/05/2026 17:39;08/05/2026 17:39;;;0;;Compromissos 1;;;
+;Preencher planilha operação 1 parcial 19/05 consolidação dos dados;19/05/2026;19/05/2026;;;;Importante;;;24:00;08/05/2026 17:40;08/05/2026 17:40;;;0;;Compromissos 1;;;
+;Sgt Santiago;19/05/2026;19/05/2026;;;;;;;24:00;14/05/2026 09:48;14/05/2026 09:48;;;0;;Compromissos 1;;Dispensa do comando geral 19/05 a 23/05;
+;Ordem atendimento ouro verde;21/05/2026;21/05/2026;;;;;;;24:00;14/05/2026 10:45;14/05/2026 10:46;;;0;;Compromissos 1;;22/05 ,23 e 24;
+;Cb J.Ferreira volta do atestado;22/05/2026;22/05/2026;;;;;;;24:00;12/05/2026 08:58;12/05/2026 08:59;;;0;;Compromissos 1;;;
+;Sgt Barbosa;23/05/2026;23/05/2026;;;;;;;24:00;13/05/2026 10:16;13/05/2026 10:16;;;0;;Compromissos 1;;Dispensa de Comando;
+;Cb Pereira;26/05/2026;26/05/2026;;;;;;;24:00;17/04/2026 10:19;12/05/2026 08:33;;;0;;Compromissos 1;;Férias - 26/05 a 09/06;
+;Lembrar da ordem de cavalhadas;26/05/2026;26/05/2026;;;;;;;24:00;15/05/2026 10:55;15/05/2026 10:55;;;0;;Compromissos 1;;;
+;Sgt lucas;26/05/2026;26/05/2026;;;;;;;24:00;18/05/2026 08:36;18/05/2026 08:36;;;0;;Compromissos 1;;Dispensa de comando;
+;ORD. ATEND. - NOVA VENEZA;29/05/2026;29/05/2026;;;;;;;24:00;22/05/2026 08:39;22/05/2026 08:40;;;0;;Compromissos 1;;FESTA DE NOVA VENEZA - 31/05 DAS 20 AS 00;
+;Ordem de atendimento de jogo;31/05/2026;31/05/2026;;;;;;;24:00;28/05/2026 11:55;28/05/2026 11:55;;;0;;Compromissos 1;;18:30h;
+;Sgt Urbano - Retorno;01/06/2026;01/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:03;29/04/2026 11:03;;;0;;Compromissos 1;;"Férias - 02/05 a 31/05
+30 dias";
+;Sgt Urbano;01/06/2026;01/06/2026;;;;;;;24:00;29/04/2026 11:04;29/04/2026 11:04;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 01 a 05/06;
+;Cb Bruno - Férias;01/06/2026;01/06/2026;;;;Férias / LESP;;;24:00;20/05/2026 15:42;26/05/2026 10:04;;;0;;Compromissos 1;;Férias no período de 01/06 a 30/06;
+;Preencher planilha -OP.Força Total;01/06/2026;01/06/2026;;;;;;;24:00;28/05/2026 08:18;28/05/2026 08:19;;;0;;Compromissos 1;;;
+;Cb Moreira;02/06/2026;02/06/2026;;;;;;;24:00;29/04/2026 11:15;29/04/2026 11:15;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 02 a 06/06;
+;Cb Moreira - Retorno;02/06/2026;02/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:15;29/04/2026 11:15;;;0;;Compromissos 1;;"Férias - 03/05 a 01/06
+30 dias";
+;Sd Benjamim - Retorno;02/06/2026;02/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:36;29/04/2026 11:36;;;0;;Compromissos 1;;"Férias - 03/05 a 01/06
+30 dias";
+;J.Junior;02/06/2026;02/06/2026;;;;;;;24:00;01/06/2026 11:22;01/06/2026 11:22;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sgt Felipe;03/06/2026;03/06/2026;;;;;;;24:00;14/05/2026 07:55;14/05/2026 07:56;;;0;;Compromissos 1;;Dispensa do comando da cpe e do comando geral de 03/06 a 11/06;
+;Ordem de atendimento PIRI BEER;03/06/2026;03/06/2026;;;;;;;24:00;01/06/2026 11:28;01/06/2026 11:29;;;0;;Compromissos 1;;04 a 06/06;
+;Sgt queiroz- Férias;04/06/2026;04/06/2026;;;;Férias / LESP;;;24:00;20/05/2026 15:41;26/05/2026 10:04;;;0;;Compromissos 1;;ferias no período de 04/06 a 03/07;
+;sgt urbano ;05/06/2026;05/06/2026;;;;;;;24:00;22/05/2026 08:31;22/05/2026 08:31;;;0;;Compromissos 1;;Volta da dispensa..qrv dia 06/06;
+;CB Danilo;05/06/2026;05/06/2026;;;;;;;24:00;29/05/2026 08:48;29/05/2026 08:49;;;0;;Compromissos 1;;Dispensa de comando;
+;Cb Mateus;05/06/2026;05/06/2026;;;;;;;24:00;01/06/2026 11:23;01/06/2026 11:23;;;0;;Compromissos 1;;Dispensa de Comando;
+;Cb Douglas;06/06/2026;06/06/2026;;;;;;;24:00;28/05/2026 09:19;28/05/2026 09:21;;;0;;Compromissos 1;;Dispensa de aniversário;
+;Sgt Céravalo;06/06/2026;06/06/2026;;;;;;;24:00;01/06/2026 11:31;01/06/2026 11:31;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sd Ramalho;07/06/2026;07/06/2026;;;;;;;24:00;29/04/2026 11:41;29/04/2026 11:42;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 07 a 11/06;
+;Sd Ramalho - Retorno;07/06/2026;07/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:40;29/04/2026 11:40;;;0;;Compromissos 1;;"Férias - 08/05 a 06/06
+30 dias";
+;EAC / EAS;08/06/2026;08/06/2026;;;;Alterações Escala;;;24:00;28/04/2026 15:10;20/05/2026 16:21;;;0;;Compromissos 1;;"EAC Cb Douglas,Mateus, donario, Danilo e t santos
+EAS Sgt Brandão";
+;Sgt Elias - Retorno;08/06/2026;08/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:05;29/04/2026 11:05;;;0;;Compromissos 1;;"Férias - 09/05 a 07/06
+30 dias";
+;Sgt Elias;08/06/2026;08/06/2026;;;;;;;24:00;29/04/2026 11:05;29/04/2026 11:08;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 08 a 12/06;
+;ST Thales - Férias;08/06/2026;08/06/2026;;;;Férias / LESP;;;24:00;20/05/2026 15:14;26/05/2026 10:05;;;0;;Compromissos 1;;Férias mo período 08/06 a 07/07;
+;Cb Pereira -Retorno das férias;09/06/2026;09/06/2026;;;;Férias / LESP;;;24:00;12/05/2026 08:30;26/05/2026 10:06;;;0;;Compromissos 1;;Dispensa do comando geral dia (5 dias) 10/06 a 14/06;
+;Cb Pereira ;10/06/2026;10/06/2026;;;;Dispensa;;;24:00;20/05/2026 16:14;26/05/2026 10:07;;;0;;Compromissos 1;;Dispensa de comando no periodo de 10/06 a 14/06;
+;Reunião Criação da Cartilha ;10/06/2026;10/06/2026;;;;;;;24:00;29/05/2026 08:22;29/05/2026 08:22;;;0;;Compromissos 1;;Academia PM -DIA 10/06 08 AS 18H;
+;Sd Franco;12/06/2026;12/06/2026;;;;;;;24:00;29/04/2026 11:37;29/04/2026 11:38;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 12 a 16/06;
+;Sd Franco - Retorno;12/06/2026;12/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:37;03/06/2026 09:15;;;0;;Compromissos 1;;"Férias - 13/05 a 11/06
+Disp. Cmt: 12/06 a 16/07
+";
+;CB Nathan;12/06/2026;12/06/2026;;;;;;;24:00;08/06/2026 09:00;08/06/2026 09:00;;;0;;Compromissos 1;;Dispensa de comando;
+;SGT George;13/06/2026;13/06/2026;;;;;;;24:00;01/06/2026 09:47;01/06/2026 09:48;;;0;;Compromissos 1;;Dispensa de Comando;
+;ORDEM DE ATENDIMENTO - JOGO PRAÇA DOM EMANUEL;13/06/2026;13/06/2026;;;;;;;24:00;03/06/2026 11:03;03/06/2026 11:03;;;0;;Compromissos 1;;;
+;PROVA TAP;14/06/2026;14/06/2026;;;;;;;24:00;27/05/2026 11:29;27/05/2026 11:29;;;0;;Compromissos 1;;;
+;Cb Pereira - Retorno das férias /dispensa;15/06/2026;15/06/2026;;;;Férias / LESP;;;24:00;26/05/2026 10:07;26/05/2026 10:07;;;0;;Compromissos 1;;;
+;Sgt Edson - Retorno;16/06/2026;16/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:12;29/04/2026 11:13;;;0;;Compromissos 1;;"Férias - 17/05 a 15/06
+30 dias";
+;Cb Moreira ;16/06/2026;16/06/2026;;;;;;;24:00;08/06/2026 08:31;08/06/2026 08:32;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sd Franco;17/06/2026;17/06/2026;;;;Férias / LESP;;;24:00;03/06/2026 09:15;03/06/2026 09:16;;;0;;Compromissos 1;;Pronto 17/06;
+;Sgt Valadão;17/06/2026;17/06/2026;;;;;;;24:00;15/06/2026 14:15;15/06/2026 14:16;;;0;;Compromissos 1;;Dispensa de Comando;
+;Cb Gouveia - Férias;18/06/2026;18/06/2026;;;;Férias / LESP;;;24:00;26/05/2026 10:03;26/05/2026 10:04;;;0;;Compromissos 1;;Férias de 18/06 a 17/07;
+;Ggt cliff;19/06/2026;19/06/2026;;;;;;;24:00;18/05/2026 08:38;18/05/2026 08:39;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sgt Ramos Jr.;20/06/2026;20/06/2026;;;;;;;24:00;02/06/2026 09:06;12/06/2026 14:28;;;0;;Compromissos 1;;Dsipensa de Comando Geral - 20 a 24/06;
+;Cb Douglas - Férias;22/06/2026;22/06/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:34;26/05/2026 10:05;;;0;;Compromissos 1;;"Férias - 22/06 a 21/07
+30 dias";
+;Sgt aguinaldo;22/06/2026;22/06/2026;;;;Dispensa;;;24:00;25/05/2026 14:51;26/05/2026 10:05;;;0;;Compromissos 1;;Dispensa comando geral de 22 a 26/06;
+;SGT Ribeiro;24/06/2026;24/06/2026;;;;;;;24:00;16/06/2026 16:55;16/06/2026 16:56;;;0;;Compromissos 1;;DISPENSA DE COMANDO;
+;Festa Junina em Terezópolis;25/06/2026;25/06/2026;;;;Ordens de Serviço;;;24:00;12/06/2026 17:18;25/06/2026 09:48;;;0;;Compromissos 1;;"SEI 202600002071066
+O.S. 089
+
+26 a 28/06
+23h às 02h
+01 Equipe
+
+
+
+Terezópolis de Goiás a tradicional Festa Junina,26,27,28
+Ordem pronta - somente divulgar
+";
+;Operação Mulher Segura - 3ª Parcial;25/06/2026;25/06/2026;;;;Relatório;;;24:00;25/06/2026 09:37;25/06/2026 09:55;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+3ª Parcial/Junho até às 15h";
+;Plano de defesa bancos;26/06/2026;26/06/2026;;;;Importante;;;24:00;22/06/2026 14:16;25/06/2026 10:41;;;0;;Compromissos 1;;;
+;Operação Virtude - 3ª Parcial;26/06/2026;26/06/2026;;;;Relatório;;;24:00;25/06/2026 09:34;25/06/2026 09:56;;;0;;Compromissos 1;;"SEI 202600016016343
+
+3ª Parcial até às 09h";
+;Operação Escola Segura;26/06/2026;26/06/2026;;;;Ordens de Serviço;;;24:00;25/06/2026 10:24;25/06/2026 10:24;;;0;;Compromissos 1;;"SEI 202600002074835
+O.S. 093
+
+
+09h
+Todas Equipes";
+;Sgt Cliff;27/06/2026;27/06/2026;;;;;;;24:00;28/04/2026 08:48;28/04/2026 10:28;;;0;;Compromissos 1;;;
+;CB Arantes;27/06/2026;27/06/2026;;;;;;;24:00;18/05/2026 09:27;18/05/2026 09:27;;;0;;Compromissos 1;;Dispensa de comando;
+;Ten Araujo;27/06/2026;27/06/2026;;;;Férias / LESP;;;24:00;26/05/2026 09:50;25/06/2026 10:38;;;0;;Compromissos 1;;"Férias - 27/06 a a 16/07
+20 dias";
+;Operação Virtude - 4ª Parcial;29/06/2026;29/06/2026;;;;Relatório;;;24:00;25/06/2026 09:35;29/06/2026 08:28;;;0;;Compromissos 1;;"SEI 202600016016343
+
+4ª Parcial até às 09h";
+;Ten Andrade;29/06/2026;29/06/2026;;;;Férias / LESP;;;24:00;11/06/2026 15:16;25/06/2026 10:35;;;0;;Compromissos 1;;"Férias - 29/06 a 08/07
+10 dias";
+;Operação Força Total - 28ª Ed;29/06/2026;29/06/2026;;;;Ordens de Serviço;;;24:00;25/06/2026 09:50;25/06/2026 09:54;;;0;;Compromissos 1;;"SEI 202600002071870
+O.A. 091
+
+
+29 e 30/06
+24h
+Todas as Equipes
+
+Relatório:
+01/07 até às 10h";
+;Operação Força Total - 28ª Ed;30/06/2026;30/06/2026;;;;Ordens de Serviço;;;24:00;25/06/2026 09:54;25/06/2026 09:54;;;0;;Compromissos 1;;"SEI 202600002071870
+O.A. 091
+
+
+29 e 30/06
+24h
+Todas as Equipes
+
+Relatório:
+01/07 até às 10h";
+;Uessugui, J.Nunes e Araujo -retorno;30/06/2026;30/06/2026;;;;Férias / LESP;;;24:00;26/05/2026 10:16;26/05/2026 10:17;;;0;;Compromissos 1;;Retorno da licença - prontos dia 01/07;
+;Cb Bruno;01/07/2026;01/07/2026;;;;Dispensa;;;24:00;20/05/2026 15:42;26/05/2026 10:00;;;0;;Compromissos 1;;Dispensa do comando geral de 01/07 a 05/07;
+;Operação Força Total - 28ª Ed;01/07/2026;01/07/2026;;;;Relatório;;;24:00;25/06/2026 09:54;25/06/2026 09:55;;;0;;Compromissos 1;;"SEI 202600002071870
+O.A. 091
+
+
+29 e 30/06
+24h
+Todas as Equipes
+
+Relatório:
+01/07 até às 10h";
+;Operação Virtude - Consolidação;01/07/2026;01/07/2026;;;;Relatório;;;24:00;25/06/2026 09:36;30/06/2026 08:40;;;0;;Compromissos 1;;"SEI 202600016016343
+
+Consolidação até às 09h";
+;Uessugui, J.Nunes e Araujo -retorno;01/07/2026;01/07/2026;;;;;;;24:00;26/05/2026 10:17;26/05/2026 10:17;;;0;;Compromissos 1;;;
+;Sgt Felipe;01/07/2026;01/07/2026;;;;;;;24:00;29/06/2026 08:16;29/06/2026 08:17;;;0;;Compromissos 1;;Dispensa de comando (aniversário);
+;Operação Mulher Segura - 1ª Parcial;02/07/2026;02/07/2026;;;;Relatório;;;24:00;25/06/2026 09:39;25/06/2026 09:55;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+1ª Parcial/Julho até às 15h";
+;Sgt Tabata;03/07/2026;03/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:30;25/06/2026 10:30;;;0;;Compromissos 1;;"Férias - 03 a 12/07
+10 dias";
+;Cb Coelho;03/07/2026;03/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:58;30/06/2026 09:29;;;0;;Compromissos 1;;LESP - 01/07 a 30/09;
+;Colônia de férias ASSISTEN;04/07/2026;04/07/2026;;;;Ordens de Serviço;;;24:00;22/06/2026 09:13;22/06/2026 09:15;;;0;;Compromissos 1;;"SEI 202600002076167
+O.S. 092
+
+08h às 17h
+01 Equipe";
+;Sgt Rocha;05/07/2026;05/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:31;25/06/2026 10:32;;;0;;Compromissos 1;;"Férias - 05/07 a 03/08
+30 dias";
+;SGT  Lucas;05/07/2026;05/07/2026;;;;;;;24:00;26/06/2026 16:56;26/06/2026 16:57;;;0;;Compromissos 1;;Dispensa de comando (ANIVERSÁRIO);
+;Futebol Anapolis X Botafogo;05/07/2026;05/07/2026;;;;Ordens de Serviço;;;24:00;02/07/2026 08:59;03/07/2026 12:52;;;0;;Compromissos 1;;"SEI 202600002081169
+O.S. 094
+
+
+18h
+01 Equipe CPE
+Gramado e Escolta do trio de arbitragem";
+;EAC / EAS;05/07/2026;05/07/2026;;;;Alterações Escala;;;24:00;30/06/2026 11:39;02/07/2026 09:16;;;0;;Compromissos 1;;"Período de 05/07 a 19/07
+
+EAS:
+- Sgt Elias (C)
+
+EAC:
+- Cb. J.Nunes (D)
+- Cb Filho (D)
+- Cb Moreira (A)
+- Cb Nathan (A)";
+;Sgt Queiroz - Retorno Férias;06/07/2026;06/07/2026;;;;Férias / LESP;;;24:00;26/05/2026 09:58;02/07/2026 09:06;;;0;;Compromissos 1;;Férias de 04/06 a 03/07;
+;Cb Bruno - retorno;07/07/2026;07/07/2026;;;;Férias / LESP;;;24:00;26/05/2026 10:02;02/07/2026 10:23;;;0;;Compromissos 1;;Retorno da dispensa do comando geral 01/07 a 05/07;
+;Sgt Frederico;07/07/2026;07/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:33;25/06/2026 10:33;;;0;;Compromissos 1;;"Férias - 07/07 a 05/08
+30 dias";
+;Retorno de férais ST THALES;08/07/2026;08/07/2026;;;;Férias / LESP;;;24:00;26/05/2026 09:57;06/07/2026 08:45;;;0;;Compromissos 1;;Férias 08/06 A 07/07;
+;ST Thales;08/07/2026;08/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:41;25/06/2026 10:42;;;0;;Compromissos 1;;LESP - 08/07 a 09/10;
+;Sgt Sérgio;08/07/2026;08/07/2026;;;;;;;24:00;06/07/2026 09:39;07/07/2026 10:21;;;0;;Compromissos 1;;;
+;Operação Mulher Segura - 2ª Parcial;09/07/2026;09/07/2026;;;;Relatório;;;24:00;25/06/2026 09:40;25/06/2026 09:55;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+2ª Parcial/Julho até às 15h";
+;Cb ARANTES ;09/07/2026;09/07/2026;;;;;;;24:00;09/06/2026 15:37;02/07/2026 10:21;;;0;;Compromissos 1;;ATESTADO MÉDICO (Cirurgia);
+;Aniversário de Corumbá;09/07/2026;09/07/2026;;;;Ordens de Serviço;;;24:00;01/07/2026 10:49;07/07/2026 10:33;;;0;;Compromissos 1;;"SEI 202600002075420
+O.S. 096
+
+09 a 11/07
+20h às 04h
+01 Equipe
+";
+;Aniversário de Corumbá;10/07/2026;10/07/2026;;;;Ordens de Serviço;;;24:00;07/07/2026 10:33;07/07/2026 10:33;;;0;;Compromissos 1;;"SEI 202600002075420
+O.S. 096
+
+09 a 11/07
+20h às 04h
+01 Equipe
+";
+;Sgt Victor;10/07/2026;10/07/2026;;;;;;;24:00;29/06/2026 08:09;02/07/2026 08:49;;;0;;Compromissos 1;;Dispensa de comando;
+;Aniversário de Corumbá;11/07/2026;11/07/2026;;;;Ordens de Serviço;;;24:00;07/07/2026 10:33;07/07/2026 10:33;;;0;;Compromissos 1;;"SEI 202600002075420
+O.S. 096
+
+09 a 11/07
+20h às 04h
+01 Equipe
+";
+;Ten Andrade;11/07/2026;11/07/2026;;;;Dispensa;;;24:00;11/06/2026 15:17;08/07/2026 09:01;;;0;;Compromissos 1;;Dispensa de Comando (Cmt GERAL) - 09 a 13/07;
+;Ten Andrade - Retorno;11/07/2026;11/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:36;08/07/2026 09:01;;;0;;Compromissos 1;;"Férias - 29/06 a 08/07
+10 dias";
+;Cb Neves;12/07/2026;12/07/2026;;;;;;;24:00;12/06/2026 14:18;12/06/2026 14:18;;;0;;Compromissos 1;;Dispensa de comando;
+;Sgt J Junior;12/07/2026;12/07/2026;;;;;;;24:00;06/07/2026 09:30;07/07/2026 10:21;;;0;;Compromissos 1;;;
+;Futebol Anapolis X Maringa;12/07/2026;12/07/2026;;;;Ordens de Serviço;;;24:00;10/07/2026 09:10;10/07/2026 09:11;;;0;;Compromissos 1;;"SEI 202600002084087
+O.S. 97
+
+13h
+01 Equipe
+Gramado / Escolta Arbitragem";
+;ST Carla;13/07/2026;13/07/2026;;;;;;;24:00;02/06/2026 10:52;01/07/2026 09:22;;;0;;Compromissos 1;;Dispensa de Comando;
+;Sgt Santiago;14/07/2026;14/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:28;25/06/2026 10:29;;;0;;Compromissos 1;;"Férias - 14/07 a 12/08
+30 dias";
+;Sgt Diogo;15/07/2026;15/07/2026;;;;;;;24:00;29/06/2026 11:52;29/06/2026 11:53;;;0;;Compromissos 1;;Dispensa de Cmd (Cmt Geral) - 15 a 19/07;
+;Sgt Tabata - Retorno;15/07/2026;15/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:31;09/07/2026 11:19;;;0;;Compromissos 1;;"Férias - 03 a 12/07
+10 dias";
+;Operação Mulher Segura - 3ª Parcial;16/07/2026;16/07/2026;;;;Relatório;;;24:00;25/06/2026 09:41;25/06/2026 09:55;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+3ª Parcial/Julho até às 15h";
+;Ten Araujo - Retorno;17/07/2026;17/07/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:39;25/06/2026 10:39;;;0;;Compromissos 1;;"Férias - 27/06 a a 16/07
+20 dias";
+;OS - Campo limpo;17/07/2026;17/07/2026;;;;Ordens de Serviço;;;24:00;15/07/2026 10:35;15/07/2026 10:35;;;0;;Compromissos 1;;;
+;Retorno de férias - Cb Gouveia;18/07/2026;18/07/2026;;;;Férias / LESP;;;24:00;26/05/2026 10:08;25/06/2026 10:41;;;0;;Compromissos 1;;18/06 a 17/07;
+;Cb Gouveia;18/07/2026;18/07/2026;;;;Dispensa;;;24:00;26/05/2026 10:09;25/06/2026 10:35;;;0;;Compromissos 1;;Dispensa do comando geral de 18/07 a 22/07;
+;Sgt Urbano;18/07/2026;18/07/2026;;;;;;;24:00;13/07/2026 15:20;13/07/2026 15:20;;;0;;Compromissos 1;;Dispensa de comando;
+;EAC / EAS - Retorno;19/07/2026;19/07/2026;;;;Alterações Escala;;;24:00;02/07/2026 09:13;02/07/2026 09:16;;;0;;Compromissos 1;;"Período de 05/07 a 19/07
+
+EAS:
+- Sgt Elias (C)
+
+EAC:
+- Cb. J.Nunes (D)
+- Cb Filho (D)
+- Cb Moreira (A)
+- Cb Nathan (A)";
+;Sgt Peixoto;19/07/2026;19/07/2026;;;;;;;24:00;06/07/2026 09:56;06/07/2026 09:56;;;0;;Compromissos 1;;;
+;Cb Douglas;22/07/2026;22/07/2026;;;;;;;24:00;29/04/2026 11:35;29/04/2026 11:35;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) no período de 22 a 26/07;
+;Cb Douglas - Retorno;22/07/2026;22/07/2026;;;;Férias / LESP;;;24:00;29/04/2026 11:35;29/04/2026 11:35;;;0;;Compromissos 1;;"Férias - 22/06 a 21/07
+30 dias";
+;Operação Mulher Segura - 4ª Parcial;23/07/2026;23/07/2026;;;;Relatório;;;24:00;25/06/2026 09:41;25/06/2026 09:55;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+4ª Parcial/Julho até às 15h";
+;Sgt Morais;23/07/2026;23/07/2026;;;;;;;24:00;21/07/2026 14:07;22/07/2026 10:17;;;0;;Compromissos 1;;Dispensa de comando;
+;Operação Força Total;23/07/2026;23/07/2026;;;;Ordens de Serviço;;;24:00;22/07/2026 09:50;22/07/2026 09:51;;;0;;Compromissos 1;;"SEI 202600002086023
+O.S. 106
+
+Dias 23 e 24/07
+00h às 23h59
+Todas equipes
+
+RELATÓRIO DIA 27/07";
+;Operação Força Total;24/07/2026;24/07/2026;;;;Ordens de Serviço;;;24:00;22/07/2026 09:51;22/07/2026 09:51;;;0;;Compromissos 1;;"SEI 202600002086023
+O.S. 106
+
+Dias 23 e 24/07
+00h às 23h59
+Todas equipes
+
+RELATÓRIO DIA 27/07";
+;SGT Carvalho;24/07/2026;24/07/2026;;;;;;;24:00;11/06/2026 13:16;11/06/2026 13:17;;;0;;Compromissos 1;;Dispensa de Comando;
+; Cb Gouveia -Retorno;24/07/2026;24/07/2026;;;;;;;24:00;26/05/2026 10:10;21/07/2026 08:45;;;0;;Compromissos 1;;Retorno da dispensa comando geral ;
+;Aniversario Campo Limpo;24/07/2026;24/07/2026;;;;Ordens de Serviço;;;24:00;15/07/2026 10:35;22/07/2026 09:53;;;0;;Compromissos 1;;"SEI 202600002072199
+O.S. 101
+
+Dias 24 e 25/07
+21h às 05h
+01 Equipe";
+;Ten Danisclay;24/07/2026;24/07/2026;;;;;;;24:00;21/07/2026 12:34;21/07/2026 12:35;;;0;;Compromissos 1;;;
+;Aniversario Campo Limpo;25/07/2026;25/07/2026;;;;Ordens de Serviço;;;24:00;22/07/2026 09:53;22/07/2026 09:53;;;0;;Compromissos 1;;"SEI 202600002072199
+O.S. 101
+
+Dias 24 e 25/07
+21h às 05h
+01 Equipe";
+;Plantonista CRPM;25/07/2026;25/07/2026;;;;Importante;;;24:00;02/07/2026 14:45;23/07/2026 08:55;;;0;;Compromissos 1;;SEI 202600002067485;
+;Sgt Lucas;25/07/2026;25/07/2026;;;;Dispensa;;;24:00;03/07/2026 14:46;03/07/2026 14:47;;;0;;Compromissos 1;;Dispensa de Comando (Cmt GERAL) - 25 a 29/07;
+;Futebol Gremio Anapolis X Morrinhos;25/07/2026;25/07/2026;;;;Ordens de Serviço;;;24:00;21/07/2026 14:08;22/07/2026 09:50;;;0;;Compromissos 1;;"SEI 202600002088082
+O.S. 102
+
+13h
+01 Equipe";
+;Igreja Quadrangular / Unievangelica;25/07/2026;25/07/2026;;;;Ordens de Serviço;;;24:00;21/07/2026 16:47;22/07/2026 09:57;;;0;;Compromissos 1;;"SEI 202600002088620
+O.S. 105
+
+16h
+01 Equipe
+PB e Patrulahemnto imediações";
+;Cb Malheiros;26/07/2026;26/07/2026;;;;;;;24:00;21/07/2026 14:58;21/07/2026 14:59;;;0;;Compromissos 1;;Dispensa de comando ( aniversário);
+;Operação Força Total;27/07/2026;27/07/2026;;;;Relatório;;;24:00;21/07/2026 17:48;22/07/2026 09:52;;;0;;Compromissos 1;;"SEI 202600002086023
+O.S. 106
+
+Dias 23 e 24/07
+00h às 23h59
+Todas equipes
+
+RELATÓRIO DIA 27/07";
+;Cb Otto;27/07/2026;27/07/2026;;;;;;;24:00;23/07/2026 09:49;23/07/2026 09:49;;;0;;Compromissos 1;;;
+;Cb Douglas- retorno;28/07/2026;28/07/2026;;;;;;;24:00;26/05/2026 10:11;23/07/2026 10:04;;;0;;Compromissos 1;;Retorno da dispensa do comando geral 18/07 a 22/07;
+;Plantonista  CRPM;29/07/2026;29/07/2026;;;;Importante;;;24:00;02/07/2026 14:45;02/07/2026 14:45;;;0;;Compromissos 1;;;
+;Operação Mulher Segura - 5ª Parcial;30/07/2026;30/07/2026;;;;Relatório;;;24:00;25/06/2026 09:42;25/06/2026 09:56;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+5ª Parcial/Julho até às 15h";
+;OS.Unievangélica;30/07/2026;30/07/2026;;;;Ordens de Serviço;;;24:00;21/07/2026 16:04;21/07/2026 16:04;;;0;;Compromissos 1;;;
+;OS. Expoana Anápolis;30/07/2026;30/07/2026;;;;Ordens de Serviço;;;24:00;27/07/2026 16:32;27/07/2026 16:33;;;0;;Compromissos 1;;Dias 30,31/07,01/08;
+;Operação Mulher Segura - Consolidação;31/07/2026;31/07/2026;;;;Relatório;;;24:00;25/06/2026 09:42;25/06/2026 09:56;;;0;;Compromissos 1;;"SEI 202600002063484
+O.S. 081/26-31ª CIPM
+
+Consolidação/Julho até às 15h";
+;OS. Desfile;31/07/2026;31/07/2026;;;;Ordens de Serviço;;;24:00;21/07/2026 16:05;21/07/2026 16:05;;;0;;Compromissos 1;;;
+;Sgt Gustavo;01/08/2026;01/08/2026;;;;;;;24:00;27/04/2026 10:06;27/04/2026 10:06;;;0;;Compromissos 1;;;
+;Sgt Lucas;02/08/2026;02/08/2026;;;;Férias / LESP;;;24:00;23/07/2026 17:37;23/07/2026 17:38;;;0;;Compromissos 1;;"Férias - 02/08 a 31/08
+30 dias";
+;OS - Gameleira GO;02/08/2026;02/08/2026;;;;Ordens de Serviço;;;24:00;29/07/2026 17:09;29/07/2026 17:09;;;0;;Compromissos 1;;;
+;Sgt Rocha - Retorno;04/08/2026;04/08/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:32;25/06/2026 10:32;;;0;;Compromissos 1;;"Férias - 05/07 a 03/08
+30 dias";
+;Sgt Rocha;04/08/2026;04/08/2026;;;;Dispensa;;;24:00;25/06/2026 10:32;25/06/2026 10:33;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 04 a 08/08;
+;ST Carla;05/08/2026;05/08/2026;;;;Alterações Escala;;;24:00;29/07/2026 08:34;29/07/2026 08:34;;;0;;Compromissos 1;;S.E.R.;
+;Sgt Frederico - Retorno;06/08/2026;06/08/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:34;25/06/2026 10:34;;;0;;Compromissos 1;;"Férias - 07/07 a 05/08
+30 dias";
+;Operação Mulher segura - 1ª Parcial  ;06/08/2026;06/08/2026;;;;Relatório;;;24:00;02/07/2026 14:36;02/07/2026 14:37;;;0;;Compromissos 1;;;
+;O.S JOGO;06/08/2026;06/08/2026;;;;;;;24:00;05/08/2026 17:21;05/08/2026 17:22;;;0;;Compromissos 1;;ASSINAR SEI E ENVIAR;
+;Operação Mulher segura - Dia D - Aniversário Maria da Penha;07/08/2026;07/08/2026;;;;Importante;;;24:00;02/07/2026 14:36;02/07/2026 14:38;;;0;;Compromissos 1;;;
+;Sgt dos santos ;07/08/2026;07/08/2026;;;;;;;24:00;05/08/2026 15:45;05/08/2026 15:46;;;0;;Compromissos 1;;Extra para completar equipe dia 10/08;
+;ESCALA HABILITAÇÃO BENELLI 12;07/08/2026;07/08/2026;;;;;;;24:00;06/08/2026 11:57;06/08/2026 11:58;;;0;;Compromissos 1;;;
+;Cb Donário;08/08/2026;08/08/2026;;;;Férias / LESP;;;24:00;23/07/2026 17:40;23/07/2026 17:41;;;0;;Compromissos 1;;"Férias - 08/08 a 06/09
+30 dias";
+;Cb Neves;09/08/2026;09/08/2026;;;;Férias / LESP;;;24:00;23/07/2026 17:43;23/07/2026 17:44;;;0;;Compromissos 1;;"Férias - 09/08 a 07/09
+30 dias";
+;Cb Glauber;12/08/2026;12/08/2026;;;;Férias / LESP;;;24:00;23/07/2026 17:38;23/07/2026 17:39;;;0;;Compromissos 1;;"Férias - 12/08 a 10/09
+30 dias";
+;Sgt Santiago - Retorno;13/08/2026;13/08/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:29;25/06/2026 10:30;;;0;;Compromissos 1;;"Férias - 14/07 a 12/08
+30 dias";
+;Operação Mulher segura - 2ª Parcial;13/08/2026;13/08/2026;;;;Relatório;;;24:00;02/07/2026 14:35;02/07/2026 14:38;;;0;;Compromissos 1;;;
+;Sgt Ceravalo;13/08/2026;13/08/2026;;;;Férias / LESP;;;24:00;06/08/2026 09:57;24/08/2026 11:46;;;0;;Compromissos 1;;"Férias - 13/08 a 27/08
+15 dias";
+;Sgt Uessugui;14/08/2026;14/08/2026;;;;Dispensa;;;24:00;10/08/2026 15:35;10/08/2026 15:36;;;0;;Compromissos 1;;Dispensa de Comando;
+;"OS ""OPERAÇÃO PROTEÇÃO DO CORAÇÃO DO BRASIL""";14/08/2026;14/08/2026;;;;Ordens de Serviço;;;24:00;12/08/2026 08:43;12/08/2026 08:44;;;0;;Compromissos 1;;;
+;Sgt Barbosa;15/08/2026;15/08/2026;;;;Férias / LESP;;;24:00;23/07/2026 17:34;23/07/2026 17:35;;;0;;Compromissos 1;;"Férias - 15/08 a 13/09
+30 dias";
+;Sgt Thassio;18/08/2026;18/08/2026;;;;Férias / LESP;;;24:00;13/08/2026 08:47;13/08/2026 08:48;;;0;;Compromissos 1;;"Férias - 18/08 a 16/09
+30 dias";
+;Desfile de Vianópolis;19/08/2026;19/08/2026;;;;Ordens de Serviço;;;24:00;12/08/2026 08:46;18/08/2026 09:10;;;0;;Compromissos 1;;"SEI 202600002098311
+O.S. 116
+
+07h30min
+01 Equipe";
+;Operação Mulher segura - 3ª Parcial ;20/08/2026;20/08/2026;;;;Relatório;;;24:00;02/07/2026 14:38;02/07/2026 14:38;;;0;;Compromissos 1;;;
+;Pecuária de Vianópolis;20/08/2026;20/08/2026;;;;Ordens de Serviço;;;24:00;17/08/2026 15:21;18/08/2026 09:25;;;0;;Compromissos 1;;"SEI 202600002067578
+O.S. 117
+
+20 a 23/08
+18h às 06h
+01 Equipe";
+;Pecuária de Vianópolis;21/08/2026;21/08/2026;;;;Ordens de Serviço;;;24:00;18/08/2026 09:25;18/08/2026 09:25;;;0;;Compromissos 1;;"SEI 202600002067578
+O.S. 117
+
+20 a 23/08
+18h às 06h
+01 Equipe";
+;22º CRPM Seguro - Nerópolis;21/08/2026;21/08/2026;;;;Ordens de Serviço;;;24:00;17/08/2026 15:34;18/08/2026 09:21;;;0;;Compromissos 1;;"SEI 202600002098087
+O.S. 003
+
+21/08 - 16h às 19h
+23/08 - 14h às 17h
+01 Equipe";
+;Escala Instrução TASER 10;21/08/2026;21/08/2026;;;;Importante;;;24:00;18/08/2026 16:28;18/08/2026 16:29;;;0;;Compromissos 1;;;
+;Futebol: Grêmio Anapolis X Mineiros;22/08/2026;22/08/2026;;;;Ordens de Serviço;;;24:00;17/08/2026 15:21;18/08/2026 09:23;;;0;;Compromissos 1;;"SEI 202600002093685
+O.S. 118
+
+13h
+01 Equipe
+Gramado e Escolta Arbitragem";
+;Pecuária de Vianópolis;22/08/2026;22/08/2026;;;;Ordens de Serviço;;;24:00;18/08/2026 09:25;18/08/2026 09:25;;;0;;Compromissos 1;;"SEI 202600002067578
+O.S. 117
+
+20 a 23/08
+18h às 06h
+01 Equipe";
+;OS. Corridão Projeto Polícia;22/08/2026;22/08/2026;;;;Ordens de Serviço;;;24:00;20/08/2026 16:35;20/08/2026 16:36;;;0;;Compromissos 1;;22/08 - as 16: 30h;
+;22º CRPM Seguro - Nerópolis;23/08/2026;23/08/2026;;;;Ordens de Serviço;;;24:00;18/08/2026 09:21;18/08/2026 09:21;;;0;;Compromissos 1;;"SEI 202600002098087
+O.S. 003
+
+21/08 - 16h às 19h
+23/08 - 14h às 17h
+01 Equipe";
+;Pecuária de Vianópolis;23/08/2026;23/08/2026;;;;Ordens de Serviço;;;24:00;18/08/2026 09:25;18/08/2026 09:25;;;0;;Compromissos 1;;"SEI 202600002067578
+O.S. 117
+
+20 a 23/08
+18h às 06h
+01 Equipe";
+;Sgt Ramos Junior;23/08/2026;23/08/2026;;;;;;;24:00;19/08/2026 09:17;19/08/2026 09:18;;;0;;Compromissos 1;;;
+;OS. Parada LGBT;23/08/2026;23/08/2026;;;;Ordens de Serviço;;;24:00;19/08/2026 15:09;19/08/2026 15:09;;;0;;Compromissos 1;;;
+;OS. Homenagem aos Heróis;23/08/2026;23/08/2026;;;;Ordens de Serviço;;;24:00;19/08/2026 15:25;19/08/2026 15:26;;;0;;Compromissos 1;;23/08 - 09h;
+;Cb J Ferreira;24/08/2026;24/08/2026;;;;Férias / LESP;;;24:00;28/07/2026 17:43;24/08/2026 11:52;;;0;;Compromissos 1;;"Férias - 24/08 a 02/09
+10 dias";
+;Aula Bootcamp Unievangelica;24/08/2026;24/08/2026;;;;Ordens de Serviço;;;24:00;10/08/2026 10:37;11/08/2026 11:40;;;0;;Compromissos 1;;"SEI
+O.S. 
+
+Sgt Diogo
+Sgt Frederico
+Sgt Peixoto
+CB Bruno
+
+Maj George
+Ten Leonardo
+Sgt Ramos Junior
+Sgt Gustavo";
+;Reunião APAE- Major -  ;25/08/2026;25/08/2026;;;;Importante;;;24:00;19/08/2026 14:35;19/08/2026 14:36;;;0;;Compromissos 1;;09h -12:30;
+;Sgt Rocha;26/08/2026;26/08/2026;;;;;;;24:00;16/04/2026 10:37;19/08/2026 16:30;;;0;;Compromissos 1;;;
+;Futebol Gremio Anapolis X Goianesia;26/08/2026;26/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:34;25/08/2026 09:36;;;0;;Compromissos 1;;"SEI 202600002093685
+O.S. 125
+
+16h
+01 Equipe";
+;Operação Mulher segura - 4ª Parcial  ;27/08/2026;27/08/2026;;;;Relatório;;;24:00;02/07/2026 14:39;02/07/2026 14:39;;;0;;Compromissos 1;;;
+;Pecuaria de Silvania;27/08/2026;27/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:42;25/08/2026 09:42;;;0;;Compromissos 1;;"SEI 202600002062526
+O.S. 126
+
+27 a 30/08
+18 às 06h
+01 Equipe";
+;Operação Força Total 30ª Ed;27/08/2026;27/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 11:27;25/08/2026 11:28;;;0;;Compromissos 1;;"SEI 202600002096415
+O.S. 123
+
+27 e 28/08
+24h
+Todas Equipes";
+;Operação Força Total 30ª Ed;28/08/2026;28/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 11:28;25/08/2026 11:28;;;0;;Compromissos 1;;"SEI 202600002096415
+O.S. 123
+
+27 e 28/08
+24h
+Todas Equipes";
+;Pecuaria de Silvania;28/08/2026;28/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:43;25/08/2026 09:43;;;0;;Compromissos 1;;"SEI 202600002062526
+O.S. 126
+
+27 a 30/08
+18 às 06h
+01 Equipe";
+;Sd V.Carvalho;28/08/2026;28/08/2026;;;;Alterações Escala;;;24:00;19/08/2026 15:57;25/08/2026 11:30;;;0;;Compromissos 1;;Dispensa Nupcias - 28 a 04/09;
+;Sgt Ceravalo - Retorno;28/08/2026;28/08/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:46;24/08/2026 11:46;;;0;;Compromissos 1;;"Férias - 13/08 a 27/08
+15 dias";
+;Sgt Cerávalo;28/08/2026;28/08/2026;;;;Dispensa;;;24:00;06/08/2026 09:59;20/08/2026 09:47;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 28/08 a 01/09;
+;;28/08/2026 09:30;28/08/2026 10:30;;;;;;;1:00;28/08/2026 09:29;28/08/2026 09:29;;;0;;Compromissos 1;;;
+;Futebol Anapolis X Santa Cruz;29/08/2026;29/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:36;25/08/2026 09:37;;;0;;Compromissos 1;;"SEI 202600002093692
+O.S. 124
+
+14h
+01 Equipe";
+;Pecuaria de Silvania;29/08/2026;29/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:43;25/08/2026 09:43;;;0;;Compromissos 1;;"SEI 202600002062526
+O.S. 126
+
+27 a 30/08
+18 às 06h
+01 Equipe";
+;Pecuaria de Silvania;30/08/2026;30/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:43;25/08/2026 09:43;;;0;;Compromissos 1;;"SEI 202600002062526
+O.S. 126
+
+27 a 30/08
+18 às 06h
+01 Equipe";
+;Sgt Rocha;30/08/2026;30/08/2026;;;;;;;24:00;16/04/2026 10:37;03/08/2026 11:48;;;0;;Compromissos 1;;;
+;Aniversario Leopoldo Bulhoes;30/08/2026;30/08/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:37;25/08/2026 09:40;;;0;;Compromissos 1;;"SEI 202600002102658
+O.S. 127
+
+30/08 - 13h às 19h
+01/09 - 18h às 06h >>> S.E.R 47ª CIPM
+02/09 - a partir das 07h
+
+01 Equipe";
+;Operação Mulher segura - Consolidação;31/08/2026;31/08/2026;;;;Relatório;;;24:00;02/07/2026 14:39;02/07/2026 14:39;;;0;;Compromissos 1;;;
+;Escala Habilitação - Pistola;31/08/2026;31/08/2026;;;;Importante;;;24:00;19/08/2026 14:50;19/08/2026 14:50;;;0;;Compromissos 1;;;
+;Operação Força Total;31/08/2026;31/08/2026;;;;Relatório;;;24:00;25/08/2026 08:40;25/08/2026 08:40;;;0;;Compromissos 1;;;
+;Aniversario Leopoldo Bulhoes;01/09/2026;01/09/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:40;25/08/2026 09:40;;;0;;Compromissos 1;;"SEI 202600002102658
+O.S. 127
+
+30/08 - 13h às 19h
+01/09 - 18h às 06h >>> S.E.R 47ª CIPM
+02/09 - a partir das 07h
+
+01 Equipe";
+;Sgt Lucas - Retorno;01/09/2026;01/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:49;24/08/2026 11:50;;;0;;Compromissos 1;;"Férias - 02/08 a 31/08
+30 dias";
+;Aniversario Leopoldo Bulhoes;02/09/2026;02/09/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:40;25/08/2026 09:41;;;0;;Compromissos 1;;"SEI 202600002102658
+O.S. 127
+
+30/08 - 13h às 19h
+01/09 - 18h às 06h >>> S.E.R 47ª CIPM
+02/09 - a partir das 07h
+
+01 Equipe";
+;Sgt Cerávalo - Retorno;02/09/2026;02/09/2026;;;;Dispensa;;;24:00;24/08/2026 11:47;24/08/2026 11:47;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 28/08 a 01/09;
+;Cb J Ferreira - Retorno;03/09/2026;03/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:52;24/08/2026 11:53;;;0;;Compromissos 1;;"Férias - 24/08 a 02/09
+10 dias";
+;Operação Mulher segura - 1ª Parcial  ;03/09/2026;03/09/2026;;;;Relatório;;;24:00;03/09/2026 14:55;10/09/2026 09:22;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 03/09/2026 até às 15h00 
+2ª Parcial: 10/09/2026 até às 15h00 
+3ª Parcial: 17/09/2026 até às 15h00
+DIA D OPERACIONAL: 23/09/2026 - Dia Internacional contra a Exploração Sexual e o Tráfico de Mulheres e Crianças
+4ª Parcial: 24/09/2026 até às 15h00 
+Consolidação Mensal: 30/09/2026 até às 15h00 ";
+;Cb J Ferreira;03/09/2026;03/09/2026;;;;Dispensa;;;24:00;28/07/2026 17:44;24/08/2026 11:53;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 03 a 07/09;
+;Cavalhadas de Corumbá de Goiás;04/09/2026;04/09/2026;;;;Ordens de Serviço;;;24:00;19/08/2026 15:22;25/08/2026 09:33;;;0;;Compromissos 1;;"SEI 202600002091605
+O.S. 128
+
+04 a 06/09
+14h às 02h
+01 Equipe";
+;Cavalhadas de Corumbá de Goiás;05/09/2026;05/09/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:33;25/08/2026 09:33;;;0;;Compromissos 1;;"SEI 202600002091605
+O.S. 128
+
+04 a 06/09
+14h às 02h
+01 Equipe";
+;Cb Danilo;05/09/2026;05/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:37;24/08/2026 11:37;;;0;;Compromissos 1;;"Férias: 05/09 a 04/10
+30 dias";
+;Cavalhadas de Corumbá de Goiás;06/09/2026;06/09/2026;;;;Ordens de Serviço;;;24:00;25/08/2026 09:33;25/08/2026 09:33;;;0;;Compromissos 1;;"SEI 202600002091605
+O.S. 128
+
+04 a 06/09
+14h às 02h
+01 Equipe";
+;Cb Pereira;07/09/2026;07/09/2026;;;;;;;24:00;25/08/2026 08:49;25/08/2026 08:49;;;0;;Compromissos 1;;Aniversario filho;
+;Cb J Ferreira - Retorno;08/09/2026;08/09/2026;;;;Dispensa;;;24:00;24/08/2026 11:53;24/08/2026 11:53;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 03 a 07/09;
+;Cb Neves - Retorno;08/09/2026;08/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:55;24/08/2026 11:55;;;0;;Compromissos 1;;"Férias - 09/08 a 07/09
+30 dias";
+;Cb Neves;08/09/2026;08/09/2026;;;;Dispensa;;;24:00;23/07/2026 17:46;23/07/2026 17:46;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 08 a 12/09;
+;Sgt Ramos Junior;08/09/2026;08/09/2026;;;;Férias / LESP;;;24:00;19/08/2026 17:40;24/08/2026 11:35;;;0;;Compromissos 1;;Férias: 08/09 - a 07/10 - 30 dias ;
+;Operação Mulher segura - 2ª Parcial  ;10/09/2026;10/09/2026;;;;Relatório;;;24:00;03/09/2026 14:56;10/09/2026 09:22;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 03/09/2026 até às 15h00 
+2ª Parcial: 10/09/2026 até às 15h00 
+3ª Parcial: 17/09/2026 até às 15h00
+DIA D OPERACIONAL: 23/09/2026 - Dia Internacional contra a Exploração Sexual e o Tráfico de Mulheres e Crianças
+4ª Parcial: 24/09/2026 até às 15h00 
+Consolidação Mensal: 30/09/2026 até às 15h00 ";
+;Cb Glauber - Retorno;11/09/2026;11/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:51;24/08/2026 11:51;;;0;;Compromissos 1;;"Férias - 12/08 a 10/09
+30 dias";
+;Sd Vinicius;11/09/2026;11/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:40;24/08/2026 11:40;;;0;;Compromissos 1;;"Férias: 11/09 a 10/10
+30 dias";
+;Sd Gleiber;12/09/2026;12/09/2026;;;;;;;24:00;24/08/2026 11:41;10/09/2026 08:51;;;0;;Compromissos 1;;Retorno;
+;Cb Neves - Retorno;13/09/2026;13/09/2026;;;;Dispensa;;;24:00;24/08/2026 11:55;24/08/2026 11:55;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral): 08 a 12/09;
+;Sgt Barbosa - Retorno;14/09/2026;14/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:48;24/08/2026 11:49;;;0;;Compromissos 1;;"Férias - 15/08 a 13/09
+30 dias";
+;Cb Pereira;15/09/2026;15/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:38;24/08/2026 11:39;;;0;;Compromissos 1;;"Férias: 15/09 a 29/09
+15 dias";
+;Cb Filho;15/09/2026;15/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:39;24/08/2026 11:39;;;0;;Compromissos 1;;"Férias: 15/09 a 29/09
+15 dias";
+;Sd Benjamim;16/09/2026;16/09/2026;;;;;;;24:00;22/07/2026 08:58;19/08/2026 14:44;;;0;;Compromissos 1;;Dispensa de Comando;
+;Operação Mulher segura - 3ª Parcial  ;17/09/2026;17/09/2026;;;;Relatório;;;24:00;03/09/2026 14:56;10/09/2026 09:22;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 03/09/2026 até às 15h00 
+2ª Parcial: 10/09/2026 até às 15h00 
+3ª Parcial: 17/09/2026 até às 15h00
+DIA D OPERACIONAL: 23/09/2026 - Dia Internacional contra a Exploração Sexual e o Tráfico de Mulheres e Crianças
+4ª Parcial: 24/09/2026 até às 15h00 
+Consolidação Mensal: 30/09/2026 até às 15h00 ";
+;Sgt Morais;17/09/2026;17/09/2026;;;;Férias / LESP;;;24:00;19/08/2026 17:43;24/08/2026 11:36;;;0;;Compromissos 1;;Férias: 17/09 a 01/10 - 15 dias ;
+;Cb Bruno;17/09/2026;17/09/2026;;;;;;;24:00;20/08/2026 08:36;20/08/2026 08:36;;;0;;Compromissos 1;;;
+;ST Carla;17/09/2026;17/09/2026;;;;Alterações Escala;;;24:00;10/09/2026 10:54;10/09/2026 10:55;;;0;;Compromissos 1;;;
+;Sgt Thassio - Retorno;19/09/2026;19/09/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:51;15/09/2026 08:55;;;0;;Compromissos 1;;"Férias - 18/08 a 16/09
+30 dias";
+;Carreata;19/09/2026;19/09/2026;;;;Ordens de Serviço;;;24:00;18/09/2026 12:04;18/09/2026 12:05;;;0;;Compromissos 1;;"SEI 202600002114084
+O.S. 139
+
+08h30min
+Pq da Jaiara
+01 Equipe";
+;Futebol Grêmio Anápolis x Bom Jesus;23/09/2026;23/09/2026;;;;Ordens de Serviço;;;24:00;18/09/2026 12:03;18/09/2026 12:04;;;0;;Compromissos 1;;"SEI 202600002093685
+O.S. 140
+
+16h
+Gramado e escolta Trio de arbitragem
+01 Equipe";
+;Operação Mulher segura - 4ª Parcial  ;24/09/2026;24/09/2026;;;;Relatório;;;24:00;03/09/2026 14:56;10/09/2026 09:22;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 03/09/2026 até às 15h00 
+2ª Parcial: 10/09/2026 até às 15h00 
+3ª Parcial: 17/09/2026 até às 15h00
+DIA D OPERACIONAL: 23/09/2026 - Dia Internacional contra a Exploração Sexual e o Tráfico de Mulheres e Crianças
+4ª Parcial: 24/09/2026 até às 15h00 
+Consolidação Mensal: 30/09/2026 até às 15h00 ";
+;Operação Força Total;24/09/2026;24/09/2026;;;;Importante;;;24:00;18/09/2026 12:03;18/09/2026 12:03;;;0;;Compromissos 1;;;
+;Sgt Tabata;25/09/2026;25/09/2026;;;;Férias / LESP;;;24:00;17/07/2026 10:33;24/08/2026 11:33;;;0;;Compromissos 1;;"Férias: 25/09 - a 14/10
+20 dias ";
+;Sgt Diogo;25/09/2026;25/09/2026;;;;;;;24:00;21/09/2026 09:14;21/09/2026 09:14;;;0;;Compromissos 1;;Dispensa CRPM;
+;Sgt J Junior;26/09/2026;26/09/2026;;;;;;;24:00;24/09/2026 09:28;24/09/2026 09:28;;;0;;Compromissos 1;;;
+;EAC / EAS;28/09/2026;28/09/2026;;;;Alterações Escala;;;24:00;25/09/2026 08:54;25/09/2026 08:55;;;0;;Compromissos 1;;Cb Jonatas;
+;Operação Mulher segura - Consolidação;30/09/2026;30/09/2026;;;;Relatório;;;24:00;03/09/2026 14:57;10/09/2026 09:22;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 03/09/2026 até às 15h00 
+2ª Parcial: 10/09/2026 até às 15h00 
+3ª Parcial: 17/09/2026 até às 15h00
+DIA D OPERACIONAL: 23/09/2026 - Dia Internacional contra a Exploração Sexual e o Tráfico de Mulheres e Crianças
+4ª Parcial: 24/09/2026 até às 15h00 
+Consolidação Mensal: 30/09/2026 até às 15h00 ";
+;Cb Filho - Retorno;01/10/2026;01/10/2026;;;;;;;24:00;24/08/2026 11:39;24/09/2026 10:34;;;0;;Compromissos 1;;"Férias: 15/09 a 29/09
+15 dias";
+;Cb Pereira - Retorno;01/10/2026;01/10/2026;;;;;;;24:00;24/08/2026 11:39;24/09/2026 10:34;;;0;;Compromissos 1;;"Férias: 15/09 a 29/09
+15 dias";
+;Operação Mulher segura - 1ª Parcial  ;01/10/2026;01/10/2026;;;;Relatório;;;24:00;03/09/2026 14:58;10/09/2026 09:26;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 01/10/2026 até às 15h00 
+2ª Parcial: 08/10/2026 até às 15h00 
+3ª Parcial: 15/10/2026 até às 15h00
+4ª Parcial: 22/10/2026 até às 15h00 
+5ª Parcial: 29/10/2026 até às 15h00 
+Consolidação Mensal: 31/10/2026 até às 15h00 ";
+;Cb Coelho - Retorno;03/10/2026;03/10/2026;;;;Férias / LESP;;;24:00;25/06/2026 11:00;28/09/2026 10:33;;;0;;Compromissos 1;;LESP - 01/07 a 30/09;
+;Sgt Morais - Retorno;03/10/2026;03/10/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:36;29/09/2026 16:10;;;0;;Compromissos 1;;Férias: 17/09 a 01/10 - 15 dias ;
+;Sgt Coelho;03/10/2026;03/10/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:35;29/09/2026 16:10;;;0;;Compromissos 1;;"Férias: 01 a 20/10
+20 dias";
+;Ten Couto;03/10/2026;03/10/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:29;29/09/2026 11:30;;;0;;Compromissos 1;;"Férias: 03/10 a 01/11
+30 dias";
+;Cb Danilo - Retorno;05/10/2026;05/10/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:38;24/08/2026 11:38;;;0;;Compromissos 1;;"Férias: 05/09 a 04/10
+30 dias";
+;Operação Mulher segura - 2ª Parcial  ;08/10/2026;08/10/2026;;;;Relatório;;;24:00;03/09/2026 14:58;10/09/2026 09:26;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 01/10/2026 até às 15h00 
+2ª Parcial: 08/10/2026 até às 15h00 
+3ª Parcial: 15/10/2026 até às 15h00
+4ª Parcial: 22/10/2026 até às 15h00 
+5ª Parcial: 29/10/2026 até às 15h00 
+Consolidação Mensal: 31/10/2026 até às 15h00 ";
+;Sgt Ramos Junior - Retorno;08/10/2026;08/10/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:35;24/08/2026 11:35;;;0;;Compromissos 1;;Férias: 08/09 - a 07/10 - 30 dias ;
+;Sd Martins;09/10/2026;09/10/2026;;;;;;;24:00;28/09/2026 09:28;28/09/2026 09:28;;;0;;Compromissos 1;;;
+;ST Thales;10/10/2026;10/10/2026;;;;Dispensa;;;24:00;24/08/2026 11:44;24/08/2026 11:44;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 10 a 14/10;
+;ST Thales - Retorno;10/10/2026;10/10/2026;;;;Férias / LESP;;;24:00;25/06/2026 10:42;25/06/2026 10:43;;;0;;Compromissos 1;;LESP - 08/07 a 09/10;
+;Cb Reis;10/10/2026;10/10/2026;;;;Férias / LESP;;;24:00;16/09/2026 08:55;16/09/2026 08:56;;;0;;Compromissos 1;;"Férias atrasadas
+30 dias";
+;Sd Vinicius;11/10/2026;11/10/2026;;;;Dispensa;;;24:00;24/08/2026 11:43;24/08/2026 11:43;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 11 a 15/10;
+;Sd Vinicius - Retorno;11/10/2026;11/10/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:40;24/08/2026 11:40;;;0;;Compromissos 1;;"Férias: 11/09 a 10/10
+30 dias";
+;ST Thales;11/10/2026;11/10/2026;;;;Dispensa;;;24:00;25/06/2026 10:43;25/06/2026 10:44;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 11 a 15/10;
+;Cap Bueno SUPERVISÃO;11/10/2026;11/10/2026;;;;Alterações Escala;;;24:00;28/09/2026 08:57;28/09/2026 09:03;;;0;;Compromissos 1;;"ST Emílio motorista
+
+PAGO PELA CPE";
+;ST Nivaldo;11/10/2026;11/10/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:31;29/09/2026 11:31;;;0;;Compromissos 1;;"Férias: 11/10 a 09/11
+30 dias";
+;Dia das Crianças;12/10/2026;12/10/2026;;;;Ordens de Serviço;;;24:00;24/08/2026 16:34;24/08/2026 16:35;;;0;;Compromissos 1;;"Ofício Frederico Caixeta
+
+St Pedro Ludovico";
+;Cb Evandro;12/10/2026;12/10/2026;;;;Férias / LESP;;;24:00;11/09/2026 17:03;29/09/2026 11:40;;;0;;Compromissos 1;;"Férias: 12 a 10/11
+30 dias";
+;Ten Danisclay;12/10/2026;12/10/2026;;;;;;;24:00;24/09/2026 09:29;24/09/2026 09:29;;;0;;Compromissos 1;;"
+
+Ten Andrade vai cobrir pelo S.E.R.";
+;;12/10/2026;12/10/2026;;;;;;;24:00;29/09/2026 11:39;29/09/2026 11:39;;;0;;Compromissos 1;;;
+;Cb Mateus;14/10/2026;14/10/2026;;;;Férias / LESP;;;24:00;17/09/2026 10:14;17/09/2026 10:14;;;0;;Compromissos 1;;"Férias
+30 dias";
+;Cb Reis;14/10/2026;14/10/2026;;;;Férias / LESP;;;24:00;21/09/2026 10:05;29/09/2026 11:41;;;0;;Compromissos 1;;"Férias: 14/10 a 12/11
+30 dias";
+;Sgt Barreto;14/10/2026;14/10/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:32;29/09/2026 11:33;;;0;;Compromissos 1;;"Férias: 14/10 a 12/11
+30 dias";
+;Operação Mulher segura - 3ª Parcial  ;15/10/2026;15/10/2026;;;;Relatório;;;24:00;03/09/2026 14:58;10/09/2026 09:26;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 01/10/2026 até às 15h00 
+2ª Parcial: 08/10/2026 até às 15h00 
+3ª Parcial: 15/10/2026 até às 15h00
+4ª Parcial: 22/10/2026 até às 15h00 
+5ª Parcial: 29/10/2026 até às 15h00 
+Consolidação Mensal: 31/10/2026 até às 15h00 ";
+;Sgt Tabata - Retorno;15/10/2026;15/10/2026;;;;Férias / LESP;;;24:00;24/08/2026 11:33;24/08/2026 11:34;;;0;;Compromissos 1;;"Férias: 25/09 - a 14/10
+20 dias ";
+;ST Thales - Retorno;15/10/2026;15/10/2026;;;;Dispensa;;;24:00;24/08/2026 11:44;24/08/2026 11:45;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 10 a 14/10;
+;Sgt Tabata;15/10/2026;15/10/2026;;;;Dispensa;;;24:00;19/08/2026 17:36;24/08/2026 11:34;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 15 a 19/10;
+;Sd Vinicius - Retorno;16/10/2026;16/10/2026;;;;Dispensa;;;24:00;24/08/2026 11:43;24/08/2026 11:43;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 11 a 15/10;
+;Sgt Tabata - Retorno;20/10/2026;20/10/2026;;;;Dispensa;;;24:00;24/08/2026 11:34;24/08/2026 11:35;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 15 a 19/10;
+;Sgt Coelho - Retorno;21/10/2026;21/10/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:39;29/09/2026 11:39;;;0;;Compromissos 1;;"Férias: 01 a 20/10
+20 dias";
+;Operação Mulher segura - 4ª Parcial  ;22/10/2026;22/10/2026;;;;Relatório;;;24:00;03/09/2026 14:59;10/09/2026 09:26;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 01/10/2026 até às 15h00 
+2ª Parcial: 08/10/2026 até às 15h00 
+3ª Parcial: 15/10/2026 até às 15h00
+4ª Parcial: 22/10/2026 até às 15h00 
+5ª Parcial: 29/10/2026 até às 15h00 
+Consolidação Mensal: 31/10/2026 até às 15h00 ";
+;Cb T Santos;26/10/2026;26/10/2026;;;;Férias / LESP;;;24:00;11/08/2026 09:02;11/08/2026 09:04;;;0;;Compromissos 1;;"Férias - 26/10 a 09/11
+15 dias";
+;Operação Mulher segura - 5ª Parcial  ;29/10/2026;29/10/2026;;;;Relatório;;;24:00;03/09/2026 14:59;10/09/2026 09:27;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 01/10/2026 até às 15h00 
+2ª Parcial: 08/10/2026 até às 15h00 
+3ª Parcial: 15/10/2026 até às 15h00
+4ª Parcial: 22/10/2026 até às 15h00 
+5ª Parcial: 29/10/2026 até às 15h00 
+Consolidação Mensal: 31/10/2026 até às 15h00 ";
+;Operação Mulher segura - Consolidação;31/10/2026;31/10/2026;;;;Relatório;;;24:00;03/09/2026 15:00;10/09/2026 09:27;;;0;;Compromissos 1;;"SEI 202600002063484
+
+Parciais:
+1ª Parcial: 01/10/2026 até às 15h00 
+2ª Parcial: 08/10/2026 até às 15h00 
+3ª Parcial: 15/10/2026 até às 15h00
+4ª Parcial: 22/10/2026 até às 15h00 
+5ª Parcial: 29/10/2026 até às 15h00 
+Consolidação Mensal: 31/10/2026 até às 15h00 ";
+;Ten Couto - Retorno;02/11/2026;02/11/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:30;29/09/2026 11:30;;;0;;Compromissos 1;;"Férias: 03/10 a 01/11
+30 dias";
+;Operação Mulher segura - 1ª Parcial  ;05/11/2026;05/11/2026;;;;Relatório;;;24:00;03/09/2026 15:14;03/09/2026 15:14;;;0;;Compromissos 1;;;
+;Cb T Santos - Retorno;10/11/2026;10/11/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:48;29/09/2026 11:48;;;0;;Compromissos 1;;"Férias - 26/10 a 09/11
+15 dias";
+;ST Nivaldo - Retorno;10/11/2026;10/11/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:32;29/09/2026 11:32;;;0;;Compromissos 1;;"Férias: 11/10 a 09/11
+30 dias
+
+Vai pegar mais 30 dias";
+;Cb Evandro - Retorno;11/11/2026;11/11/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:40;29/09/2026 11:40;;;0;;Compromissos 1;;"Férias: 12 a 10/11
+30 dias";
+;Operação Mulher segura - 2ª Parcial  ;12/11/2026;12/11/2026;;;;Relatório;;;24:00;03/09/2026 15:15;03/09/2026 15:15;;;0;;Compromissos 1;;;
+;Cb Reis - Retorno;13/11/2026;13/11/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:41;29/09/2026 11:41;;;0;;Compromissos 1;;"Férias: 14/10 a 12/11
+30 dias";
+;Sgt Barreto - Retorno;13/11/2026;13/11/2026;;;;Férias / LESP;;;24:00;29/09/2026 11:33;29/09/2026 11:33;;;0;;Compromissos 1;;"Férias: 14/10 a 12/11
+30 dias";
+;Sd Benjamim;15/11/2026;15/11/2026;;;;;;;24:00;19/08/2026 14:40;21/09/2026 18:12;;;0;;Compromissos 1;;Dispensa de Comando (Cmt Geral) - 15/11 a 19/11;
+;Operação Mulher segura - 3ª Parcial  ;19/11/2026;19/11/2026;;;;Relatório;;;24:00;03/09/2026 15:15;03/09/2026 15:15;;;0;;Compromissos 1;;;
+;Operação Mulher segura - 4ª Parcial  ;26/11/2026;26/11/2026;;;;Relatório;;;24:00;03/09/2026 15:16;03/09/2026 15:16;;;0;;Compromissos 1;;;
+;Operação Mulher segura - Consolidação;30/11/2026;30/11/2026;;;;Relatório;;;24:00;03/09/2026 15:17;03/09/2026 15:17;;;0;;Compromissos 1;;;
+;Operação Mulher segura - 1ª Parcial  ;03/12/2026;03/12/2026;;;;Relatório;;;24:00;03/09/2026 15:17;03/09/2026 15:17;;;0;;Compromissos 1;;;
+;Operação Mulher segura - 2ª Parcial  ;10/12/2026;10/12/2026;;;;Relatório;;;24:00;03/09/2026 15:17;03/09/2026 15:17;;;0;;Compromissos 1;;;
+;Operação Mulher segura - 3ª Parcial  ;17/12/2026;17/12/2026;;;;Relatório;;;24:00;03/09/2026 15:18;03/09/2026 15:18;;;0;;Compromissos 1;;;
+;ST Carla????;23/12/2026;23/12/2026;;;;;;;24:00;23/09/2026 09:20;23/09/2026 09:20;;;0;;Compromissos 1;;;
+;Operação Mulher segura - 4ª Parcial  ;24/12/2026;24/12/2026;;;;Relatório;;;24:00;03/09/2026 15:18;03/09/2026 15:18;;;0;;Compromissos 1;;;
+;Operação Mulher segura - 5ª Parcial  ;31/12/2026;31/12/2026;;;;Relatório;;;24:00;03/09/2026 15:18;03/09/2026 15:18;;;0;;Compromissos 1;;;
+;Operação Mulher segura - Consolidação;31/12/2026;31/12/2026;;;;Relatório;;;24:00;03/09/2026 15:18;03/09/2026 15:18;;;0;;Compromissos 1;;;

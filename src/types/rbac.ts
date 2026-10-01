@@ -11,6 +11,7 @@ export type ModuleKey =
   | 'entradaSaidaFerias'
   | 'aniversariantes'
   | 'planoChamada'
+  | 'agenda'
   | 'agendaAudiencias'
   | 'medalhas'
   | 'dispencaRecompensa'
@@ -41,6 +42,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
   entradaSaidaFerias: 'Entrada / Saída de Férias',
   aniversariantes: 'Aniversariantes',
   planoChamada: 'Plano de Chamada',
+  agenda: 'Agenda',
   agendaAudiencias: 'Agenda Audiências',
   medalhas: 'Medalhas',
   dispencaRecompensa: 'Dispensa Recompensa',
@@ -59,6 +61,7 @@ export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
   'entrada-saida-ferias': 'entradaSaidaFerias',
   'aniversariantes': 'aniversariantes',
   'plano-chamada': 'planoChamada',
+  'agenda': 'agenda',
   'agenda-audiencias': 'agendaAudiencias',
   'medalhas': 'medalhas',
   'dispenca-recompensa': 'dispencaRecompensa',
@@ -84,6 +87,7 @@ export const DEFAULT_PERMISSIONS: UserPermissions = {
   entradaSaidaFerias: { ...DEFAULT_MODULE_PERMISSION },
   aniversariantes: { ...DEFAULT_MODULE_PERMISSION },
   planoChamada: { ...DEFAULT_MODULE_PERMISSION },
+  agenda: { ...DEFAULT_MODULE_PERMISSION },
   agendaAudiencias: { ...DEFAULT_MODULE_PERMISSION },
   medalhas: { ...DEFAULT_MODULE_PERMISSION },
   dispencaRecompensa: { ...DEFAULT_MODULE_PERMISSION },

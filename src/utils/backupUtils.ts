@@ -29,6 +29,7 @@ const MODULES = [
   { label: 'EFETIVO',                             key: 'cpe-site:efetivo:v1' },
   { label: 'ANIVERSARIANTES',                     key: 'cpe-site:aniversariantes:v1' },
   { label: 'PLANO DE CHAMADA',                    key: 'cpe-site:plano-chamada:v1' },
+  { label: 'AGENDA',                              key: 'cpe-site:agenda:v1' },
   { label: 'AGENDA DE AUDIÊNCIAS',                key: 'cpe-site:agenda-audiencias:v1' },
   { label: 'DISPENSA RECOMPENSA — CMDO',          key: 'cpe-site:dispensa-recompensa:cmdo:v1' },
   { label: 'DISPENSA RECOMPENSA — OUTRAS',        key: 'cpe-site:dispensa-recompensa:outras:v1' },
