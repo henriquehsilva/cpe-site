@@ -881,40 +881,75 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
           <div className="px-4 py-3" style={{ background: 'var(--adm-tbl-head)', borderBottom: '1px solid var(--adm-border)' }}>
             <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>Efetivo em Serviço</span>
           </div>
-          <div className="p-4 grid grid-cols-2 gap-2">
-            {(
-              [
-                ['Pelotão A',       'pelA'],
-                ['Pelotão B',       'pelB'],
-                ['Pelotão C',       'pelC'],
-                ['Pelotão D',       'pelD'],
-                ['Diagonal',        'diagonal'],
-                ['Dia a Reserva',   'diaReserva'],
-                ['Administração',   'administracao'],
-                ['Afas. LESP',      'lesp'],
-                ['Afas. Férias',    'ferias'],
-                ['Afas. Curso',     'curso'],
-                ['Afas. JCS',       'jcs'],
-                ['Afas. Outros',    'outros'],
-              ] as [string, keyof MapaContagem][]
-            ).map(([lbl, key]) => (
-              <div key={key} className="flex items-center justify-between gap-2">
-                <span className="text-xs" style={{ color: 'var(--adm-muted)' }}>{lbl}</span>
-                {editMode ? (
-                  <input type="number" min={0}
-                    value={(draft!.contagens as Record<string, number>)[key]}
-                    onChange={e => setDraftCount(key, +e.target.value)}
-                    className="adm-input rounded px-2 py-1 text-xs border w-16 text-right"
-                    style={fss} />
-                ) : (
-                  <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>
-                    {(m.contagens as Record<string, number>)[key]}
-                  </span>
-                )}
+          <div className="p-4 space-y-3">
+            <div className="rounded-lg border p-3" style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-row-even)' }}>
+              <div className="mb-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
+                Efetivo operacional
               </div>
-            ))}
-            <div className="col-span-2 pt-2 mt-1 border-t flex items-center justify-between"
-              style={{ borderColor: 'var(--adm-border)' }}>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-2">
+                {(
+                  [
+                    ['Pelotão A',       'pelA'],
+                    ['Pelotão B',       'pelB'],
+                    ['Pelotão C',       'pelC'],
+                    ['Pelotão D',       'pelD'],
+                    ['Diagonal',        'diagonal'],
+                    ['Dia a Reserva',   'diaReserva'],
+                    ['Administração',   'administracao'],
+                  ] as [string, keyof MapaContagem][]
+                ).map(([lbl, key]) => (
+                  <div key={key} className="flex items-center justify-between gap-2">
+                    <span className="text-xs" style={{ color: 'var(--adm-muted)' }}>{lbl}</span>
+                    {editMode ? (
+                      <input type="number" min={0}
+                        value={(draft!.contagens as Record<string, number>)[key]}
+                        onChange={e => setDraftCount(key, +e.target.value)}
+                        className="adm-input rounded px-2 py-1 text-xs border w-16 text-right"
+                        style={fss} />
+                    ) : (
+                      <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>
+                        {(m.contagens as Record<string, number>)[key]}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-lg border p-3" style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-row-even)' }}>
+              <div className="mb-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--adm-muted)' }}>
+                Afastamentos
+              </div>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-2">
+                {(
+                  [
+                    ['Afas. LESP',      'lesp'],
+                    ['Afas. Férias',    'ferias'],
+                    ['Afas. Curso',     'curso'],
+                    ['Afas. JCS',       'jcs'],
+                    ['Afas. Outros',    'outros'],
+                  ] as [string, keyof MapaContagem][]
+                ).map(([lbl, key]) => (
+                  <div key={key} className="flex items-center justify-between gap-2">
+                    <span className="text-xs" style={{ color: 'var(--adm-muted)' }}>{lbl}</span>
+                    {editMode ? (
+                      <input type="number" min={0}
+                        value={(draft!.contagens as Record<string, number>)[key]}
+                        onChange={e => setDraftCount(key, +e.target.value)}
+                        className="adm-input rounded px-2 py-1 text-xs border w-16 text-right"
+                        style={fss} />
+                    ) : (
+                      <span className="text-xs font-bold" style={{ color: 'var(--adm-text)' }}>
+                        {(m.contagens as Record<string, number>)[key]}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-lg border px-3 py-2.5 flex items-center justify-between"
+              style={{ borderColor: 'var(--adm-border)', background: 'var(--adm-tbl-head)' }}>
               <span className="text-sm font-bold" style={{ color: 'var(--adm-text)' }}>TOTAL</span>
               {editMode ? (
                 <input type="number" min={0} value={draft!.contagens.total}
