@@ -581,6 +581,7 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
   // ── render: detail / edit ─────────────────────────────────────────────────
   const m  = editMode && draft ? draft : selected!;
   const idx = sorted.findIndex(s => s.id === m.id);
+  const cpe20Index = m.linhas.findIndex(row => row.label === 'CPE 20');
 
   return (
     <div className="flex flex-col h-full">
@@ -721,9 +722,12 @@ export default function MapaEfetivoModule({ onBack, permissions }: Props) {
               const isHeader = row.label === 'CPE CMD' || row.label === 'CPE 90' || row.label === 'CPE 20';
               const isDiaReserva = /^dia\s*(?:a|\/)\s*reserva$/i.test(row.label.trim());
               const isTeamSeparator = i < m.linhas.length - 1 && ((i + 1) % 4 === 0 || isDiaReserva);
+              const isCpe20Row = cpe20Index !== -1 && i >= cpe20Index;
               const teamCellStyle = {
                 ...dataCellStyle,
-                borderBottom: isTeamSeparator ? '6px solid #fff' : dataCellStyle.borderBottom,
+                borderBottom: isTeamSeparator
+                  ? '6px solid #fff'
+                  : isCpe20Row ? '1px solid #d1d5db' : dataCellStyle.borderBottom,
               };
 
               return (
