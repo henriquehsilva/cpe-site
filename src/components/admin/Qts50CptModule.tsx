@@ -236,11 +236,15 @@ export default function Qts50CptModule({ onBack, permissions }: Props) {
       .merged-time, .merged-label { background: #d4d4d4 !important; font-weight: 700; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .merged-time { font-size: 8px; }
       .merged-label { font-size: 10px; text-transform: uppercase; }
+      .signature { margin-top: 10px; text-align: center; break-inside: avoid; page-break-inside: avoid; }
+      .signature strong { display: block; font-size: 11px; text-transform: uppercase; }
+      .signature span { display: block; margin-top: 2px; font-size: 10px; }
       footer { margin-top: 5px; display: flex; justify-content: space-between; font: 7px Arial, sans-serif; }
     </style></head><body>
       <header><h1>Quadro de Trabalho Semanal — QTS</h1><h2>50º Curso de Patrulhamento Tático e Ações Especializadas de Polícia — 31ª CIPM — CPE</h2></header>
       <div class="meta"><span><strong>Período:</strong> ${escapeHtml(periods)}</span><span><strong>Filtros:</strong> ${escapeHtml(filterDescription)}</span><span><strong>Registros:</strong> ${filtered.length}</span></div>
       <table><colgroup>${colGroup}</colgroup><thead><tr>${dayHeaders}</tr><tr>${fieldHeaders}</tr></thead><tbody>${rows}</tbody></table>
+      <div class="signature"><strong>RAFAEL BUENO GONÇALVES - CAPITÃO PM</strong><span>Coordenador do 50º CPT</span></div>
       <footer><span>QTS 50º CPT</span><span>Emitido em ${new Date().toLocaleString('pt-BR')}</span></footer>
     </body></html>`;
 
