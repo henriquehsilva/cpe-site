@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft, ChevronLeft, ChevronRight, Download, Eye, FilterX, Pencil, Plus,
-  Save, Search, Trash2, X,
+  Printer, Save, Search, Trash2, X,
 } from 'lucide-react';
 import {
   DIAS_SEMANA_QTS, qts50CptDB, QtsRegistro, TIPOS_ATIVIDADE_QTS, TipoAtividadeQts,
@@ -42,6 +42,20 @@ function typeColor(tipo: TipoAtividadeQts): string {
   if (tipo === 'Intervalo') return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
   if (tipo === 'Almoço') return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
   return 'bg-slate-500/15 text-slate-400 border-slate-500/30';
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function formatDate(value: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  return match ? `${match[3]}/${match[2]}/${match[1]}` : value;
 }
 
 export default function Qts50CptModule({ onBack, permissions }: Props) {
@@ -154,6 +168,74 @@ export default function Qts50CptModule({ onBack, permissions }: Props) {
     XLSX.writeFile(wb, 'registros-qts-50-cpt.xlsx');
   };
 
+  const printReport = () => {
+    const filterDescription = [
+      search && `Busca: “${search}”`,
+      diaFiltro && `Dia: ${diaFiltro}`,
+      tipoFiltro && `Tipo: ${tipoFiltro}`,
+      periodoFiltro && `Período: ${periodoFiltro}`,
+    ].filter(Boolean).join(' · ') || 'Todos os registros';
+
+    const rows = filtered.map((item, index) => {
+      const previousDay = filtered[index - 1]?.diaSemana;
+      const dayHeader = previousDay !== item.diaSemana
+        ? `<tr class="day"><td colspan="8">${escapeHtml(item.diaSemana)}</td></tr>`
+        : '';
+      return `${dayHeader}<tr>
+        <td>${escapeHtml(item.periodo || '—')}</td>
+        <td>${escapeHtml(formatDate(item.data) || '—')}</td>
+        <td class="center">${escapeHtml(item.aula || '—')}</td>
+        <td class="nowrap">${escapeHtml(item.horario)}</td>
+        <td>${escapeHtml(item.tipo)}</td>
+        <td class="main">${escapeHtml(item.disciplina || 'Não informada')}</td>
+        <td>${escapeHtml(item.instrutor || '—')}</td>
+        <td class="center">${escapeHtml(item.turma || '—')}</td>
+      </tr>`;
+    }).join('');
+
+    const report = `<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><title>QTS 50º CPT</title><style>
+      @page { size: A4 landscape; margin: 10mm; }
+      * { box-sizing: border-box; }
+      body { margin: 0; color: #111; font-family: Arial, Helvetica, sans-serif; font-size: 9px; }
+      header { position: relative; text-align: center; border-bottom: 2px solid #222; padding: 0 130px 8px; margin-bottom: 9px; }
+      header h1 { margin: 0; font-size: 16px; text-transform: uppercase; }
+      header h2 { margin: 3px 0 0; font-size: 12px; font-weight: 600; }
+      header .count { position: absolute; right: 0; bottom: 9px; font-size: 9px; font-weight: 700; }
+      .meta { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 7px; color: #333; }
+      .meta strong { color: #111; }
+      table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+      col.period { width: 12%; } col.date { width: 8%; } col.lesson { width: 5%; }
+      col.time { width: 10%; } col.type { width: 9%; } col.subject { width: 25%; }
+      col.instructor { width: 23%; } col.class { width: 8%; }
+      thead { display: table-header-group; }
+      th { background: #20252b !important; color: #fff !important; border: 1px solid #111; padding: 5px 4px; text-align: left; text-transform: uppercase; font-size: 8px; letter-spacing: .25px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      td { border: 1px solid #777; padding: 4px; vertical-align: middle; overflow-wrap: anywhere; }
+      tbody tr:nth-child(odd):not(.day) td { background: #f3f4f6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      tr { break-inside: avoid; page-break-inside: avoid; }
+      tr.day td { background: #d9dee5 !important; border-color: #333; padding: 5px 6px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .center { text-align: center; } .nowrap { white-space: nowrap; } .main { font-weight: 600; }
+      .empty { border: 1px solid #777; padding: 30px; text-align: center; font-size: 11px; }
+      footer { margin-top: 7px; text-align: right; color: #555; font-size: 8px; }
+    </style></head><body>
+      <header><h1>Quadro de Trabalho Semanal — QTS</h1><h2>50º Curso de Patrulhamento Tático e Ações Especializadas de Polícia</h2><span class="count">${filtered.length} registro(s)</span></header>
+      <div class="meta"><span><strong>Filtros:</strong> ${escapeHtml(filterDescription)}</span><span><strong>Emissão:</strong> ${new Date().toLocaleString('pt-BR')}</span></div>
+      ${filtered.length ? `<table><colgroup><col class="period"><col class="date"><col class="lesson"><col class="time"><col class="type"><col class="subject"><col class="instructor"><col class="class"></colgroup>
+        <thead><tr><th>Período</th><th>Data</th><th>Aula</th><th>Horário</th><th>Tipo</th><th>Disciplina / Atividade</th><th>Instrutor(a)</th><th>Turma</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">Nenhum registro encontrado para os filtros selecionados.</div>'}
+      <footer>QTS 50º CPT — 31ª CIPM — CPE</footer>
+    </body></html>`;
+
+    const url = URL.createObjectURL(new Blob([report], { type: 'text/html;charset=utf-8' }));
+    const printWindow = window.open(url, '_blank');
+    if (printWindow) {
+      printWindow.addEventListener('load', () => {
+        printWindow.addEventListener('afterprint', () => URL.revokeObjectURL(url), { once: true });
+        printWindow.print();
+      });
+    } else {
+      URL.revokeObjectURL(url);
+    }
+  };
+
   const styleInput = { background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' };
   const filtersActive = Boolean(search || diaFiltro || tipoFiltro || periodoFiltro);
 
@@ -164,6 +246,7 @@ export default function Qts50CptModule({ onBack, permissions }: Props) {
         <div><h2 className="text-2xl font-bold" style={{ color: 'var(--adm-text)' }}>QTS 50º CPT</h2><p className="text-sm" style={{ color: 'var(--adm-muted)' }}>Gerenciamento de aulas e atividades</p></div>
       </div>
       <div className="flex flex-wrap gap-2">
+        <button onClick={printReport} className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={styleInput}><Printer size={16} /> Imprimir</button>
         <button onClick={exportXlsx} className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={styleInput}><Download size={16} /> Exportar</button>
         {canCreate && <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cpe-red text-white font-medium"><Plus size={17} /> Inserir registro</button>}
       </div>
