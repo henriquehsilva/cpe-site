@@ -236,7 +236,7 @@ export default function Qts50CptModule({ onBack, permissions }: Props) {
       .merged-time, .merged-label { background: #d4d4d4 !important; font-weight: 700; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .merged-time { font-size: 8px; }
       .merged-label { font-size: 10px; text-transform: uppercase; }
-      .signature { margin-top: 10px; text-align: center; break-inside: avoid; page-break-inside: avoid; }
+      .signature { margin-top: 32px; text-align: center; break-inside: avoid; page-break-inside: avoid; }
       .signature strong { display: block; font-size: 11px; text-transform: uppercase; }
       .signature span { display: block; margin-top: 2px; font-size: 10px; }
       footer { margin-top: 5px; display: flex; justify-content: space-between; font: 7px Arial, sans-serif; }
