@@ -21,7 +21,8 @@ export type ModuleKey =
   | 'armamento'
   | 'viaturas'
   | 'caraterGeral'
-  | 'procedimentos';
+  | 'procedimentos'
+  | 'qts50Cpt';
 
 export type UserPermissions = Record<ModuleKey, ModulePermission>;
 
@@ -53,6 +54,7 @@ export const MODULE_LABELS: Record<ModuleKey, string> = {
   viaturas: 'Viaturas',
   caraterGeral: 'Caráter Geral',
   procedimentos: 'Procedimentos',
+  qts50Cpt: 'QTS 50º CPT',
 };
 
 export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
@@ -72,6 +74,7 @@ export const MODULE_ID_TO_KEY: Record<string, ModuleKey> = {
   'viaturas': 'viaturas',
   'carater-geral': 'caraterGeral',
   'procedimentos': 'procedimentos',
+  'qts-50-cpt': 'qts50Cpt',
 };
 
 export const DEFAULT_MODULE_PERMISSION: ModulePermission = {
@@ -98,6 +101,7 @@ export const DEFAULT_PERMISSIONS: UserPermissions = {
   viaturas: { ...DEFAULT_MODULE_PERMISSION },
   caraterGeral: { ...DEFAULT_MODULE_PERMISSION },
   procedimentos: { ...DEFAULT_MODULE_PERMISSION },
+  qts50Cpt: { ...DEFAULT_MODULE_PERMISSION },
 };
 
 export const SUPER_ADMIN_EMAIL = 'sad31chagas@gmail.com';

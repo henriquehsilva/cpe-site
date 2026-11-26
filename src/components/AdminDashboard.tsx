@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import {
   Users, CalendarDays, Cake, PhoneCall, Scale,
   Award, Gift, BookOpen, LogOut, Shield, Palette,
-  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair,   Car, ClipboardList, Download, ScrollText,
+  Settings, Camera, ArrowLeft, ArrowRightLeft, Crosshair, Car, ClipboardList, Download, ScrollText, TableProperties,
 } from 'lucide-react';
 import { downloadBackup } from '../utils/backupUtils';
 import EfetivoModule from './admin/EfetivoModule';
@@ -22,6 +22,7 @@ import ArmamentoModule from './admin/ArmamentoModule';
 import ViaturasModule from './admin/ViaturasModule';
 import CaraterGeralModule from './admin/CaraterGeralModule';
 import ProcedimentosModule from './admin/ProcedimentosModule';
+import Qts50CptModule from './admin/Qts50CptModule';
 import ProfileModal from './admin/ProfileModal';
 import { THEMES } from '../data/themes';
 import { useRBAC } from '../contexts/RBACContext';
@@ -46,6 +47,7 @@ const ALL_MODULES = [
   { id: 'viaturas',           label: 'Viaturas',            icon: Car },
   { id: 'carater-geral',      label: 'Caráter Geral',       icon: ClipboardList },
   { id: 'procedimentos',      label: 'Procedimentos',       icon: ScrollText },
+  { id: 'qts-50-cpt',         label: 'QTS 50º CPT',         icon: TableProperties },
 ];
 
 const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
@@ -299,6 +301,8 @@ const AdminDashboard = ({ onClose }: AdminDashboardProps) => {
           <CaraterGeralModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('carater-geral')} />
         ) : activeModule === 'procedimentos' ? (
           <ProcedimentosModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('procedimentos')} />
+        ) : activeModule === 'qts-50-cpt' ? (
+          <Qts50CptModule onBack={() => setActiveModule(null)} permissions={getModulePermissions('qts-50-cpt')} />
         ) : (
           <>
             <div className="mb-8 sm:mb-10">
