@@ -1,184 +1,243 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
-import { ArrowLeft, CalendarDays, CopyPlus, Download, Pencil, Printer, Save, Trash2, X } from 'lucide-react';
-import { criarQtsEmBranco, qts50CptDB, QtsDocumento } from '../../data/qts50Cpt';
+import {
+  ArrowLeft, ChevronLeft, ChevronRight, Download, Eye, FilterX, Pencil, Plus,
+  Save, Search, Trash2, X,
+} from 'lucide-react';
+import {
+  DIAS_SEMANA_QTS, qts50CptDB, QtsRegistro, TIPOS_ATIVIDADE_QTS, TipoAtividadeQts,
+} from '../../data/qts50Cpt';
 import { usePersistentState } from '../../hooks/usePersistentState';
 import { ModulePermission } from '../../types/rbac';
 
-interface Props { onBack: () => void; permissions?: ModulePermission; }
+type ModalMode = 'view' | 'edit' | 'create';
 
-function cloneQts(qts: QtsDocumento): QtsDocumento {
-  return JSON.parse(JSON.stringify(qts)) as QtsDocumento;
+interface Props {
+  onBack: () => void;
+  permissions?: ModulePermission;
 }
 
-function html(value: string): string {
-  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const PAGE_SIZE = 20;
+
+const emptyForm = (): Omit<QtsRegistro, 'id'> => ({
+  periodo: '',
+  diaSemana: 'Segunda-feira',
+  data: '',
+  aula: '',
+  horario: '',
+  disciplina: '',
+  instrutor: '',
+  turma: '',
+  tipo: 'Aula',
+});
+
+function dayOrder(day: string): number {
+  const index = DIAS_SEMANA_QTS.indexOf(day as (typeof DIAS_SEMANA_QTS)[number]);
+  return index === -1 ? 99 : index;
+}
+
+function typeColor(tipo: TipoAtividadeQts): string {
+  if (tipo === 'Aula') return 'bg-blue-500/15 text-blue-400 border-blue-500/30';
+  if (tipo === 'Formatura') return 'bg-purple-500/15 text-purple-400 border-purple-500/30';
+  if (tipo === 'Intervalo') return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+  if (tipo === 'Almoço') return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+  return 'bg-slate-500/15 text-slate-400 border-slate-500/30';
 }
 
 export default function Qts50CptModule({ onBack, permissions }: Props) {
   const canCreate = !permissions || permissions.create;
   const canEdit = !permissions || permissions.edit;
   const canDelete = !permissions || permissions.delete;
-  const [documentos, setDocumentos] = usePersistentState<QtsDocumento[]>('cpe-site:qts-50-cpt:v1', qts50CptDB);
-  const [selecionadoId, setSelecionadoId] = useState(qts50CptDB[0].id);
-  const [rascunho, setRascunho] = useState<QtsDocumento | null>(null);
-  const [confirmarExclusao, setConfirmarExclusao] = useState(false);
+  const [registros, setRegistros] = usePersistentState<QtsRegistro[]>('cpe-site:qts-50-cpt:v2', qts50CptDB);
+  const [search, setSearch] = useState('');
+  const [diaFiltro, setDiaFiltro] = useState('');
+  const [tipoFiltro, setTipoFiltro] = useState('');
+  const [periodoFiltro, setPeriodoFiltro] = useState('');
+  const [page, setPage] = useState(1);
+  const [modal, setModal] = useState<{ mode: ModalMode; item: QtsRegistro | null } | null>(null);
+  const [form, setForm] = useState<Omit<QtsRegistro, 'id'>>(emptyForm());
+  const [errors, setErrors] = useState<{ diaSemana?: string; horario?: string; disciplina?: string }>({});
+  const [deleteTarget, setDeleteTarget] = useState<QtsRegistro | null>(null);
 
-  const selecionado = useMemo(
-    () => documentos.find(item => item.id === selecionadoId) ?? documentos[0] ?? null,
-    [documentos, selecionadoId],
-  );
-  const exibido = rascunho ?? selecionado;
+  const periodos = useMemo(() => Array.from(new Set(registros.map(item => item.periodo.trim()).filter(Boolean))).sort(), [registros]);
 
-  useEffect(() => {
-    if (selecionado && selecionado.id !== selecionadoId) setSelecionadoId(selecionado.id);
-  }, [selecionado, selecionadoId]);
+  const filtered = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase('pt-BR');
+    return registros
+      .filter(item => !query || [
+        item.periodo, item.diaSemana, item.data, item.aula, item.horario,
+        item.disciplina, item.instrutor, item.turma, item.tipo,
+      ].some(value => value.toLocaleLowerCase('pt-BR').includes(query)))
+      .filter(item => !diaFiltro || item.diaSemana === diaFiltro)
+      .filter(item => !tipoFiltro || item.tipo === tipoFiltro)
+      .filter(item => !periodoFiltro || item.periodo === periodoFiltro)
+      .sort((a, b) =>
+        dayOrder(a.diaSemana) - dayOrder(b.diaSemana)
+        || a.data.localeCompare(b.data)
+        || a.horario.localeCompare(b.horario, 'pt-BR', { numeric: true }),
+      );
+  }, [registros, search, diaFiltro, tipoFiltro, periodoFiltro]);
 
-  const iniciarEdicao = () => selecionado && setRascunho(cloneQts(selecionado));
-  const salvar = () => {
-    if (!rascunho) return;
-    setDocumentos(current => current.map(item => item.id === rascunho.id ? rascunho : item));
-    setRascunho(null);
-  };
-  const criar = () => {
-    const id = `qts-${Date.now()}`;
-    const novo = criarQtsEmBranco(id);
-    setDocumentos(current => [...current, novo]);
-    setSelecionadoId(id);
-    setRascunho(cloneQts(novo));
-  };
-  const excluir = () => {
-    if (!selecionado) return;
-    const restantes = documentos.filter(item => item.id !== selecionado.id);
-    setDocumentos(restantes);
-    setSelecionadoId(restantes[0]?.id ?? '');
-    setRascunho(null);
-    setConfirmarExclusao(false);
-  };
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  const start = filtered.length ? (safePage - 1) * PAGE_SIZE + 1 : 0;
+  const end = Math.min(safePage * PAGE_SIZE, filtered.length);
 
-  const alterarDocumento = (campo: 'periodo' | 'curso' | 'coordenador' | 'funcaoCoordenador', valor: string) => {
-    setRascunho(current => current ? { ...current, [campo]: valor } : current);
-  };
-  const alterarDia = (diaIndex: number, campo: 'nome' | 'data', valor: string) => {
-    setRascunho(current => current ? {
-      ...current,
-      dias: current.dias.map((dia, index) => index === diaIndex ? { ...dia, [campo]: valor } : dia),
-    } : current);
-  };
-  const alterarAtividade = (diaIndex: number, atividadeIndex: number, campo: 'disciplina' | 'instrutor' | 'turma', valor: string) => {
-    setRascunho(current => {
-      if (!current) return current;
-      return {
-        ...current,
-        dias: current.dias.map((dia, index) => index !== diaIndex ? dia : {
-          ...dia,
-          atividades: dia.atividades.map((atividade, linha) =>
-            linha === atividadeIndex ? { ...atividade, [campo]: valor } : atividade,
-          ),
-        }),
-      };
-    });
+  const resetPage = () => setPage(1);
+  const clearFilters = () => {
+    setSearch('');
+    setDiaFiltro('');
+    setTipoFiltro('');
+    setPeriodoFiltro('');
+    setPage(1);
   };
 
-  const exportarXlsx = () => {
-    if (!exibido) return;
-    const linhas: (string | number)[][] = [
-      ['POLÍCIA MILITAR'], ['COMANDO DA ACADEMIA DE POLÍCIA MILITAR'], ['ESCOLA DA HONRA E DA LEALDADE'],
-      ['Quadro de Trabalho Semanal - QTS', exibido.curso], ['PERÍODO:', exibido.periodo], [],
-    ];
-    const cabecalho1: string[] = [];
-    const cabecalho2: string[] = [];
-    exibido.dias.forEach(dia => {
-      cabecalho1.push('A', 'H', `${dia.nome} (${dia.data})`, '', 'T');
-      cabecalho2.push('', '', 'DISCIPLINA', 'INSTRUTOR(A)', 'T');
-    });
-    linhas.push(cabecalho1, cabecalho2);
-    for (let linha = 0; linha < exibido.dias[0].atividades.length; linha += 1) {
-      const valores: string[] = [];
-      exibido.dias.forEach(dia => {
-        const atividade = dia.atividades[linha];
-        valores.push(atividade.aula, atividade.horario, atividade.disciplina, atividade.instrutor, atividade.turma);
-      });
-      linhas.push(valores);
+  const openCreate = () => {
+    setForm(emptyForm());
+    setErrors({});
+    setModal({ mode: 'create', item: null });
+  };
+  const openView = (item: QtsRegistro) => {
+    setForm(item);
+    setErrors({});
+    setModal({ mode: 'view', item });
+  };
+  const openEdit = (item: QtsRegistro) => {
+    setForm(item);
+    setErrors({});
+    setModal({ mode: 'edit', item });
+  };
+  const changeField = (key: keyof Omit<QtsRegistro, 'id'>, value: string) => {
+    setForm(current => ({ ...current, [key]: value }));
+    if (key in errors) setErrors(current => ({ ...current, [key]: undefined }));
+  };
+  const validate = () => {
+    const next: typeof errors = {};
+    if (!form.diaSemana) next.diaSemana = 'Dia da semana obrigatório';
+    if (!form.horario.trim()) next.horario = 'Horário obrigatório';
+    if (!form.disciplina.trim()) next.disciplina = 'Disciplina ou atividade obrigatória';
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+  const save = () => {
+    if (!validate()) return;
+    if (modal?.mode === 'create') {
+      setRegistros(current => [...current, { ...form, id: `qts-${Date.now()}` }]);
+    } else if (modal?.mode === 'edit' && modal.item) {
+      setRegistros(current => current.map(item => item.id === modal.item?.id ? { ...form, id: item.id } : item));
     }
-    linhas.push([], [exibido.coordenador], [exibido.funcaoCoordenador]);
-    const ws = XLSX.utils.aoa_to_sheet(linhas);
-    ws['!cols'] = Array.from({ length: 25 }, (_, index) => ({ wch: index % 5 === 2 ? 27 : index % 5 === 3 ? 22 : 12 }));
+    setModal(null);
+  };
+  const remove = () => {
+    if (!deleteTarget) return;
+    setRegistros(current => current.filter(item => item.id !== deleteTarget.id));
+    setDeleteTarget(null);
+  };
+
+  const exportXlsx = () => {
+    const rows = filtered.map(item => ({
+      Período: item.periodo,
+      'Dia da semana': item.diaSemana,
+      Data: item.data,
+      Aula: item.aula,
+      Horário: item.horario,
+      Tipo: item.tipo,
+      'Disciplina / Atividade': item.disciplina,
+      'Instrutor(a)': item.instrutor,
+      Turma: item.turma,
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 8 }, { wch: 16 }, { wch: 14 }, { wch: 34 }, { wch: 28 }, { wch: 12 }];
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'QTS 50º CPT');
-    XLSX.writeFile(wb, `qts-50-cpt-${exibido.periodo || 'sem-periodo'}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Registros QTS');
+    XLSX.writeFile(wb, 'registros-qts-50-cpt.xlsx');
   };
 
-  const imprimir = () => {
-    if (!exibido) return;
-    const dias = exibido.dias.map(dia => `<section><h3>${html(dia.nome)} (${html(dia.data)})</h3><table>
-      <thead><tr><th>A</th><th>Horário</th><th>Disciplina</th><th>Instrutor(a)</th><th>T</th></tr></thead>
-      <tbody>${dia.atividades.map(a => `<tr><td>${html(a.aula)}</td><td>${html(a.horario)}</td><td>${html(a.disciplina)}</td><td>${html(a.instrutor)}</td><td>${html(a.turma)}</td></tr>`).join('')}</tbody>
-      </table></section>`).join('');
-    const conteudo = `<!doctype html><html><head><meta charset="UTF-8"><title>QTS 50º CPT</title><style>
-      body{font-family:Arial,sans-serif;margin:18px;color:#111}h1,h2,p{text-align:center;margin:3px}main{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}section:last-child{grid-column:1/-1}h3{text-align:center;margin:4px;font-size:12px}table{width:100%;border-collapse:collapse;font-size:9px}th,td{border:1px solid #555;padding:3px}th{background:#ddd}.assinatura{margin-top:24px;text-align:center}@media print{body{margin:5mm}}</style></head><body>
-      <h1>Quadro de Trabalho Semanal - QTS</h1><h2>${html(exibido.curso)}</h2><p>PERÍODO: ${html(exibido.periodo)}</p><main>${dias}</main>
-      <div class="assinatura"><strong>${html(exibido.coordenador)}</strong><br>${html(exibido.funcaoCoordenador)}</div></body></html>`;
-    const url = URL.createObjectURL(new Blob([conteudo], { type: 'text/html;charset=utf-8' }));
-    const janela = window.open(url, '_blank');
-    if (janela) janela.addEventListener('load', () => { janela.print(); URL.revokeObjectURL(url); });
-  };
-
-  const inputStyle = { background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' };
+  const styleInput = { background: 'var(--adm-input)', borderColor: 'var(--adm-border)', color: 'var(--adm-text)' };
+  const filtersActive = Boolean(search || diaFiltro || tipoFiltro || periodoFiltro);
 
   return <div>
-    <div className="flex flex-col gap-4 mb-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-lg border" style={inputStyle} aria-label="Voltar"><ArrowLeft size={20} /></button>
-          <div><h2 className="text-2xl font-bold" style={{ color: 'var(--adm-text)' }}>QTS 50º CPT</h2><p className="text-sm" style={{ color: 'var(--adm-muted)' }}>Quadro de Trabalho Semanal</p></div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={exportarXlsx} disabled={!exibido} className="flex items-center gap-2 px-3 py-2 rounded-lg border disabled:opacity-40" style={inputStyle}><Download size={16} /> XLSX</button>
-          <button onClick={imprimir} disabled={!exibido} className="flex items-center gap-2 px-3 py-2 rounded-lg border disabled:opacity-40" style={inputStyle}><Printer size={16} /> Imprimir</button>
-          {canCreate && <button onClick={criar} disabled={Boolean(rascunho)} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cpe-red text-white disabled:opacity-40"><CopyPlus size={16} /> Novo QTS</button>}
-        </div>
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex items-center gap-3">
+        <button onClick={onBack} className="p-2 rounded-lg border" style={styleInput} aria-label="Voltar"><ArrowLeft size={20} /></button>
+        <div><h2 className="text-2xl font-bold" style={{ color: 'var(--adm-text)' }}>QTS 50º CPT</h2><p className="text-sm" style={{ color: 'var(--adm-muted)' }}>Gerenciamento de aulas e atividades</p></div>
       </div>
-      {documentos.length > 0 && <div className="flex flex-wrap items-center gap-2">
-        <select value={selecionado?.id ?? ''} onChange={event => { setSelecionadoId(event.target.value); setRascunho(null); }} disabled={Boolean(rascunho)} className="adm-input px-3 py-2 rounded-lg border max-w-full" style={inputStyle}>
-          {documentos.map((item, index) => <option key={item.id} value={item.id}>QTS {index + 1} — {item.periodo || 'Período não informado'}</option>)}
-        </select>
-        {!rascunho && canEdit && <button onClick={iniciarEdicao} className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={inputStyle}><Pencil size={16} /> Editar</button>}
-        {rascunho && <button onClick={salvar} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-600 text-white"><Save size={16} /> Salvar</button>}
-        {rascunho && <button onClick={() => setRascunho(null)} className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={inputStyle}><X size={16} /> Cancelar</button>}
-        {!rascunho && canDelete && <button onClick={() => setConfirmarExclusao(true)} className="flex items-center gap-2 px-3 py-2 rounded-lg border border-red-500/40 text-red-400"><Trash2 size={16} /> Excluir</button>}
-      </div>}
+      <div className="flex flex-wrap gap-2">
+        <button onClick={exportXlsx} className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={styleInput}><Download size={16} /> Exportar</button>
+        {canCreate && <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cpe-red text-white font-medium"><Plus size={17} /> Inserir registro</button>}
+      </div>
     </div>
 
-    {!exibido ? <div className="rounded-2xl border p-12 text-center" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}><CalendarDays size={44} className="mx-auto mb-3 opacity-40" />Nenhum QTS cadastrado.</div> : <div className="space-y-5">
-      <div className="rounded-2xl border p-4 sm:p-6" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
-        <div className="grid gap-4 lg:grid-cols-2">
-          {([['periodo', 'Período', 'Ex.: 01/12/2026 a 05/12/2026'], ['curso', 'Curso', ''], ['coordenador', 'Coordenador', ''], ['funcaoCoordenador', 'Função', '']] as const).map(([campo, rotulo, placeholder]) => <label key={campo} className="text-sm" style={{ color: 'var(--adm-muted)' }}>{rotulo}
-            <input value={exibido[campo]} onChange={event => alterarDocumento(campo, event.target.value)} readOnly={!rascunho} placeholder={placeholder} className="adm-input mt-1 w-full px-3 py-2 rounded-lg border read-only:opacity-80" style={inputStyle} />
-          </label>)}
+    <div className="rounded-2xl border p-4 mb-5" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr_1fr_auto]">
+        <div className="relative">
+          <Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--adm-muted)' }} />
+          <input value={search} onChange={event => { setSearch(event.target.value); resetPage(); }} placeholder="Buscar disciplina, instrutor, horário, turma..." className="adm-input w-full pl-10 pr-3 py-2.5 rounded-lg border" style={styleInput} />
         </div>
+        <select value={diaFiltro} onChange={event => { setDiaFiltro(event.target.value); resetPage(); }} className="adm-input px-3 py-2.5 rounded-lg border" style={styleInput}>
+          <option value="">Todos os dias</option>{DIAS_SEMANA_QTS.map(day => <option key={day}>{day}</option>)}
+        </select>
+        <select value={tipoFiltro} onChange={event => { setTipoFiltro(event.target.value); resetPage(); }} className="adm-input px-3 py-2.5 rounded-lg border" style={styleInput}>
+          <option value="">Todos os tipos</option>{TIPOS_ATIVIDADE_QTS.map(tipo => <option key={tipo}>{tipo}</option>)}
+        </select>
+        <select value={periodoFiltro} onChange={event => { setPeriodoFiltro(event.target.value); resetPage(); }} className="adm-input px-3 py-2.5 rounded-lg border" style={styleInput}>
+          <option value="">Todos os períodos</option>{periodos.map(periodo => <option key={periodo}>{periodo}</option>)}
+        </select>
+        <button onClick={clearFilters} disabled={!filtersActive} title="Limpar filtros" className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border disabled:opacity-30" style={styleInput}><FilterX size={17} /><span className="xl:hidden">Limpar</span></button>
       </div>
-      <div className="overflow-x-auto pb-2"><div className="grid grid-cols-5 gap-3 min-w-[1500px]">
-        {exibido.dias.map((dia, diaIndex) => <section key={dia.id} className="rounded-xl border overflow-hidden" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
-          <div className="p-3" style={{ background: 'var(--adm-tbl-head)' }}>
-            <input value={dia.nome} onChange={event => alterarDia(diaIndex, 'nome', event.target.value)} readOnly={!rascunho} className="w-full bg-transparent text-center font-bold outline-none" style={{ color: 'var(--adm-text)' }} />
-            <input value={dia.data} onChange={event => alterarDia(diaIndex, 'data', event.target.value)} readOnly={!rascunho} placeholder="Data" className="mt-1 w-full bg-transparent text-center text-xs outline-none" style={{ color: 'var(--adm-muted)' }} />
-          </div>
-          <div className="grid grid-cols-[34px_78px_1fr_1fr_42px] text-[10px] font-bold uppercase" style={{ color: 'var(--adm-muted)' }}>
-            {['A', 'Horário', 'Disciplina', 'Instrutor(a)', 'T'].map(rotulo => <div key={rotulo} className="p-1 border-b border-r last:border-r-0 text-center" style={{ borderColor: 'var(--adm-border)' }}>{rotulo}</div>)}
-          </div>
-          {dia.atividades.map((atividade, atividadeIndex) => <div key={atividade.id} className="adm-row grid grid-cols-[34px_78px_1fr_1fr_42px] min-h-12 text-xs" style={{ borderBottom: '1px solid var(--adm-border)' }}>
-            <div className="p-1 flex items-center justify-center border-r" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>{atividade.aula}</div>
-            <div className="p-1 flex items-center justify-center text-center border-r" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>{atividade.horario}</div>
-            {(['disciplina', 'instrutor', 'turma'] as const).map(campo => <textarea key={campo} value={atividade[campo]} onChange={event => alterarAtividade(diaIndex, atividadeIndex, campo, event.target.value)} readOnly={!rascunho} rows={2} className="resize-none p-1 bg-transparent outline-none border-r last:border-r-0 read-only:cursor-default" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-text)' }} />)}
-          </div>)}
-        </section>)}
-      </div></div>
-    </div>}
+    </div>
 
-    {confirmarExclusao && <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"><div className="w-full max-w-md rounded-2xl border p-6" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
-      <h3 className="text-lg font-bold" style={{ color: 'var(--adm-text)' }}>Excluir este QTS?</h3><p className="mt-2 text-sm" style={{ color: 'var(--adm-muted)' }}>A grade e todos os preenchimentos deste período serão removidos.</p>
-      <div className="flex justify-end gap-2 mt-6"><button onClick={() => setConfirmarExclusao(false)} className="px-4 py-2 rounded-lg border" style={inputStyle}>Cancelar</button><button onClick={excluir} className="px-4 py-2 rounded-lg bg-red-600 text-white">Excluir</button></div>
+    <div className="rounded-2xl border overflow-hidden" style={{ background: 'var(--adm-surface)', borderColor: 'var(--adm-border)' }}>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[1050px] text-sm">
+          <thead style={{ background: 'var(--adm-tbl-head)', color: 'var(--adm-muted)' }}><tr>
+            {['Dia / Data', 'Aula / Horário', 'Tipo', 'Disciplina / Atividade', 'Instrutor(a)', 'Turma', 'Ações'].map(label => <th key={label} className={`px-4 py-3 text-left text-xs uppercase tracking-wide ${label === 'Ações' ? 'text-right' : ''}`}>{label}</th>)}
+          </tr></thead>
+          <tbody>
+            {paginated.map(item => <tr key={item.id} className="adm-row border-t" style={{ borderColor: 'var(--adm-border)' }}>
+              <td className="px-4 py-3"><div className="font-medium" style={{ color: 'var(--adm-text)' }}>{item.diaSemana}</div><div className="text-xs mt-0.5" style={{ color: 'var(--adm-muted)' }}>{item.data || item.periodo || 'Sem data definida'}</div></td>
+              <td className="px-4 py-3"><div style={{ color: 'var(--adm-text)' }}>{item.aula || '—'}</div><div className="text-xs" style={{ color: 'var(--adm-muted)' }}>{item.horario}</div></td>
+              <td className="px-4 py-3"><span className={`inline-flex px-2 py-1 rounded-full border text-xs font-medium ${typeColor(item.tipo)}`}>{item.tipo}</span></td>
+              <td className="px-4 py-3 max-w-[300px]"><div className="font-medium truncate" style={{ color: 'var(--adm-text)' }}>{item.disciplina || 'Não informada'}</div>{item.periodo && <div className="text-xs truncate" style={{ color: 'var(--adm-muted)' }}>Período: {item.periodo}</div>}</td>
+              <td className="px-4 py-3" style={{ color: item.instrutor ? 'var(--adm-text)' : 'var(--adm-muted)' }}>{item.instrutor || 'Não informado'}</td>
+              <td className="px-4 py-3" style={{ color: 'var(--adm-text)' }}>{item.turma || '—'}</td>
+              <td className="px-4 py-3"><div className="flex items-center justify-end gap-1">
+                <button onClick={() => openView(item)} title="Visualizar" className="p-2 rounded-lg hover:bg-white/5" style={{ color: 'var(--adm-muted)' }}><Eye size={17} /></button>
+                {canEdit && <button onClick={() => openEdit(item)} title="Editar" className="p-2 rounded-lg hover:bg-white/5 text-blue-400"><Pencil size={17} /></button>}
+                {canDelete && <button onClick={() => setDeleteTarget(item)} title="Excluir" className="p-2 rounded-lg hover:bg-white/5 text-red-400"><Trash2 size={17} /></button>}
+              </div></td>
+            </tr>)}
+          </tbody>
+        </table>
+      </div>
+      {paginated.length === 0 && <div className="py-16 text-center"><Search size={38} className="mx-auto mb-3 opacity-30" style={{ color: 'var(--adm-muted)' }} /><p className="font-medium" style={{ color: 'var(--adm-text)' }}>Nenhum registro encontrado</p><p className="text-sm mt-1" style={{ color: 'var(--adm-muted)' }}>Altere os filtros ou insira um novo registro.</p></div>}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t" style={{ borderColor: 'var(--adm-border)', color: 'var(--adm-muted)' }}>
+        <span className="text-xs">Exibindo {start}–{end} de {filtered.length} registros</span>
+        <div className="flex items-center gap-2"><button onClick={() => setPage(current => Math.max(1, current - 1))} disabled={safePage === 1} className="p-2 rounded-lg border disabled:opacity-30" style={styleInput}><ChevronLeft size={16} /></button><span className="text-xs">Página {safePage} de {totalPages}</span><button onClick={() => setPage(current => Math.min(totalPages, current + 1))} disabled={safePage === totalPages} className="p-2 rounded-lg border disabled:opacity-30" style={styleInput}><ChevronRight size={16} /></button></div>
+      </div>
+    </div>
+
+    {modal && <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"><div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}>
+      <div className="sticky top-0 flex items-center justify-between px-5 py-4 border-b" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}><div><h3 className="text-lg font-bold" style={{ color: 'var(--adm-text)' }}>{modal.mode === 'create' ? 'Inserir registro' : modal.mode === 'edit' ? 'Editar registro' : 'Detalhes do registro'}</h3><p className="text-xs mt-0.5" style={{ color: 'var(--adm-muted)' }}>QTS do 50º CPT</p></div><button onClick={() => setModal(null)} className="p-2" style={{ color: 'var(--adm-muted)' }}><X size={20} /></button></div>
+      <div className="grid gap-4 p-5 sm:grid-cols-2">
+        <Field label="Período"><input value={form.periodo} onChange={event => changeField('periodo', event.target.value)} readOnly={modal.mode === 'view'} placeholder="Ex.: 01/12/2026 a 05/12/2026" className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field>
+        <Field label="Data"><input type="date" value={form.data} onChange={event => changeField('data', event.target.value)} readOnly={modal.mode === 'view'} className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field>
+        <Field label="Dia da semana" error={errors.diaSemana}><select value={form.diaSemana} onChange={event => changeField('diaSemana', event.target.value)} disabled={modal.mode === 'view'} className="adm-input w-full px-3 py-2.5 rounded-lg border disabled:opacity-70" style={styleInput}>{DIAS_SEMANA_QTS.map(day => <option key={day}>{day}</option>)}</select></Field>
+        <Field label="Tipo"><select value={form.tipo} onChange={event => changeField('tipo', event.target.value)} disabled={modal.mode === 'view'} className="adm-input w-full px-3 py-2.5 rounded-lg border disabled:opacity-70" style={styleInput}>{TIPOS_ATIVIDADE_QTS.map(tipo => <option key={tipo}>{tipo}</option>)}</select></Field>
+        <Field label="Aula"><input value={form.aula} onChange={event => changeField('aula', event.target.value)} readOnly={modal.mode === 'view'} placeholder="Ex.: 1ª" className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field>
+        <Field label="Horário" error={errors.horario}><input value={form.horario} onChange={event => changeField('horario', event.target.value)} readOnly={modal.mode === 'view'} placeholder="Ex.: 08:00 08:45" className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field>
+        <div className="sm:col-span-2"><Field label="Disciplina / Atividade" error={errors.disciplina}><input value={form.disciplina} onChange={event => changeField('disciplina', event.target.value)} readOnly={modal.mode === 'view'} placeholder="Nome da disciplina ou atividade" className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field></div>
+        <Field label="Instrutor(a)"><input value={form.instrutor} onChange={event => changeField('instrutor', event.target.value)} readOnly={modal.mode === 'view'} placeholder="Nome do instrutor" className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field>
+        <Field label="Turma / T"><input value={form.turma} onChange={event => changeField('turma', event.target.value)} readOnly={modal.mode === 'view'} placeholder="Turma" className="adm-input w-full px-3 py-2.5 rounded-lg border read-only:opacity-70" style={styleInput} /></Field>
+      </div>
+      <div className="flex justify-end gap-2 px-5 py-4 border-t" style={{ borderColor: 'var(--adm-border)' }}><button onClick={() => setModal(null)} className="px-4 py-2 rounded-lg border" style={styleInput}>{modal.mode === 'view' ? 'Fechar' : 'Cancelar'}</button>{modal.mode !== 'view' && <button onClick={save} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cpe-red text-white"><Save size={16} /> Salvar</button>}</div>
     </div></div>}
+
+    {deleteTarget && <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"><div className="w-full max-w-md rounded-2xl border p-6" style={{ background: 'var(--adm-modal)', borderColor: 'var(--adm-border)' }}><h3 className="text-lg font-bold" style={{ color: 'var(--adm-text)' }}>Excluir registro?</h3><p className="mt-2 text-sm" style={{ color: 'var(--adm-muted)' }}>{deleteTarget.disciplina || 'Atividade sem disciplina'} — {deleteTarget.diaSemana}, {deleteTarget.horario}.</p><div className="flex justify-end gap-2 mt-6"><button onClick={() => setDeleteTarget(null)} className="px-4 py-2 rounded-lg border" style={styleInput}>Cancelar</button><button onClick={remove} className="px-4 py-2 rounded-lg bg-red-600 text-white">Excluir</button></div></div></div>}
   </div>;
+}
+
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+  return <label className="block text-sm" style={{ color: 'var(--adm-muted)' }}><span className="block mb-1.5 font-medium">{label}</span>{children}{error && <span className="block mt-1 text-xs text-red-400">{error}</span>}</label>;
 }

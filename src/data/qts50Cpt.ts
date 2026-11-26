@@ -1,31 +1,28 @@
-export interface QtsAtividade {
+export type TipoAtividadeQts = 'Aula' | 'Formatura' | 'Intervalo' | 'Almoço' | 'Atividade';
+
+export interface QtsRegistro {
   id: string;
+  periodo: string;
+  diaSemana: string;
+  data: string;
   aula: string;
   horario: string;
   disciplina: string;
   instrutor: string;
   turma: string;
+  tipo: TipoAtividadeQts;
 }
 
-export interface QtsDia {
-  id: string;
-  nome: string;
-  data: string;
-  atividades: QtsAtividade[];
-}
+export const DIAS_SEMANA_QTS = [
+  'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
+] as const;
 
-export interface QtsDocumento {
-  id: string;
-  periodo: string;
-  curso: string;
-  coordenador: string;
-  funcaoCoordenador: string;
-  dias: QtsDia[];
-}
+export const TIPOS_ATIVIDADE_QTS: TipoAtividadeQts[] = [
+  'Aula', 'Formatura', 'Intervalo', 'Almoço', 'Atividade',
+];
 
-const DIAS = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
 const AULAS = ['', '1ª', '2ª', '3ª', '', '4ª', '5ª', '', '6ª', '7ª', '', '8ª', '9ª', '10ª'];
-const HORARIOS_PADRAO = [
+const HORARIOS = [
   '07:15 08:00', '08:00 08:45', '08:45 09:30', '09:30 10:15',
   '10:15 10:30', '10:30 11:15', '11:15 12:00', '12:00 14:00',
   '14:00 14:45', '14:45 15:30', '15:30 15:45', '15:45 16:30',
@@ -53,31 +50,31 @@ function turmaInicial(dia: number, linha: number): string {
   return '';
 }
 
-export function criarQtsEmBranco(id: string): QtsDocumento {
-  return {
-    id,
-    periodo: '',
-    curso: '50º Curso de Patrulhamento Tático e Ações Especializadas de Polícia (CPT) – 31ª CIPM – CPE',
-    coordenador: 'RAFAEL BUENO GONÇALVES - CAPITÃO PM',
-    funcaoCoordenador: 'Coordenador do 50º CPT',
-    dias: DIAS.map((nome, dia) => ({
-      id: `dia-${dia}`,
-      nome,
-      data: '',
-      atividades: AULAS.map((aula, linha) => ({
-        id: `atividade-${linha}`,
-        aula,
-        horario: dia === 2 && linha === 0
-          ? '07:15 08:20'
-          : dia === 2 && linha === 1
-            ? '08:20 09:05'
-            : HORARIOS_PADRAO[linha],
-        disciplina: disciplinaInicial(dia, linha),
-        instrutor: '',
-        turma: turmaInicial(dia, linha),
-      })),
-    })),
-  };
+function tipoInicial(linha: number, disciplina: string): TipoAtividadeQts {
+  if (linha === 0) return disciplina.includes('FORMATURA') ? 'Formatura' : 'Atividade';
+  if (linha === 4 || linha === 10) return 'Intervalo';
+  if (linha === 7) return 'Almoço';
+  return 'Aula';
 }
 
-export const qts50CptDB: QtsDocumento[] = [criarQtsEmBranco('qts-50-cpt-modelo')];
+export const qts50CptDB: QtsRegistro[] = DIAS_SEMANA_QTS.flatMap((diaSemana, dia) =>
+  AULAS.map((aula, linha) => {
+    const disciplina = disciplinaInicial(dia, linha);
+    return {
+      id: `qts-seed-${dia + 1}-${linha + 1}`,
+      periodo: '',
+      diaSemana,
+      data: '',
+      aula,
+      horario: dia === 2 && linha === 0
+        ? '07:15 08:20'
+        : dia === 2 && linha === 1
+          ? '08:20 09:05'
+          : HORARIOS[linha],
+      disciplina,
+      instrutor: '',
+      turma: turmaInicial(dia, linha),
+      tipo: tipoInicial(linha, disciplina),
+    };
+  }),
+);

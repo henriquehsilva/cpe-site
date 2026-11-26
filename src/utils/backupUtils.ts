@@ -46,7 +46,7 @@ const MODULES = [
   { label: 'CARÁTER GERAL — DIÁRIO',              key: 'cpe-site:carater-geral:v2' },
   { label: 'CARÁTER GERAL — HIST. VEÍCULOS',     key: 'cpe-site:carater-historico-veiculos:v1' },
   { label: 'CARÁTER GERAL — ALERTAS HISTÓRICOS', key: 'cpe-site:carater-alertas-historico:v1' },
-  { label: 'QTS 50º CPT',                        key: 'cpe-site:qts-50-cpt:v1' },
+  { label: 'QTS 50º CPT',                        key: 'cpe-site:qts-50-cpt:v2' },
 ];
 
 export function downloadBackup() {
