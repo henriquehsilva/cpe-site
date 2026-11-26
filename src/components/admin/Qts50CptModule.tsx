@@ -176,52 +176,72 @@ export default function Qts50CptModule({ onBack, permissions }: Props) {
       periodoFiltro && `Período: ${periodoFiltro}`,
     ].filter(Boolean).join(' · ') || 'Todos os registros';
 
-    const rows = filtered.map((item, index) => {
-      const previousDay = filtered[index - 1]?.diaSemana;
-      const dayHeader = previousDay !== item.diaSemana
-        ? `<tr class="day"><td colspan="8">${escapeHtml(item.diaSemana)}</td></tr>`
-        : '';
-      return `${dayHeader}<tr>
-        <td>${escapeHtml(item.periodo || '—')}</td>
-        <td>${escapeHtml(formatDate(item.data) || '—')}</td>
-        <td class="center">${escapeHtml(item.aula || '—')}</td>
-        <td class="nowrap">${escapeHtml(item.horario)}</td>
-        <td>${escapeHtml(item.tipo)}</td>
-        <td class="main">${escapeHtml(item.disciplina || 'Não informada')}</td>
-        <td>${escapeHtml(item.instrutor || '—')}</td>
-        <td class="center">${escapeHtml(item.turma || '—')}</td>
-      </tr>`;
+    const recordsByDay = DIAS_SEMANA_QTS.map(day =>
+      filtered.filter(item => item.diaSemana === day),
+    );
+    const rowCount = Math.max(1, ...recordsByDay.map(items => items.length));
+    const periods = Array.from(new Set(filtered.map(item => item.periodo).filter(Boolean))).join(' | ') || 'Não informado';
+
+    const renderCells = (item: QtsRegistro | undefined): string => {
+      if (!item) return '<td></td><td></td><td></td><td></td><td></td>';
+      const schedule = escapeHtml(item.horario).replace(/\s+/g, '<br>');
+      const isMerged = item.tipo !== 'Aula' && !item.instrutor && !item.turma;
+      if (isMerged) {
+        return `<td colspan="2" class="time merged-time">${schedule}</td><td colspan="3" class="merged-label">${escapeHtml(item.disciplina)}</td>`;
+      }
+      return `<td class="lesson">${escapeHtml(item.aula)}</td><td class="time">${schedule}</td><td class="subject">${escapeHtml(item.disciplina)}</td><td class="instructor">${escapeHtml(item.instrutor)}</td><td class="class">${escapeHtml(item.turma)}</td>`;
+    };
+
+    const rows = Array.from({ length: rowCount }, (_, rowIndex) =>
+      `<tr>${recordsByDay.map(items => renderCells(items[rowIndex])).join('')}</tr>`,
+    ).join('');
+
+    const colGroup = DIAS_SEMANA_QTS.map(() =>
+      '<col class="lesson-col"><col class="time-col"><col class="subject-col"><col class="instructor-col"><col class="class-col">',
+    ).join('');
+
+    const dayHeaders = DIAS_SEMANA_QTS.map((day, index) => {
+      const date = recordsByDay[index].find(item => item.data)?.data ?? '';
+      return `<th rowspan="2" class="short">A</th><th rowspan="2" class="short">H</th><th colspan="3" class="day-name">${escapeHtml(day)} <span>(${escapeHtml(formatDate(date))})</span></th>`;
     }).join('');
 
+    const fieldHeaders = DIAS_SEMANA_QTS.map(() =>
+      '<th>Disciplina</th><th>Instrutor(a)</th><th class="short">T</th>',
+    ).join('');
+
     const report = `<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><title>QTS 50º CPT</title><style>
-      @page { size: A4 landscape; margin: 10mm; }
+      @page { size: A3 landscape; margin: 8mm; }
       * { box-sizing: border-box; }
-      body { margin: 0; color: #111; font-family: Arial, Helvetica, sans-serif; font-size: 9px; }
-      header { position: relative; text-align: center; border-bottom: 2px solid #222; padding: 0 130px 8px; margin-bottom: 9px; }
-      header h1 { margin: 0; font-size: 16px; text-transform: uppercase; }
-      header h2 { margin: 3px 0 0; font-size: 12px; font-weight: 600; }
-      header .count { position: absolute; right: 0; bottom: 9px; font-size: 9px; font-weight: 700; }
-      .meta { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 7px; color: #333; }
-      .meta strong { color: #111; }
+      body { margin: 0; color: #000; font-family: "Times New Roman", serif; font-size: 8px; }
+      header { text-align: center; margin-bottom: 6px; }
+      header h1 { margin: 0; font-size: 15px; text-transform: uppercase; }
+      header h2 { margin: 2px 0; font-size: 11px; }
+      .meta { display: flex; justify-content: space-between; gap: 12px; margin: 5px 0; font: 8px Arial, sans-serif; }
       table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-      col.period { width: 12%; } col.date { width: 8%; } col.lesson { width: 5%; }
-      col.time { width: 10%; } col.type { width: 9%; } col.subject { width: 25%; }
-      col.instructor { width: 23%; } col.class { width: 8%; }
+      col.lesson-col { width: 1.9%; } col.time-col { width: 2.35%; } col.subject-col { width: 7.1%; }
+      col.instructor-col { width: 7.2%; } col.class-col { width: 1.45%; }
+      th, td { border: 1px solid #111; text-align: center; vertical-align: middle; overflow-wrap: anywhere; }
       thead { display: table-header-group; }
-      th { background: #20252b !important; color: #fff !important; border: 1px solid #111; padding: 5px 4px; text-align: left; text-transform: uppercase; font-size: 8px; letter-spacing: .25px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      td { border: 1px solid #777; padding: 4px; vertical-align: middle; overflow-wrap: anywhere; }
-      tbody tr:nth-child(odd):not(.day) td { background: #f3f4f6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      tr { break-inside: avoid; page-break-inside: avoid; }
-      tr.day td { background: #d9dee5 !important; border-color: #333; padding: 5px 6px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .center { text-align: center; } .nowrap { white-space: nowrap; } .main { font-weight: 600; }
-      .empty { border: 1px solid #777; padding: 30px; text-align: center; font-size: 11px; }
-      footer { margin-top: 7px; text-align: right; color: #555; font-size: 8px; }
+      thead th { background: #d4d4d4 !important; padding: 5px 2px; font-size: 8px; font-weight: 700; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      thead tr:first-child th { height: 27px; font-size: 11px; text-transform: none; }
+      thead tr:first-child th.short { font-size: 9px; text-transform: uppercase; }
+      .day-name span { font-weight: 400; }
+      tbody tr { height: 31px; break-inside: avoid; page-break-inside: avoid; }
+      tbody td { padding: 2px; font-size: 8px; }
+      tbody td:nth-child(5n), thead th:nth-child(5n) { border-right-width: 2px; }
+      .lesson { font-size: 10px; font-weight: 700; }
+      .time { font-size: 7px; line-height: 1.25; font-family: Arial, sans-serif; }
+      .subject, .instructor { text-transform: uppercase; font-weight: 600; }
+      .class { font-size: 7px; }
+      .merged-time, .merged-label { background: #d4d4d4 !important; font-weight: 700; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .merged-time { font-size: 8px; }
+      .merged-label { font-size: 10px; text-transform: uppercase; }
+      footer { margin-top: 5px; display: flex; justify-content: space-between; font: 7px Arial, sans-serif; }
     </style></head><body>
-      <header><h1>Quadro de Trabalho Semanal — QTS</h1><h2>50º Curso de Patrulhamento Tático e Ações Especializadas de Polícia</h2><span class="count">${filtered.length} registro(s)</span></header>
-      <div class="meta"><span><strong>Filtros:</strong> ${escapeHtml(filterDescription)}</span><span><strong>Emissão:</strong> ${new Date().toLocaleString('pt-BR')}</span></div>
-      ${filtered.length ? `<table><colgroup><col class="period"><col class="date"><col class="lesson"><col class="time"><col class="type"><col class="subject"><col class="instructor"><col class="class"></colgroup>
-        <thead><tr><th>Período</th><th>Data</th><th>Aula</th><th>Horário</th><th>Tipo</th><th>Disciplina / Atividade</th><th>Instrutor(a)</th><th>Turma</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">Nenhum registro encontrado para os filtros selecionados.</div>'}
-      <footer>QTS 50º CPT — 31ª CIPM — CPE</footer>
+      <header><h1>Quadro de Trabalho Semanal — QTS</h1><h2>50º Curso de Patrulhamento Tático e Ações Especializadas de Polícia — 31ª CIPM — CPE</h2></header>
+      <div class="meta"><span><strong>Período:</strong> ${escapeHtml(periods)}</span><span><strong>Filtros:</strong> ${escapeHtml(filterDescription)}</span><span><strong>Registros:</strong> ${filtered.length}</span></div>
+      <table><colgroup>${colGroup}</colgroup><thead><tr>${dayHeaders}</tr><tr>${fieldHeaders}</tr></thead><tbody>${rows}</tbody></table>
+      <footer><span>QTS 50º CPT</span><span>Emitido em ${new Date().toLocaleString('pt-BR')}</span></footer>
     </body></html>`;
 
     const url = URL.createObjectURL(new Blob([report], { type: 'text/html;charset=utf-8' }));
